@@ -3,7 +3,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
-         
+
+  enum user_type: [ :normal, :admin ]
+
   belongs_to :eula
   #belongs_to :user_type
   #belongs_to :user_status
