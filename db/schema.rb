@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151201123440) do
+ActiveRecord::Schema.define(version: 20151203064412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,13 +29,12 @@ ActiveRecord::Schema.define(version: 20151201123440) do
     t.text     "message"
     t.integer  "conversation_id"
     t.integer  "user_id"
-    t.integer  "user_content_status_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.integer  "status",          default: 0, null: false
   end
 
   add_index "chats", ["conversation_id"], name: "index_chats_on_conversation_id", using: :btree
-  add_index "chats", ["user_content_status_id"], name: "index_chats_on_user_content_status_id", using: :btree
   add_index "chats", ["user_id"], name: "index_chats_on_user_id", using: :btree
 
   create_table "conversations", force: :cascade do |t|
@@ -55,43 +54,28 @@ ActiveRecord::Schema.define(version: 20151201123440) do
     t.datetime "updated_at",                 null: false
   end
 
-  create_table "job_statuses", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "jobs", force: :cascade do |t|
-    t.integer  "job_status_id"
     t.integer  "user_id"
-    t.integer  "offered_by",    null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.integer  "offered_by",             null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.integer  "status",     default: 0
   end
 
-  add_index "jobs", ["job_status_id"], name: "index_jobs_on_job_status_id", using: :btree
   add_index "jobs", ["user_id"], name: "index_jobs_on_user_id", using: :btree
-
-  create_table "notification_types", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "notifications", force: :cascade do |t|
     t.string   "subject"
     t.text     "message"
-    t.integer  "user_type_id"
     t.integer  "user_id"
-    t.integer  "notification_type_id"
-    t.integer  "sent_by_id",           null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "sent_by_id",                    null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "notification_type", default: 0, null: false
+    t.integer  "user_type",         default: 0, null: false
   end
 
-  add_index "notifications", ["notification_type_id"], name: "index_notifications_on_notification_type_id", using: :btree
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
-  add_index "notifications", ["user_type_id"], name: "index_notifications_on_user_type_id", using: :btree
 
   create_table "privacies", force: :cascade do |t|
     t.text     "privacy_text"
@@ -103,14 +87,13 @@ ActiveRecord::Schema.define(version: 20151201123440) do
   create_table "ratings", force: :cascade do |t|
     t.decimal  "rating"
     t.text     "comment"
-    t.integer  "user_content_status_id"
     t.integer  "user_id"
-    t.integer  "rated_on_id",            null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "rated_on_id",             null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "status",      default: 0, null: false
   end
 
-  add_index "ratings", ["user_content_status_id"], name: "index_ratings_on_user_content_status_id", using: :btree
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "reported_chats", force: :cascade do |t|
@@ -131,24 +114,6 @@ ActiveRecord::Schema.define(version: 20151201123440) do
 
   add_index "reported_ratings", ["rating_id"], name: "index_reported_ratings_on_rating_id", using: :btree
 
-  create_table "user_content_statuses", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "user_statuses", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "user_types", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
@@ -167,13 +132,13 @@ ActiveRecord::Schema.define(version: 20151201123440) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.integer  "user_status_id"
-    t.integer  "user_type_id"
     t.integer  "eula_id"
     t.string   "first_name"
     t.string   "last_name"
     t.string   "company"
     t.decimal  "rating"
+    t.integer  "status",                 default: 0,  null: false
+    t.integer  "user_type",              default: 0,  null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -181,13 +146,10 @@ ActiveRecord::Schema.define(version: 20151201123440) do
 
   add_foreign_key "blocked_users", "users"
   add_foreign_key "chats", "conversations"
-  add_foreign_key "chats", "user_content_statuses"
   add_foreign_key "chats", "users"
   add_foreign_key "conversations", "users"
   add_foreign_key "jobs", "users"
-  add_foreign_key "notifications", "user_types"
   add_foreign_key "notifications", "users"
-  add_foreign_key "ratings", "user_content_statuses"
   add_foreign_key "ratings", "users"
   add_foreign_key "reported_chats", "chats"
   add_foreign_key "reported_ratings", "ratings"

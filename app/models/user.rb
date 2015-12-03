@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
          
   belongs_to :eula
-  belongs_to :user_type
-  belongs_to :user_status
+  #belongs_to :user_type
+  #belongs_to :user_status
   
   has_many :ratings
   has_many :blocked_users
