@@ -8,32 +8,43 @@ ActiveAdmin.register User do
   action_item :view, only: :index do
     link_to 'New Staff', new_admin_staff_path
   end
+
   index do
     selectable_column
     id_column
-    column :name
+    column :first_name
+    column :last_name
     column :email
     column :user_type
-    column :eula
     column :company
-    column :rating
+    column :last_sign_in_at
     column :status
-    column :current_sign_in_at
-    column :sign_in_count
-    column :created_at
     actions do |user|
-      link_to 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
+      # link_to 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
+      item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
+      (item 'Ban', ban_admin_user_path(user), class: 'member_link', method: :put) if user.active?
+      (item 'Enable', enable_admin_user_path(user), class: 'member_link', method: :put) if user.banned?
+      item 'Events', '#'
     end
+
   end
 
-  filter :name
+  filter :firstname
+  filter :last_name
   filter :email
   filter :user_type, as: :select, collection: -> { User.user_types.keys }
-  filter :eula
   filter :company
-  filter :rating
+  filter :last_sign_in_at
   filter :status
 
+  member_action :ban, method: :put do
+    resource.banned!
+    redirect_to admin_users_path, notice: 'User Banned!'
+  end
 
+  member_action :enable, method: :put do
+    resource.active!
+    redirect_to admin_users_path, notice: 'User Enabled!'
+  end
 
 end

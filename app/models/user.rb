@@ -44,7 +44,7 @@ class User < ActiveRecord::Base
   belongs_to :eula
   #belongs_to :user_type
   #belongs_to :user_status
-  enum user_status: [:active, :banned]
+  enum status: [:active, :banned]
 
   has_many :ratings
   has_many :blocked_users
