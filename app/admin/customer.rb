@@ -1,10 +1,10 @@
-ActiveAdmin.register User, as: 'Staff' do
+ActiveAdmin.register User, as: 'Customer' do
 
   permit_params :name, :email, :company, :password
   actions :all, :except => [:index]
 
   form do |f|
-    f.inputs 'Staff Details' do
+    f.inputs 'Customer Details' do
       f.input :name
       f.input :email
       f.input :company
@@ -25,7 +25,7 @@ ActiveAdmin.register User, as: 'Staff' do
         @user.update_attributes(permitted_params[:user])
       end
       if @user.errors.blank?
-        redirect_to admin_users_path, :notice => 'Staff updated successfully.'
+        redirect_to admin_users_path, :notice => 'Customer updated successfully.'
       else
         render :edit
       end
@@ -33,16 +33,15 @@ ActiveAdmin.register User, as: 'Staff' do
 
     def create
       super do |success,failure|
-        success.html { redirect_to admin_users_path, :notice => 'Staff created successfully.' }
+        success.html { redirect_to admin_users_path, :notice => 'Customer created successfully.' }
         failure.html { render :edit }
       end
     end
-
   end
 
   controller do
     def scoped_collection
-      User.where(user_type: User.user_types[:staff])
+      User.where(user_type: User.user_types[:customer])
     end
   end
 end
