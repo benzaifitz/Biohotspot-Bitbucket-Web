@@ -26,5 +26,6 @@ DeviseTokenAuth.setup do |config|
   # password is updated.
   # config.check_current_password_before_update = :attributes  
 end
+
 # For logout 
 # http://stackoverflow.com/questions/32507637/why-am-i-unable-to-sign-out-using-devise-token-auth-and-curl
