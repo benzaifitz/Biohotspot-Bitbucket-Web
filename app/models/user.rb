@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   #belongs_to :user_type
   #belongs_to :user_status
   enum user_status: [:active, :banned]
-  enum type: [:user, :admin]
+  
   has_many :ratings
   has_many :blocked_users
   has_many :jobs
