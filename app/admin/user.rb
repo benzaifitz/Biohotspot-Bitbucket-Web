@@ -1,6 +1,11 @@
 ActiveAdmin.register User do
 
   actions :index, :show
+
+  action_item :view, only: :index do
+    link_to 'New Staff', new_admin_staff_path
+  end
+
   index do
     selectable_column
     id_column
