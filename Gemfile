@@ -20,6 +20,9 @@ end
 gem 'devise'
 gem 'high_voltage'
 gem 'simple_form'
+gem 'rack-cors', :require => 'rack/cors'
+gem 'omniauth'
+gem 'devise_token_auth'
 group :development do
   gem 'better_errors'
   gem 'quiet_assets'

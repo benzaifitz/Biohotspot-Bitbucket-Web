@@ -75,6 +75,9 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise_token_auth (0.1.36)
+      devise (~> 3.5.2)
+      rails (~> 4.2)
     diff-lcs (1.2.5)
     dotenv (2.0.2)
     dotenv-rails (2.0.2)
@@ -92,6 +95,7 @@ GEM
     ffi (1.9.10)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    hashie (3.4.3)
     high_voltage (2.4.0)
     i18n (0.7.0)
     jbuilder (2.3.2)
@@ -114,11 +118,15 @@ GEM
     multi_json (1.11.2)
     nokogiri (1.6.7)
       mini_portile2 (~> 2.0.0.rc2)
+    omniauth (1.2.2)
+      hashie (>= 1.2, < 4)
+      rack (~> 1.0)
     orm_adapter (0.5.0)
     pg (0.18.4)
     quiet_assets (1.1.0)
       railties (>= 3.1, < 5.0)
     rack (1.6.4)
+    rack-cors (0.4.0)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.5)
@@ -221,6 +229,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   database_cleaner
   devise
+  devise_token_auth
   dotenv-rails
   factory_girl_rails
   faker
@@ -228,8 +237,10 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   launchy
+  omniauth
   pg
   quiet_assets
+  rack-cors
   rails (= 4.2.5)
   rails_layout
   rspec-rails

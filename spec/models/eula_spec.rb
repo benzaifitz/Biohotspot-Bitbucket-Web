@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: eulas
+#
+#  id         :integer          not null, primary key
+#  eula_text  :text
+#  is_latest  :boolean          default(FALSE)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 require 'rails_helper'
 
 RSpec.describe Eula, type: :model do
