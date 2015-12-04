@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
 
-  actions :index, :show
+  actions :index, :show, :destroy
 
   action_item :view, only: :index do
     link_to 'New Customer', new_admin_customer_path
