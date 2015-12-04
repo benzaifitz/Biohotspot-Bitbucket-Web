@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  enum user_type: [ :normal, :admin ]
+  enum user_type: [:staff, :administrator, :customer]
 
   belongs_to :eula
   #belongs_to :user_type

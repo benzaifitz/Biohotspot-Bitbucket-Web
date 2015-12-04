@@ -1,7 +1,6 @@
 ActiveAdmin.register User do
 
-  permit_params :name, :email, :eula_id, :password, :user_type, :eula, :company, :rating, :status, :email
-
+  actions :index, :show
   index do
     selectable_column
     id_column
@@ -15,7 +14,9 @@ ActiveAdmin.register User do
     column :current_sign_in_at
     column :sign_in_count
     column :created_at
-    actions
+    actions do |user|
+      link_to 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
+    end
   end
 
   filter :name
@@ -26,37 +27,6 @@ ActiveAdmin.register User do
   filter :rating
   filter :status
 
-
-  form do |f|
-    f.inputs "User Details" do
-      f.input :name
-      f.input :email
-      f.input :user_type, as: :select, collection: User.user_types.keys
-      f.input :eula
-      f.input :company
-      f.input :rating
-      f.input :status
-      f.input :email
-      f.input :password
-    end
-    f.actions
-  end
-
-  controller do
-    def update
-      @user = User.find(params[:id])
-      if permitted_params[:user][:password].blank?
-        @user.update_without_password(permitted_params[:user])
-      else
-        @user.update_attributes(permitted_params[:user])
-      end
-      if @user.errors.blank?
-        redirect_to admin_users_path, :notice => "User updated successfully."
-      else
-        render :edit
-      end
-    end
-  end
 
 
 end
