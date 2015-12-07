@@ -4,7 +4,7 @@
 #
 #  id         :integer          not null, primary key
 #  user_id    :integer
-#  offered_by :integer          not null
+#  offered_by_id :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  status     :integer          default(0)
@@ -12,6 +12,6 @@
 
 class Job < ActiveRecord::Base
   belongs_to :user
-  #belongs_to :job_status
-  belongs_to :owner, class_name: "User", foreign_key: "offered_by"
+  belongs_to :offered_by, class_name: "User", foreign_key: "offered_by_id"
+  enum status: [:created, :completed, :accepted, :cancelled, :rejected, :offered, :withdrawn]
 end
