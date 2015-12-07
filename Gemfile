@@ -24,6 +24,7 @@ gem 'simple_form'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'omniauth'
 gem 'devise_token_auth'
+gem 'ckeditor', '~> 4.1', '>= 4.1.5'
 group :development do
   gem 'better_errors'
   gem 'quiet_assets'
