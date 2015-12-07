@@ -1,17 +1,6 @@
 ActiveAdmin.register Rating do
 
-# See permitted parameters documentation:
-# https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#
-# permit_params :list, :of, :attributes, :on, :model
-#
-# or
-#
-# permit_params do
-#   permitted = [:permitted, :attributes]
-#   permitted << :other if resource.something?
-#   permitted
-# end
+  actions :index
 
   index do
     column :created_at
@@ -34,6 +23,33 @@ ActiveAdmin.register Rating do
     end
     column :comment
     column :status
+    actions do |r|
+      (item 'Ban', ban_admin_rating_path(r.rated_on), class: 'member_link', method: :put) if r.rated_on.active?
+      (item 'Enable', enable_admin_rating_path(r.rated_on), class: 'member_link', method: :put) if r.rated_on.banned?
+      (item 'Censor', censor_admin_rating_path(r), class: 'member_link', method: :put) if r.active? || r.allowed?
+      (item 'Allow', allow_admin_rating_path(r), class: 'member_link', method: :put) if r.censored?
+    end
+  end
+
+
+  member_action :ban, method: :put do
+    resource.rated_on.banned!
+    redirect_to admin_ratings_path, notice: 'User Banned!'
+  end
+
+  member_action :enable, method: :put do
+    resource.rated_on.active!
+    redirect_to admin_ratings_path, notice: 'User Enabled!'
+  end
+
+  member_action :censor, method: :put do
+    resource.censored!
+    redirect_to admin_ratings_path, notice: 'Rating Censored!'
+  end
+
+  member_action :allow, method: :put do
+    resource.allowed!
+    redirect_to admin_ratings_path, notice: 'Rating Allowed!'
   end
 
 
