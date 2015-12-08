@@ -1,5 +1,8 @@
 ActiveAdmin.register Eula, as: 'Terms And Condition' do
 
+  filter :is_latest
+  filter :created_at
+  
   permit_params :is_latest, :eula_text
 
   form do |f|
@@ -19,5 +22,13 @@ ActiveAdmin.register Eula, as: 'Terms And Condition' do
       row :updated_at
     end
     active_admin_comments
+  end
+
+  index do
+    selectable_column
+    id_column
+    column :is_latest
+    column :created_at
+    actions
   end
 end
