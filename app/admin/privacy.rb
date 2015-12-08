@@ -1,4 +1,4 @@
-ActiveAdmin.register Privacy do
+ActiveAdmin.register Privacy, as: 'Privacy Policy' do
 
   filter :is_latest
   filter :created_at
@@ -7,7 +7,7 @@ ActiveAdmin.register Privacy do
 
   form do |f|
     inputs 'Privacy Policy' do
-      input :privacy_text, as: :ckeditor
+      input :privacy_text, as: :ckeditor, label: "Privacy Policy Text"
       input :is_latest
     end
     actions
