@@ -9,6 +9,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'annotate'
 gem 'activeadmin', github: 'activeadmin'
+gem 'paper_trail', '~> 4.0.0'
 group :development, :test do
   gem 'byebug'
   gem 'dotenv-rails'
