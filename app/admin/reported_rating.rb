@@ -43,7 +43,7 @@ ActiveAdmin.register ReportedRating do
       (item 'Ban', ban_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.rated_on.active?
       (item 'Enable', enable_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.rated_on.banned?
       (item 'Censor', censor_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.active? || r.rating.allowed?
-      (item 'Allow', allow_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.censored?
+      (item 'Allow', allow_admin_reported_rating_path(r), class: 'member_link', method: :put) if !r.rating.allowed?
     end
   end
 
