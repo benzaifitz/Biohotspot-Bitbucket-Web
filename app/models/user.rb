@@ -52,5 +52,10 @@ class User < ActiveRecord::Base
   has_many :notifications
   has_many :chats
   has_many :conversations
-  
+
+  scope :administrators, -> { where('user_type = ?', user_types[:administrator]) }
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
 end
