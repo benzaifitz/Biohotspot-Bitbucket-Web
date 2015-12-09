@@ -1,6 +1,6 @@
 ActiveAdmin.register Notification do
 
-  actions :index
+  actions :index, :new
 
   filter :created_at
   filter :notification_type, as: :select, collection: Notification.notification_types
@@ -18,6 +18,8 @@ ActiveAdmin.register Notification do
 
   filter :subject
 
+  permit_params :user_id, :user_type, :subject, :message
+
   index do
     selectable_column
     id_column
@@ -31,7 +33,7 @@ ActiveAdmin.register Notification do
       notification.user.user_type
     end
     column 'Status' do |notification|
-      notification.status
+      notification.status.capitalize
     end
     column (:subject) {|notification| truncate notification.subject }
     column (:message) {|notification| truncate notification.message }
@@ -40,8 +42,43 @@ ActiveAdmin.register Notification do
     end
   end
 
-  member_action :show, :method => :get do
-    @notification = Notification.find(params[:id])
-    render :layout => false
+  form do |f|
+    panel 'Note' do
+      "If you provide a User Id the message will be sent to that user only. If you want to send a message to a group you will have to specify the user group type."
+    end
+    inputs 'Details' do
+      semantic_errors
+      input :user_id, label: 'User Id'
+      input :user_type, label: 'Group Type', as: :select, collection: User.user_types,
+            selected: User.user_types[:staff], include_blank: false
+      input :notification_type, as: :select, collection: Notification.notification_types,
+            selected: Notification.notification_types[:email], include_blank: false
+      input :subject, required: true
+      input :message, required: true, as: :ckeditor
+    end
+    actions
+  end
+
+  controller do
+    def show
+      @notification = Notification.find(params[:id])
+      render :layout => false
+    end
+
+    def create
+      notification_params = params[:notification]
+      if notification_params[:user_id].present?
+        user = User.find(notification_params[:user_id])
+        @notification = Notification.new
+        @notification.user_id = user.id
+        @notification.user_type = user[:user_type]
+        @notification.message = notification_params[:message]
+        @notification.subject = notification_params[:subject]
+        @notification.status = Notification.statuses[:created]
+        @notification.sent_by_id = current_user.id
+        @notification.save!
+      end
+      redirect_to admin_notifications_path, notice: 'Your message has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed'
+    end
   end
 end
