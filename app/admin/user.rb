@@ -20,11 +20,10 @@ ActiveAdmin.register User do
     column :last_sign_in_at
     column :status
     actions do |user|
-      # link_to 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
       (item 'Ban', ban_admin_user_path(user), class: 'member_link', method: :put) if user.active?
       (item 'Enable', enable_admin_user_path(user), class: 'member_link', method: :put) if user.banned?
-      item 'Events', '#'
+      item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end
 
   end
