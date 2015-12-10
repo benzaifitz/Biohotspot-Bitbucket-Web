@@ -22,4 +22,39 @@ class Notification < ActiveRecord::Base
 
   enum notification_type: [ :push, :email ]
   enum status: [ :created, :sent, :failed ]
+
+  after_commit :enqueue_message_for_sending, on: :create
+
+  class << self
+    def save(user_id, user_type, message, subject, notification_type, status, sent_by_id)
+      notification = Notification.new
+      notification.user_id = user_id
+      notification.user_type = user_type
+      notification.message = message
+      notification.subject = subject
+      notification[:notification_type] = notification_type.to_i
+      notification.status = status
+      notification.sent_by_id = sent_by_id
+      notification.save
+    end
+
+    def enqueue_email_and_mark_it_sent(notification)
+      begin
+        NotificationMailer.notification_email(notification).deliver_now
+        notification.sent!
+      rescue StandardError => e
+        notification.failed!
+      end
+    end
+  end
+
+  private
+
+  def enqueue_message_for_sending
+    if self.email?
+      Notification.delay.enqueue_email_and_mark_it_sent(self)
+    elsif self.push?
+      # Add push notification
+    end
+  end
 end
