@@ -33,6 +33,7 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
                      u.first_name.nil? ? [u.email, u.id] : ["#{u.first_name} #{u.last_name}", u.id]
                    end
                  }
+  filter :created_at
 
 end
 
