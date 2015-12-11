@@ -1,14 +1,34 @@
-<table style="width: 400px">
-  <tr>
-    <td><h3>Subject:</h3></td>
-  </tr>
-  <tr>
-    <td><%= @notification.subject %></td>
-  </tr>
-  <tr>
-    <td><h3>Message:</h3></td>
-  </tr>
-  <tr>
-    <td><%= raw @notification.message %></td>
-  </tr>
-</table>
+<div class="panel">
+  <h3><%= @notification.subject %></h3>
+  <div class="panel-contents">
+    <table style="width: 400px">
+      <tr>
+        <td>
+          <h6>Sent By</h6>
+          <%= link_to "#{@sender.full_name}(#{@sender.email})", admin_user_path(@sender) %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h6>Sent At</h6>
+          <%= @notification.created_at.strftime('%B %d, %Y %H:%M') %>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h6>Recipient</h6>
+          <%= link_to "#{@recipient.full_name}(#{@recipient.email})", admin_user_path(@recipient) %>
+        </td>
+      </tr>
+      <tr>
+        <td><h6>Message Type</h6><%= @notification.notification_type %></td>
+      </tr>
+      <tr>
+        <td><h6>Message</h6></td>
+      </tr>
+      <tr>
+        <td><%= raw @notification.message %></td>
+      </tr>
+    </table>
+  </div>
+</div>

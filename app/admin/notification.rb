@@ -35,8 +35,12 @@ ActiveAdmin.register Notification do
     column 'Status' do |notification|
       notification.status.capitalize
     end
-    column (:subject) {|notification| truncate notification.subject }
-    column (:message) {|notification| truncate notification.message.gsub(/<\/?[^>]*>/, "") }
+    column (:subject) do |notification|
+      truncate notification.subject
+    end
+    column (:message) do |notification|
+      truncate notification.message.gsub(/<\/?[^>]*>/, "")
+    end
     column '' do |notification|
       link_to 'View', admin_notification_path(notification), class: 'fancybox member-link', data: { 'fancybox-type' => 'ajax' }
     end
@@ -66,6 +70,8 @@ ActiveAdmin.register Notification do
 
     def show
       @notification = Notification.find(params[:id])
+      @recipient = @notification.user
+      @sender = @notification.sender
       render :layout => false
     end
 
@@ -73,15 +79,15 @@ ActiveAdmin.register Notification do
       notification_params = params[:notification]
       if notification_params[:user_id].present?
         user = User.find(notification_params[:user_id])
-        notification_saved = Notification.save(user.id, user[:user_type], notification_params[:message],
-                          notification_params[:subject], notification_params[:notification_type], Notification.statuses[:created], current_user.id)
+        notification = Notification.create!(user_id: user.id, user_type: user[:user_type], message: notification_params[:message],
+                          subject: notification_params[:subject], notification_type: notification_params[:notification_type].to_i, status: Notification.statuses[:created], sent_by_id: current_user.id)
       else
         user_group_type = User.user_types.key(notification_params[:user_type].to_i)
-        BulkNotificationJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
-        notification_saved = true
+        NotificationQueueJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
+        notifications_queued = true
       end
 
-      if notification_saved
+      if notifications_queued || notification.persisted?
         redirect_to admin_notifications_path,
                     notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
       else

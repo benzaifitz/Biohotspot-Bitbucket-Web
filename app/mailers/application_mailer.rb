@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'notifications@dapper-framework.com'
+  default from: ENV['DEFAULT_FROM_EMAIL']
   layout 'mailer'
 end
