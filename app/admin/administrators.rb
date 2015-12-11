@@ -1,7 +1,7 @@
 ActiveAdmin.register User, as: 'Administrators' do
+  menu false
 
-
-  permit_params :name, :email, :company
+  permit_params :name, :email, :company, :password
   actions :all, :except => [:index]
 
   form do |f|
@@ -9,6 +9,7 @@ ActiveAdmin.register User, as: 'Administrators' do
       f.input :name
       f.input :email
       f.input :company
+      f.input :password
     end
     f.actions do
       f.action(:submit)
@@ -28,6 +29,11 @@ ActiveAdmin.register User, as: 'Administrators' do
         redirect_to admin_users_path, :notice => 'Admin updated successfully.'
       else
         render :edit
+      end
+    end
+    def create
+      create! do |format|
+        format.html { redirect_to admin_users_path, :notice => 'Admin created successfully.' }
       end
     end
   end
