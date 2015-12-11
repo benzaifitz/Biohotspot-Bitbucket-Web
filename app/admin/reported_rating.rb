@@ -11,7 +11,9 @@ ActiveAdmin.register ReportedRating do
     column 'Reported By User Type' do |r|
       label r.reported_by.user_type
     end
-    column :rating
+    column 'Rating' do |r|
+      r.rating.rating
+    end
     column 'Rating For' do |r|
       label r.rating.rated_on.name
     end
@@ -30,7 +32,7 @@ ActiveAdmin.register ReportedRating do
     column 'Rating By User Type' do |r|
       label r.rating.user.user_type
     end
-    column 'Rating' do |r|
+    column "Rating By User's Rating" do |r|
       label r.rating.user.rating
     end
     column 'Comment' do  |r|
@@ -68,5 +70,7 @@ ActiveAdmin.register ReportedRating do
     redirect_to admin_reported_ratings_path, notice: 'Rating Allowed!'
   end
 
-
+  filter :reported_by
+  filter :rating_rating, as: :select, collection: -> {Rating.distinct.pluck :rating}
+  filter :created_at
 end
