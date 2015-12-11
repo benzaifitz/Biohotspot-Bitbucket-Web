@@ -3,8 +3,8 @@ ActiveAdmin.register Job do
   actions :index
 
   index do
-    column :created_at
     id_column
+    column :created_at
     column 'Staff Id', :offered_by_id
     column 'Staff', :offered_by
     column 'Staff Company' do |j|
