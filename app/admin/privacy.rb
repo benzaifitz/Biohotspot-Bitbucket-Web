@@ -1,14 +1,15 @@
 ActiveAdmin.register Privacy, as: 'Privacy Policy' do
 
+  permit_params :privacy_text
+
+  actions :all, except: [ :edit, :update ]
+
   filter :is_latest
   filter :created_at
-
-  permit_params :is_latest, :privacy_text
 
   form do |f|
     inputs 'Privacy Policy' do
       input :privacy_text, as: :ckeditor, label: "Privacy Policy Text"
-      input :is_latest
     end
     actions
   end
@@ -16,10 +17,11 @@ ActiveAdmin.register Privacy, as: 'Privacy Policy' do
   show do
     attributes_table do
       row :id
-      row (:privacy_text) {|privacy| raw privacy.privacy_text}
+      row (:privacy_text) do |privacy|
+        raw privacy.privacy_text
+      end
       row :is_latest
       row :created_at
-      row :updated_at
     end
     active_admin_comments
   end
@@ -30,5 +32,43 @@ ActiveAdmin.register Privacy, as: 'Privacy Policy' do
     column :is_latest
     column :created_at
     actions
+  end
+
+  controller do
+    def destroy
+      privacy = Privacy.find(params[:id])
+      unless privacy.is_latest
+        privacy.destroy!
+        redirect_to admin_privacy_policies_path, notice: 'Privacy policy has been deleted successfully.'
+      else
+        redirect_to admin_privacy_policies_path, flash: { error: 'Latest Privacy Policy cannot be deleted' }
+      end
+    end
+
+    def create
+      privacy_policy = Privacy.new(permitted_params[:privacy])
+      privacy_policy.is_latest = true
+      if privacy_policy.save
+        old_privacy_policies = Privacy.where('is_latest = ?', true)
+        old_privacy_policies.each do |old_privacy_policy|
+          old_privacy_policy.deprecate! unless old_privacy_policy.eql? privacy_policy
+        end
+        redirect_to admin_privacy_policy_path(privacy_policy), notice: 'Privacy policy has been created successfully.'
+      else
+        redirect_to admin_privacy_policies_path, flash: { error: 'Privacy policy could not be created.' }
+      end
+    end
+  end
+
+  batch_action :destroy, method: :delete, confirm: "Are you sure you want to delete these privacy policies?" do |ids|
+    privacy_policies = Privacy.where(id: ids)
+    deleted_count = 0
+    privacy_policies.each do |privacy_policy|
+      unless privacy_policy.is_latest
+        deleted_count = deleted_count + 1
+        privacy_policy.destroy!
+      end
+    end
+    redirect_to admin_privacy_policies_path, notice: "#{deleted_count} privacy policies deleted."
   end
 end
