@@ -1,11 +1,12 @@
 ActiveAdmin.register User, as: 'Customer' do
 
-  permit_params :name, :email, :company, :password
+  permit_params :first_name, :last_name, :email, :company, :password
   actions :all, :except => [:index]
 
   form do |f|
     f.inputs 'Customer Details' do
-      f.input :name
+      f.input :first_name
+      f.input :last_name
       f.input :email
       f.input :company
       f.input :password
