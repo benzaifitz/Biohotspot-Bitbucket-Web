@@ -71,6 +71,6 @@ ActiveAdmin.register ReportedRating do
   end
 
   filter :reported_by
-  filter :rating_rating, as: :select, collection: -> {Rating.distinct.pluck :rating}
+  filter :rating_rating, label: 'Rating', as: :select, collection: -> {Rating.distinct.pluck :rating}
   filter :created_at
 end
