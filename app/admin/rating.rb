@@ -2,6 +2,13 @@ ActiveAdmin.register Rating do
 
   actions :index
 
+  filter :rating
+  filter :comment
+  filter :rated_on
+  filter :user, label: 'Rated By'
+  filter :status, as: :select, collection: -> { Rating.statuses }
+  filter :created_at
+
   index do
     column :created_at
     column :rating
@@ -51,6 +58,8 @@ ActiveAdmin.register Rating do
     resource.allowed!
     redirect_to admin_ratings_path, notice: 'Rating Allowed!'
   end
+
+
 
 
 end
