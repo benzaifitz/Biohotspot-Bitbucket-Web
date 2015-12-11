@@ -29,7 +29,47 @@ ActiveAdmin.register User do
       (item 'Enable', enable_admin_user_path(user), class: 'member_link', method: :put) if user.banned?
       item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end
+  end
 
+  show do
+    attributes_table do
+      row :first_name
+      row :last_name
+      row :email
+      row :user_type
+      row :company
+      row :status
+      row :rating
+      row :number_of_ratings
+      row :eula
+      row :sign_in_count
+      row :last_sign_in_at
+      row :current_sign_in_at
+      row :confirmed_at
+      row :reset_password_sent_at
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  csv do
+    column :id
+    column :first_name
+    column :last_name
+    column :email
+    column :user_type
+    column :company
+    column :status
+    column :rating
+    column :number_of_ratings
+    column :eula
+    column :sign_in_count
+    column :last_sign_in_at
+    column :current_sign_in_at
+    column :confirmed_at
+    column :reset_password_sent_at
+    column :created_at
+    column :updated_at
   end
 
   filter :firstname
