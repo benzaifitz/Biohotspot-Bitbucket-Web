@@ -24,4 +24,9 @@ ActiveAdmin.register Job, as: 'Job Events' do
     @versions = job.versions.to_a
   end
 
+
+  filter :offered_by
+  filter :user, label: 'Staff'
+  filter :status, as: :select, collection: -> { Job.statuses }
+  filter :created_at
 end
