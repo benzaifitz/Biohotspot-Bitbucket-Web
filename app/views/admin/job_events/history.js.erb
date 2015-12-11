@@ -1,0 +1,6 @@
+$('.job_versions').remove();
+<% if @versions.blank? %>
+    alert('This job has no history yet!');
+<% else %>
+    $('*[data-id="<%= @id %>"]').parents('tr').after("<%= escape_javascript(render 'history') %>");
+<% end %>

@@ -1,0 +1,33 @@
+<div class="container job_versions">
+  <br>
+  <h2 id="page_title">Versions</h2>
+  <br>
+  <table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+      <th>Created At</th>
+      <th>Staff Id</th>
+      <th>Staff</th>
+      <th>Staff Company</th>
+      <th>Customer Id</th>
+      <th>Customer</th>
+      <th>Status</th>
+    </tr>
+    </thead>
+    <tbody class="product-index">
+        <% @versions.each do |job| %>
+            <% job = job.reify %>
+            <tr>
+              <td><%= job.created_at %></td>
+              <td><%= job.offered_by_id %></td>
+              <td><%= job.offered_by.name %></td>
+              <td><%= job.offered_by.company %></td>
+              <td><%= job.user_id %></td>
+              <td><%= job.user.name %></td>
+              <td><%= job.status %></td>
+            </tr>
+        <% end %>
+    </tbody>
+  </table>
+</div>
+<br>
