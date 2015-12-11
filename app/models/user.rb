@@ -40,17 +40,38 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
   
   enum user_type: [:staff, :administrator, :customer]
-  
-  belongs_to :eula
-  #belongs_to :user_type
-  #belongs_to :user_status
   enum status: [:active, :banned]
 
+  # manual paper trail initialization
+  class_attribute :version_association_name
+  self.version_association_name = :version
+
+  # The version this instance was reified from.
+  attr_accessor self.version_association_name
+
+  belongs_to :eula
   has_many :ratings
   has_many :blocked_users
   has_many :jobs
   has_many :notifications
   has_many :chats
   has_many :conversations
+
+  after_update :log_user_events
+
+  def log_user_events
+    attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
+    if self.changed_attributes.keys.include?('sign_in_count')
+      PaperTrail::Version.create(attr.merge(event: 'Login'))
+    elsif self.changed_attributes.keys.include?('reset_password_sent_at')
+      PaperTrail::Version.create(attr.merge(event: 'Password reset requested'))
+    elsif self.changed_attributes.keys.include?('reset_password_token') && self.self.reset_password_token.nil?
+      PaperTrail::Version.create(attr.merge(event: 'Password reset'))
+    elsif self.changed_attributes.keys.include?('current_sign_in_at') && self.current_sign_in_at.nil?
+      PaperTrail::Version.create(attr.merge(event: 'Logout'))
+    elsif self.changed_attributes.keys.include?('status')
+      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit}))
+    end
+  end
   
 end
