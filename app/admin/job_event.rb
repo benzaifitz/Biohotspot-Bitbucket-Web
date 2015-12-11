@@ -26,7 +26,7 @@ ActiveAdmin.register Job, as: 'Job Events' do
 
 
   filter :offered_by
-  filter :user, label: 'Staff'
+  filter :user, label: 'Customer'
   filter :status, as: :select, collection: -> { Job.statuses }
   filter :created_at
 end
