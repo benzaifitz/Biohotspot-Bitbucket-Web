@@ -72,13 +72,13 @@ ActiveAdmin.register User do
     column :updated_at
   end
 
-  filter :firstname
+  filter :first_name
   filter :last_name
   filter :email
   filter :user_type, as: :select, collection: -> { User.user_types }
   filter :company
   filter :last_sign_in_at
-  filter :status
+  filter :status, as: :select, collection: -> { User.statuses }
 
   member_action :ban, method: :put do
     resource.banned!
