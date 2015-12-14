@@ -3,22 +3,22 @@ ActiveAdmin.register Notification do
   actions :index, :new
 
   filter :created_at
-  filter :notification_type, as: :select, collection: Notification.notification_types
+  filter :notification_type, as: :select, collection: -> { Notification.notification_types }
 
   filter :sent_by_id, label: 'Sender Id'
-  filter :sender, as: :select, collection: User.administrator
+  filter :sender, as: :select, collection: -> { User.administrator }
   filter :sender_first_name_cont, label: 'Sender First Name'
   filter :sender_last_name_cont, label: 'Sender Last Name'
 
   filter :user_id, label: 'Recipient Id'
   filter :user_first_name_cont, label: 'Recipient First Name'
   filter :user_last_name_cont, label: 'Recipient Last Name'
-  filter :user_type, label: 'Recipient Type',as: :select, collection:  User.user_types
+  filter :user_type, label: 'Recipient Type',as: :select, collection: -> { User.user_types }
   filter :user, label: 'Recipient'
 
   filter :subject
 
-  permit_params :user_id, :user_type, :subject, :message
+  permit_params :subject, :message
 
   index do
     selectable_column
@@ -79,8 +79,8 @@ ActiveAdmin.register Notification do
       notification_params = params[:notification]
       if notification_params[:user_id].present?
         user = User.find(notification_params[:user_id])
-        notification = Notification.create!(user_id: user.id, user_type: user[:user_type], message: notification_params[:message],
-                          subject: notification_params[:subject], notification_type: notification_params[:notification_type].to_i, status: Notification.statuses[:created], sent_by_id: current_user.id)
+        notification = Notification.create!(permitted_params[:notification].merge({user_id: user.id, user_type: user[:user_type],
+                        notification_type: notification_params[:notification_type].to_i ,status: Notification.statuses[:created], sent_by_id: current_user.id}))
       else
         user_group_type = User.user_types.key(notification_params[:user_type].to_i)
         NotificationQueueJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
