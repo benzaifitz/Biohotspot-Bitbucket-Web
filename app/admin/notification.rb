@@ -18,7 +18,7 @@ ActiveAdmin.register Notification do
 
   filter :subject
 
-  permit_params :subject, :message
+  permit_params :subject, :message, :notification_type, :user_id, :user_type
 
   index do
     selectable_column
@@ -76,24 +76,29 @@ ActiveAdmin.register Notification do
     end
 
     def create
-      notification_params = params[:notification]
-      if notification_params[:user_id].present?
-        user = User.find(notification_params[:user_id])
-        notification = Notification.create!(permitted_params[:notification].merge({user_id: user.id, user_type: user[:user_type],
-                        notification_type: notification_params[:notification_type].to_i ,status: Notification.statuses[:created], sent_by_id: current_user.id}))
-      else
-        user_group_type = User.user_types.key(notification_params[:user_type].to_i)
-        NotificationQueueJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
-        notifications_queued = true
-      end
 
-      if notifications_queued || notification.persisted?
-        redirect_to admin_notifications_path,
-                    notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
-      else
-        flash[:error] = 'Some errors occured while sending message!'
-        redirect_to admin_notifications_path
-      end
+      NotificationQueueJob.perform_later(permitted_params[:notification].merge({ status: Notification.statuses[:created],
+                                                                                 sent_by_id: current_user.id}))
+
+      # notification_params = params[:notification]
+      # if notification_params[:user_id].present?
+      #   notification = Notification.create!(permitted_params[:notification].merge({ status: Notification.statuses[:created],
+      #                                                                               sent_by_id: current_user.id}))
+      # else
+      #   user_group_type = User.user_types.key(notification_params[:user_type].to_i)
+      #   NotificationQueueJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
+      #   notifications_queued = true
+      # end
+      redirect_to admin_notifications_path,
+                  notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
+
+      # if notifications_queued || notification.persisted?
+      #   redirect_to admin_notifications_path,
+      #               notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
+      # else
+      #   flash[:error] = 'Some errors occured while sending message!'
+      #   redirect_to admin_notifications_path
+      # end
     end
   end
 end
