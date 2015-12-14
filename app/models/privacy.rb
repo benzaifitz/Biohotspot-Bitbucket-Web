@@ -10,9 +10,4 @@
 #
 
 class Privacy < ActiveRecord::Base
-
-  def deprecate!
-    self.is_latest = false
-    self.save!
-  end
 end

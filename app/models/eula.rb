@@ -12,8 +12,4 @@
 class Eula < ActiveRecord::Base
   has_many :users
 
-  def deprecate!
-    self.is_latest = false
-    self.save!
-  end
 end

@@ -41,18 +41,14 @@ ActiveAdmin.register Eula, as: 'Terms And Condition' do
         eula.destroy!
         redirect_to admin_terms_and_conditions_path, notice: 'Terms and Conditions deleted successfully.'
       else
-        redirect_to admin_terms_and_conditions_path, flash: { error: 'Latest Terms and Conditions cannot be deleted' }
+        redirect_to admin_terms_and_conditions_path, flash: { error: 'Latest Terms and Conditions cannot be deleted.' }
       end
     end
 
     def create
-      eula = Eula.new(permitted_params[:eula])
-      eula.is_latest = true
+      eula = Eula.new(permitted_params[:eula].merge(is_latest: true ))
       if eula.save
-        old_eulas = Eula.where('is_latest = ?', true)
-        old_eulas.each do |old_eula|
-          old_eula.deprecate! unless old_eula.eql? eula
-        end
+        Eula.where('is_latest = ? and id != ?', true, eula.id).update_all(is_latest: false)
         redirect_to admin_terms_and_condition_path(eula), notice: 'Terms and Conditions created successfully.'
       else
         redirect_to admin_terms_and_conditions_path, flash: { error: 'Terms and conditions could not be created.' }
@@ -61,14 +57,7 @@ ActiveAdmin.register Eula, as: 'Terms And Condition' do
   end
 
   batch_action :destroy, method: :delete, confirm: "Are you sure you want to delete these Terms and Conditions?" do |ids|
-    eulas = Eula.where(id: ids)
-    deleted_count = 0
-    eulas.each do |eula|
-      unless eula.is_latest
-        deleted_count = deleted_count + 1
-        eula.destroy!
-      end
-    end
-    redirect_to admin_terms_and_conditions_path, notice: "#{deleted_count} Terms and Conditions deleted."
+    deleted_eulas_count = Eula.where("id in (?) and is_latest = ?", ids, false).delete_all
+    redirect_to admin_terms_and_conditions_path, notice: "#{deleted_eulas_count} Terms and Conditions deleted."
   end
 end
