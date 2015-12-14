@@ -76,9 +76,9 @@ ActiveAdmin.register Notification do
     end
 
     def create
-
+      byebug
       NotificationQueueJob.perform_later(permitted_params[:notification].merge({ status: Notification.statuses[:created],
-                                                                                 sent_by_id: current_user.id}))
+                                                                                 sent_by_id: current_user.id, notification_type: permitted_params[:notification][:notification_type].to_i}))
 
       # notification_params = params[:notification]
       # if notification_params[:user_id].present?
