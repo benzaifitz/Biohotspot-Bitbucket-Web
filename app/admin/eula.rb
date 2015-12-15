@@ -48,7 +48,7 @@ ActiveAdmin.register Eula, as: 'Terms And Condition' do
     def create
       eula = Eula.new(permitted_params[:eula].merge(is_latest: true ))
       if eula.save
-        Eula.where('is_latest = ? and id != ?', true, eula.id).update_all(is_latest: false)
+        Eula.where('id != ?', eula.id).update_all(is_latest: false)
         redirect_to admin_terms_and_condition_path(eula), notice: 'Terms and Conditions created successfully.'
       else
         redirect_to admin_terms_and_conditions_path, flash: { error: 'Terms and conditions could not be created.' }
