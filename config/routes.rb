@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :customers, only: [:show, :update]
       resources :blocked_users, only: [:index, :create, :show]
       delete 'un_blocked_user' => 'blocked_users#destroy'
+      get 'eula/latest' => 'eulas#latest'
     end
   end
   
