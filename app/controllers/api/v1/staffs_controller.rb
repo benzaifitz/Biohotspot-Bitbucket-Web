@@ -25,7 +25,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def staff_params
-        permitted_params = [:first_name, :last_name, :email, :company]
+        permitted_params = [:first_name, :last_name, :email, :company, :eula_id]
         permitted_params += [:password] if params[:staff] && !params[:staff][:password].blank?
         params.require(:staff).permit(permitted_params)
       end
