@@ -20,7 +20,7 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_staff
-        @staff = Staff.find(params[:id])
+        @staff = current_user || Staff.new #Staff.find(params[:id])
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
