@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       resources :staffs, only: [:show, :update]
       resources :customers, only: [:show, :update]
       resources :blocked_users, only: [:index, :create, :show]
+      delete 'un_blocked_user' => 'blocked_users#destroy'
     end
   end
   
