@@ -1,13 +1,13 @@
-ActiveAdmin.register Privacy, as: 'Privacy Policy' do
+ActiveAdmin.register Eula, as: 'Terms And Condition' do
 
   filter :is_latest
   filter :created_at
-
-  permit_params :is_latest, :privacy_text
+  
+  permit_params :is_latest, :eula_text
 
   form do |f|
-    inputs 'Privacy Policy' do
-      input :privacy_text, as: :ckeditor, label: "Privacy Policy Text"
+    inputs 'Terms and Conditions (EULA)' do
+      input :eula_text, as: :ckeditor, label: "Terms and Condition Text"
       input :is_latest
     end
     actions
@@ -16,7 +16,7 @@ ActiveAdmin.register Privacy, as: 'Privacy Policy' do
   show do
     attributes_table do
       row :id
-      row (:privacy_text) {|privacy| raw privacy.privacy_text}
+      row (:eula_text) {|eula| raw eula.eula_text}
       row :is_latest
       row :created_at
       row :updated_at
