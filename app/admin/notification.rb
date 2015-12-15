@@ -76,29 +76,12 @@ ActiveAdmin.register Notification do
     end
 
     def create
-      byebug
-      NotificationQueueJob.perform_later(permitted_params[:notification].merge({ status: Notification.statuses[:created],
-                                                                                 sent_by_id: current_user.id, notification_type: permitted_params[:notification][:notification_type].to_i}))
-
-      # notification_params = params[:notification]
-      # if notification_params[:user_id].present?
-      #   notification = Notification.create!(permitted_params[:notification].merge({ status: Notification.statuses[:created],
-      #                                                                               sent_by_id: current_user.id}))
-      # else
-      #   user_group_type = User.user_types.key(notification_params[:user_type].to_i)
-      #   NotificationQueueJob.perform_later(current_user.id, user_group_type, notification_params[:message], notification_params[:subject],notification_params[:notification_type].to_i)
-      #   notifications_queued = true
-      # end
+      attrs = permitted_params[:notification]
+      NotificationQueueJob.perform_later(attrs.merge({ status: Notification.statuses[:created],
+                                                       sent_by_id: current_user.id,
+                                                       notification_type: attrs[:notification_type].to_i}))
       redirect_to admin_notifications_path,
                   notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
-
-      # if notifications_queued || notification.persisted?
-      #   redirect_to admin_notifications_path,
-      #               notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
-      # else
-      #   flash[:error] = 'Some errors occured while sending message!'
-      #   redirect_to admin_notifications_path
-      # end
     end
   end
 end

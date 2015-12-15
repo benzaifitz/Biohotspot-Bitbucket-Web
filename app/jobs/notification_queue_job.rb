@@ -6,8 +6,6 @@ class NotificationQueueJob < ActiveJob::Base
     users.find_each do |user|
       begin
         Notification.create!(attr.merge(user_id: user.id))
-        # , user_type: user[:user_type], message: message, subject: subject,
-        #   notification_type: notification_type, status: Notification.statuses[:created], sent_by_id: sender_id)
       rescue StandardError => err
         raise err
         # Todo Add exception handling
