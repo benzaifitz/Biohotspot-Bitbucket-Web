@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 20151211123033) do
     t.datetime "updated_at",                    null: false
     t.integer  "notification_type", default: 0, null: false
     t.integer  "user_type",         default: 0, null: false
+    t.integer  "status",            default: 0, null: false
   end
 
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
