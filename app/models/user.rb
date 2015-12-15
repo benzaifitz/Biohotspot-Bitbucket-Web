@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   has_many :chats
   has_many :conversations
 
+  attr_accessor :status_change_comment
+
   after_update :log_user_events
 
   def log_user_events
@@ -70,12 +72,17 @@ class User < ActiveRecord::Base
     elsif self.changed_attributes.keys.include?('current_sign_in_at') && self.current_sign_in_at.nil?
       PaperTrail::Version.create(attr.merge(event: 'Logout'))
     elsif self.changed_attributes.keys.include?('status')
-      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit}))
+      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
     end
   end
   
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def ban_with_comment(comment)
+    self.status_change_comment = comment
+    self.banned!
   end
 end

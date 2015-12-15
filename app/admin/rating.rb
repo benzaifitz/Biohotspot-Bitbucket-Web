@@ -31,16 +31,20 @@ ActiveAdmin.register Rating do
     column :comment
     column :status
     actions do |r|
-      (item 'Ban', ban_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.active?
+      (item 'Ban', confirm_ban_admin_rating_path(r), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.rated_on.active?
       (item 'Enable', enable_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.banned?
       (item 'Censor', censor_admin_rating_path(r), class: 'member_link', method: :put) if r.active? || r.allowed?
       (item 'Allow', allow_admin_rating_path(r), class: 'member_link', method: :put) if !r.allowed?
     end
   end
 
+  member_action :confirm_ban, method: :get do
+    @user = resource.rated_on
+    render template: 'admin/users/confirm_ban', :layout => false
+  end
 
   member_action :ban, method: :put do
-    resource.rated_on.banned!
+    resource.rated_on.ban_with_comment(params[:user][:status_change_comment])
     redirect_to admin_ratings_path, notice: 'User Banned!'
   end
 
