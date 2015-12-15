@@ -1,5 +1,5 @@
-class Staff < User
-  default_scope -> { where(user_type: User.user_types['staff']) }
+class Customer < User
+  default_scope -> { where(user_type: User.user_types['customer']) }
   before_update :check_duplicate_email
 
   def check_duplicate_email
