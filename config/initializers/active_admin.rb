@@ -226,6 +226,23 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
+  config.show_comments_in_menu = false
+
+  config.namespace :admin do |admin|
+    admin.build_menu do |menu|
+      menu.add label: 'Users', priority: 1
+      menu.add label: 'License', priority: 2
+      menu.add label: 'Jobs', priority: 3
+      menu.add label: 'User Content', priority: 5 do |user_content|
+        user_content.add label: "Administrator Comments", url: 'comments'
+      end
+      menu.add label: 'Settings', priority: 7 do |settings_menu|
+        settings_menu.add label: 'Logout', url: '/users/sign_out', html_options: { method: 'delete' }, priority: 3
+      end
+    end
+  end
+
+
   # == Download Links
   #
   # You can disable download links on resource listing pages,

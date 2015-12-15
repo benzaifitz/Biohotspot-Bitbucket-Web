@@ -1,5 +1,7 @@
 ActiveAdmin.register Rating do
 
+  menu label: 'Ratings and Comments', parent: 'User Content', priority: 1
+
   actions :index
 
   filter :rating

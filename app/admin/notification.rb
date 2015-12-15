@@ -2,6 +2,8 @@ ActiveAdmin.register Notification do
 
   actions :index, :new
 
+  menu false
+
   filter :created_at
   filter :notification_type, as: :select, collection: -> { Notification.notification_types }
 

@@ -1,5 +1,7 @@
 ActiveAdmin.register ReportedRating do
 
+  menu label: 'Reported Comments', parent: 'User Content', priority: 2
+
   actions :index
 
   index do
