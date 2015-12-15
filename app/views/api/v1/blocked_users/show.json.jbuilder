@@ -1,0 +1,1 @@
+json.extract! @blocked_user, :user_id, :blocked_by_id
