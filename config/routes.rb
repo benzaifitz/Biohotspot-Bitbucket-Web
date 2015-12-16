@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       get 'eula/latest' => 'eulas#latest'
       get 'privacy/latest' => 'privacies#latest'
       resources :ratings, only: [:show, :create]
+      resources :reported_ratings, only: [:show, :create]
     end
   end
   
