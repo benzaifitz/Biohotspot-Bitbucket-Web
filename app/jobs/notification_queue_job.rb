@@ -1,5 +1,5 @@
 class NotificationQueueJob < ActiveJob::Base
-  queue_as :default
+  queue_as :notifications
 
   def perform(attrs = {})
     users = attrs[:user_id].blank? ? User.where(user_type: attrs[:user_type]) : User.where(id: attrs[:user_id])

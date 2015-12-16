@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
   has_many :conversations
 
   after_update :log_user_events
+  after_create :add_to_mailchimp
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
@@ -73,9 +74,13 @@ class User < ActiveRecord::Base
       PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit}))
     end
   end
-  
 
   def full_name
     "#{first_name} #{last_name}"
   end
+
+  def add_to_mailchimp
+    MailchimpAddUserJob.perform_later(self.id)
+  end
+
 end
