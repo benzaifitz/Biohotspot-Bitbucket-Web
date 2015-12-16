@@ -28,19 +28,14 @@ module Api
       def edit
       end
 
-      # POST /api/v1/jobs
       # POST /api/v1/jobs.json
       def create
-        @job = Job.new(job_params)
-
-        respond_to do |format|
-          if @job.save
-            format.html { redirect_to @job, notice: 'Job was successfully created.' }
-            format.json { render :show, status: :created, location: @job }
-          else
-            format.html { render :new }
-            format.json { render json: @job.errors, status: :unprocessable_entity }
-          end
+        return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
+        @job = Job.new(job_params.merge(offered_by: current_user))
+        if @job.save
+          render :show
+        else
+          render json: @job.errors, status: :unprocessable_entity
         end
       end
 
@@ -76,8 +71,10 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def job_params
-        params[:job]
+        permitted_params = [:user_id, :status]
+        params.require(:job).permit(permitted_params)
       end
+
     end
   end
 end
