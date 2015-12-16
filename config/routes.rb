@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       delete 'un_blocked_user' => 'blocked_users#destroy'
       get 'eula/latest' => 'eulas#latest'
       get 'privacy/latest' => 'privacies#latest'
-      resources :ratings, only: [:show, :create]
+      resources :ratings, only: [:show, :create, :update]
       resources :reported_ratings, only: [:show, :create]
     end
   end

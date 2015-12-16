@@ -62,7 +62,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def rating_params
-        permitted_params = [:rating, :comment, :rated_on_id]
+        permitted_params = [:rating, :comment, :rated_on_id, :status]
         params.require(:rating).permit(permitted_params)
       end
     end
