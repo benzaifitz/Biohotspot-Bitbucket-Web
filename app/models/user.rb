@@ -85,4 +85,13 @@ class User < ActiveRecord::Base
     self.status_change_comment = comment
     self.banned!
   end
+
+  def enable_with_comment(comment)
+    self.status_change_comment = comment
+    self.active!
+  end
+
+  def bannable
+    self
+  end
 end
