@@ -42,14 +42,10 @@ module Api
       # PATCH/PUT /api/v1/jobs/1
       # PATCH/PUT /api/v1/jobs/1.json
       def update
-        respond_to do |format|
-          if @job.update(job_params)
-            format.html { redirect_to @job, notice: 'Job was successfully updated.' }
-            format.json { render :show, status: :ok, location: @job }
-          else
-            format.html { render :edit }
-            format.json { render json: @job.errors, status: :unprocessable_entity }
-          end
+        if @job.update(job_params)
+          render :show
+        else
+          render json: @job.errors, status: :unprocessable_entity
         end
       end
 
