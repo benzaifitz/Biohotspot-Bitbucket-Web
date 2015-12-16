@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get 'privacy/latest' => 'privacies#latest'
       resources :ratings, only: [:show, :create, :update]
       resources :reported_ratings, only: [:show, :create]
+      resources :jobs
     end
   end
   
