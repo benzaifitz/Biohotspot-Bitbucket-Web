@@ -1,6 +1,6 @@
 module Api
   module V1
-    class RatingsController < ApplicationController
+    class RatingsController < ApiController
       before_action :authenticate_user!
       before_action :set_rating, only: [:show, :edit, :update, :destroy]
 
@@ -35,17 +35,12 @@ module Api
         end
       end
 
-      # PATCH/PUT /api/v1/ratings/1
       # PATCH/PUT /api/v1/ratings/1.json
       def update
-        respond_to do |format|
-          if @rating.update(rating_params)
-            format.html { redirect_to @rating, notice: 'Rating was successfully updated.' }
-            format.json { render :show, status: :ok, location: @rating }
-          else
-            format.html { render :edit }
-            format.json { render json: @rating.errors, status: :unprocessable_entity }
-          end
+        if @rating.update(rating_params)
+          render :show
+        else
+          render json: @rating.errors, status: :unprocessable_entity
         end
       end
 
