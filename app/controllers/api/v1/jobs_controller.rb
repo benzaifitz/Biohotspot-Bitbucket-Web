@@ -42,8 +42,7 @@ module Api
       # PATCH/PUT /api/v1/jobs/1
       # PATCH/PUT /api/v1/jobs/1.json
       def update
-        return render json: {error: 'Operation not allowed.'} if !is_user_allowed_to_set_job_status
-        if @job.update(job_params)
+        if @job.update(job_params.merge(current_user_type: current_user.user_type))
           render :show
         else
           render json: @job.errors, status: :unprocessable_entity
@@ -72,16 +71,6 @@ module Api
         params.require(:job).permit(permitted_params)
       end
 
-      def is_user_allowed_to_set_job_status
-        return true if ![Job.statuses['cancelled'], Job.statuses['withdrawn']].include?(job_params[:status].to_i)
-        if job_params[:status].to_i == Job.statuses['cancelled'] && current_user.staff?
-          true
-        elsif job_params[:status].to_i == Job.statuses['withdrawn'] && current_user.customer?
-          true
-        else
-          false
-        end
-      end
     end
   end
 end
