@@ -19,7 +19,7 @@ class Rating < ActiveRecord::Base
   belongs_to :rated_on, class_name: "User", foreign_key: "rated_on_id"
   has_many :reported_ratings
 
-  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :rated_on
+  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
 
   before_save :add_to_average_rating, if: Proc.new { |rating|
                                       rating.new_record? || (rating.status_changed? && rating.allowed?)

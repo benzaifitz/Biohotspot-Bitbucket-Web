@@ -45,8 +45,8 @@ ActiveAdmin.register ReportedRating do
       label r.rating.status
     end
     actions do |r|
-      (item 'Ban', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.rating.rated_on.active?
-      (item 'Enable', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.rating.rated_on.banned?
+      (item 'Ban', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.active?
+      (item 'Enable', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.banned?
       (item 'Censor', censor_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.active? || r.rating.allowed?
       (item 'Allow', allow_admin_reported_rating_path(r), class: 'member_link', method: :put) if !r.rating.allowed?
     end
