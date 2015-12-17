@@ -4,7 +4,7 @@ ActiveAdmin.register User, as: 'Administrator' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company]
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache]
     allowed.uniq
   end
   actions :all, :except => [:index]
@@ -16,6 +16,10 @@ ActiveAdmin.register User, as: 'Administrator' do
       f.input :email
       f.input :company
       f.input :password
+      f.inputs "Profile Picture", :multipart => true do
+        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
+        f.input :profile_picture_cache, :as => :hidden
+      end
     end
     f.actions do
       f.action(:submit)

@@ -35,6 +35,9 @@ ActiveAdmin.register User do
 
   show do
     attributes_table do
+      row :profile_picture do |u|
+        image_tag u.profile_picture.url
+      end
       row :first_name
       row :last_name
       row :email
