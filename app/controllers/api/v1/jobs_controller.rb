@@ -46,7 +46,7 @@ module Api
       # PATCH/PUT /api/v1/jobs/1.json
       api :PUT, '/jobs/:id.json', 'Update the job.'
       param :id, Integer, desc: 'Id of the job which is to be updated.', required: true
-      param :status, Integer, desc: 'New status of the job.', required: false
+      param :status, Integer, desc: 'New status of the job. possible values 0 (offered), 1 (completed), 2 (accepted), 3 (cancelled), 4 (rejected), 5 (withdrawn)', required: false
       def update
         if @job.update(job_params.merge(current_user_type: current_user.user_type))
           render :show
