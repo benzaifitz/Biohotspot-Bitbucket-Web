@@ -12,7 +12,8 @@ gem 'annotate'
 gem 'activeadmin', github: 'activeadmin'
 gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails'
-
+# MailChimp integration
+gem 'gibbon'
 group :development, :test do
   gem 'byebug'  
 end

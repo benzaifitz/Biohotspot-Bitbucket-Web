@@ -1,6 +1,7 @@
 ActiveAdmin.register User do
-
   include SharedAdmin
+
+  menu label: 'User List', parent: 'Users', priority: 0
 
   actions :index, :show, :destroy
 
