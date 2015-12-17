@@ -6,15 +6,20 @@ module Api
 
 
       # GET /api/v1/blocked_users.json
+      api :GET, '/blocked_users.json', 'Get all the users who are blocked by current user.'
       def index
         @blocked_users = BlockedUser.where(blocked_by: current_user)
       end
 
       # GET /api/v1/customers/1.json
+      api :GET, '/blocked_users/:id.json', 'Returns user_id and blocked_by_id'
+      param :id, Integer, desc: 'ID of blocked user to be shown.', required: true
       def show
       end
 
       # POST /api/v1/blocked_users.json
+      api :POST, '/blocked_users.json', 'Create single record of blocked user.'
+      param :user_id, Integer, desc: 'ID of users who is to be blocked.', required: true
       def create
         @blocked_user = BlockedUser.new(blocked_user_params.merge(blocked_by: current_user))
         if @blocked_user.save
@@ -24,7 +29,8 @@ module Api
         end
       end
 
-      # DELETE /api/v1/blocked_users/1.json
+      api :POST, '/un_blocked_user.json', 'Un blocks the user.'
+      param :user_id, Integer, desc: 'ID of user who is to be un blocked.', required: true
       def destroy
         @blocked_user = BlockedUser.where(blocked_user_params.merge(blocked_by: current_user))
         @blocked_user.destroy_all

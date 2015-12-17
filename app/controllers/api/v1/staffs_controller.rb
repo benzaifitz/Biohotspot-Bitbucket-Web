@@ -5,10 +5,20 @@ module Api
       before_action :set_staff, only: [:show, :update]
 
       # GET /api/v1/staffs/1.json
+      api :GET, '/staffs/:id.json', 'Show single staff resource.'
+      param :id, Integer, desc: 'ID of Staff to be shown.', required: true
       def show
       end
 
       # PATCH/PUT /api/v1/staffs/1.json
+      api :PUT, '/staffs/:id.json', 'Update single staff resource.'
+      param :id, Integer, desc: 'ID of Staff to be updated', required: true
+      param :first_name, String, desc: 'First Name of the Staff', required: false
+      param :last_name, String, desc: 'Last Name of the Staff', required: false
+      param :email, String, desc: 'Email of the Staff', required: false
+      param :company, String, desc: 'Company name of the Staff', required: false
+      param :eula_id, Integer, desc: 'Eula ID which has been accepted by the Staff', required: false
+      param :password, String, desc: 'Password of the Staff', required: false
       def update
         if @staff.update(staff_params)
           render :show

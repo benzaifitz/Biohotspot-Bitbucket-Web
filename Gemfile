@@ -15,13 +15,14 @@ gem 'dotenv-rails'
 # MailChimp integration
 gem 'gibbon'
 group :development, :test do
-  gem 'byebug'  
+  gem 'byebug'
 end
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'letter_opener'
 end
+gem 'apipie-rails'
 gem 'devise'
 gem 'high_voltage'
 gem 'simple_form'
