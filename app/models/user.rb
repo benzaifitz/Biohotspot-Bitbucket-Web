@@ -58,6 +58,7 @@ class User < ActiveRecord::Base
   has_many :conversations
 
   after_update :log_user_events
+  after_update :update_on_mailchimp
   after_create :add_to_mailchimp
 
   def log_user_events
@@ -81,6 +82,10 @@ class User < ActiveRecord::Base
 
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)
+  end
+
+  def update_on_mailchimp
+    MailchimpUpdateUserJob.perform_later(self.id, self.email_was)
   end
 
 end
