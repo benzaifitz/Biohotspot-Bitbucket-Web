@@ -18,6 +18,9 @@ class Job < ActiveRecord::Base
   attr_accessor :current_user_type
 
   before_update :is_user_allowed_to_set_job_status
+  after_update :send_push_notification_to_customer, if: Proc.new {|job| job.status_changed? &&
+                                                 (job.cancelled? || job.accepted? || job.rejected?)}
+  after_update :send_push_notification_to_staff
 
   def is_user_allowed_to_set_job_status
     return true if !['cancelled', 'withdrawn'].include?(status)
@@ -28,6 +31,14 @@ class Job < ActiveRecord::Base
     else
       self.errors.add(:status, 'Not allowed to be changed by this user type!') && false
     end
+  end
+
+  def send_push_notification_to_customer
+
+  end
+
+  def send_push_notification_to_staff
+
   end
 
 end
