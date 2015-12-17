@@ -13,11 +13,12 @@ ActiveAdmin.register User, as: 'Customer' do
 
   form do |f|
     f.inputs 'Customer Details' do
+      f.input :email
+      f.input :password
+      f.input :username
+      f.input :company
       f.input :first_name
       f.input :last_name
-      f.input :email
-      f.input :company
-      f.input :password
     end
     f.actions do
       f.action(:submit)

@@ -57,6 +57,11 @@ class User < ActiveRecord::Base
   has_many :chats
   has_many :conversations
 
+  validates_presence_of :username
+  validates_presence_of :company, if: Proc.new { |user| user.staff? }
+  validates_uniqueness_of :username
+
+
   after_update :log_user_events
   after_update :update_on_mailchimp
   after_create :add_to_mailchimp
