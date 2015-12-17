@@ -60,6 +60,7 @@ class User < ActiveRecord::Base
   after_update :log_user_events
   after_update :update_on_mailchimp
   after_create :add_to_mailchimp
+  after_destroy :delete_from_mailchimp
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
@@ -85,7 +86,15 @@ class User < ActiveRecord::Base
   end
 
   def update_on_mailchimp
-    MailchimpUpdateUserJob.perform_later(self.id, self.email_was)
+    if self.banned?
+      MailchimpDeleteUserJob.perform_later(self.email)
+    else
+      MailchimpUpdateUserJob.perform_later(self.id, self.email_was)
+    end
+  end
+
+  def delete_from_mailchimp
+    MailchimpDeleteUserJob.perform_later(self.email)
   end
 
 end
