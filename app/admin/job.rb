@@ -7,20 +7,20 @@ ActiveAdmin.register Job do
   index do
     id_column
     column :created_at
-    column 'Staff Id', :offered_by_id
-    column 'Staff', :offered_by
-    column 'Staff Company' do |j|
+    column 'Customer Id', :offered_by_id
+    column 'Customer', :offered_by
+    column 'Customer Company' do |j|
       label j.offered_by.company
     end
     column :description
-    column 'Customer Id', :user_id
-    column 'Customer', :user
+    column 'Staff Id', :user_id
+    column 'Staff', :user
     column :status
   end
 
 
-  filter :offered_by, label: 'Staff'
-  filter :user, label: 'Customer'
+  filter :offered_by, label: 'Customer'
+  filter :user, label: 'Staff'
   filter :status, as: :select, collection: -> { Job.statuses }
   filter :created_at
 
