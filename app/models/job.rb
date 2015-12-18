@@ -18,8 +18,7 @@ class Job < ActiveRecord::Base
   attr_accessor :current_user_type
 
   before_update :is_user_allowed_to_set_job_status
-  after_update :send_push_notification_to_customer, if: Proc.new {|job| job.status_changed? &&
-                                                 (job.cancelled? || job.accepted? || job.rejected?)}
+  after_update :send_push_notification_to_customer, if: :status_of_customer_interest_has_changed?
   after_update :send_push_notification_to_staff
 
   def is_user_allowed_to_set_job_status
@@ -34,11 +33,20 @@ class Job < ActiveRecord::Base
   end
 
   def send_push_notification_to_customer
-
+    n = Rpush::Apns::Notification.new
+    n.app = Rpush::Apns::App.find_by_name('framework')
+    n.device_token = self.offered_by.device_token
+    n.alert = "Status of job changed to #{status}"
+    n.data = { job_id: id, status: status, user_id: user_id, description: description }
+    n.save!
   end
 
   def send_push_notification_to_staff
 
+  end
+
+  def status_of_customer_interest_has_changed?
+    status_changed? && (cancelled? || accepted? || rejected?)
   end
 
 end

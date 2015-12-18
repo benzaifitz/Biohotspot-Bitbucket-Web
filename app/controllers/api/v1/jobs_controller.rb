@@ -67,7 +67,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def job_params
-        permitted_params = [:user_id, :status]
+        permitted_params = [:user_id, :status, :description]
         params.require(:job).permit(permitted_params)
       end
 

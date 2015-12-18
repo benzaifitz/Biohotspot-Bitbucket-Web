@@ -14,6 +14,8 @@ gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails'
 # MailChimp integration
 gem 'gibbon'
+# The push notification service.
+gem 'rpush'
 group :development, :test do
   gem 'byebug'  
 end

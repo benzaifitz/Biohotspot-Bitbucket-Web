@@ -12,6 +12,7 @@ ActiveAdmin.register Job do
     column 'Staff Company' do |j|
       label j.offered_by.company
     end
+    column :description
     column 'Customer Id', :user_id
     column 'Customer', :user
     column :status

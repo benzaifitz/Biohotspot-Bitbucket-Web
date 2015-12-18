@@ -7,3 +7,13 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 user = CreateAdminService.new.call
 puts 'CREATED ADMIN USER: ' << user.email
+
+if Rpush::Apns::App.find_by_name("framework").nil?
+  app = Rpush::Apns::App.new
+  app.name = 'framework'
+  app.certificate = File.read("#{Rails.root}/config/certs/fram-apns-dev.pem")
+  app.environment = 'sandbox' # APNs environment.
+  app.password = nil
+  app.connections = 1
+  app.save!
+end
