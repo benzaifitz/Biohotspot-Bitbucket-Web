@@ -219,6 +219,8 @@ ActiveRecord::Schema.define(version: 20151218115113) do
     t.string   "uid",                    default: "",      null: false
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
+    t.string   "profile_picture"
+    t.string   "username",                                 null: false
     t.string   "device_token"
     t.string   "device_type"
     t.string   "profile_picture"

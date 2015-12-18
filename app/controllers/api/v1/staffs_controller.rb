@@ -1,8 +1,15 @@
 module Api
   module V1
     class StaffsController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :set_staff, only: [:show, :update]
+
+      #GET /api/v1/staffs.json
+      api :GET, '/staffs.json'
+      param :q, String, desc: 'Search staff resources with name'
+      def index
+        @staffers = Staff.search(params[:q]).page(params[:page] || 1)
+      end
 
       # GET /api/v1/staffs/1.json
       api :GET, '/staffs/:id.json', 'Show single staff resource.'

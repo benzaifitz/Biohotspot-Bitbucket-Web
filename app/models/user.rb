@@ -126,5 +126,4 @@ class User < ActiveRecord::Base
   def mailchimp_related_fields_updated?
     email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
   end
-
 end
