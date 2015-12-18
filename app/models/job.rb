@@ -34,7 +34,7 @@ class Job < ActiveRecord::Base
 
   def send_push_notification_to_customer
     n = Rpush::Apns::Notification.new
-    n.app = Rpush::Apns::App.find_by_name('framework')
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status}"
     n.data = { job_id: id, status: status, user_id: user_id, description: description }
