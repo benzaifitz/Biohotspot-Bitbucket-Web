@@ -1,4 +1,5 @@
 ActiveAdmin.register User do
+  include SharedAdmin
 
   menu label: 'User List', parent: 'Users', priority: 0
 
@@ -27,8 +28,8 @@ ActiveAdmin.register User do
     column :status
     actions do |user|
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
-      (item 'Ban', confirm_ban_admin_user_path(user), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.active?
-      (item 'Enable', enable_admin_user_path(user), class: 'member_link', method: :put) if user.banned?
+      (item 'Ban', confirm_status_change_admin_user_path(user, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.active?
+      (item 'Enable', confirm_status_change_admin_user_path(user, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.banned?
       item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end
   end
@@ -81,20 +82,4 @@ ActiveAdmin.register User do
   filter :company
   filter :last_sign_in_at
   filter :status, as: :select, collection: -> { User.statuses }
-
-  member_action :confirm_ban, method: :get do
-    render :layout => false
-  end
-
-  member_action :ban, method: :put do
-    resource.ban_with_comment(params[:user][:status_change_comment])
-    redirect_to admin_users_path, notice: 'User Banned!'
-  end
-
-  member_action :enable, method: :put do
-    # resource.status_change_comment = params[:user][:status_change_comment]
-    resource.active!
-    redirect_to admin_users_path, notice: 'User Enabled!'
-  end
-
 end

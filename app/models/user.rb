@@ -88,6 +88,16 @@ class User < ActiveRecord::Base
     self.banned!
   end
 
+  def enable_with_comment(comment)
+    self.status_change_comment = comment
+    self.active!
+  end
+
+  def bannable
+    self
+  end
+
+
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)
   end
