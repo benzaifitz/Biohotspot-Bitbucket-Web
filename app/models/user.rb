@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-
+  enum device_type: [:ios, :android]
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version

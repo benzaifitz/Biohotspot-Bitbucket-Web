@@ -19,6 +19,8 @@ module Api
       param :company, String, desc: 'Company name of the Staff', required: false
       param :eula_id, Integer, desc: 'Eula ID which has been accepted by the Staff', required: false
       param :password, String, desc: 'Password of the Staff', required: false
+      param :device_token, String, desc: 'Device Token', required: false
+      param :device_type, String, desc: 'Device Type (iOS,Android)', required: false
       def update
         if @staff.update(staff_params)
           render :show
@@ -35,7 +37,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def staff_params
-        permitted_params = [:first_name, :last_name, :email, :company, :eula_id]
+        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type]
         permitted_params += [:password] if params[:staff] && !params[:staff][:password].blank?
         params.require(:staff).permit(permitted_params)
       end
