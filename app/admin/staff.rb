@@ -5,7 +5,7 @@ ActiveAdmin.register User, as: 'Staff' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company]
+    allowed += [:first_name, :last_name, :email, :company, :username]
     allowed.uniq
   end
 
@@ -26,8 +26,6 @@ ActiveAdmin.register User, as: 'Staff' do
   end
 
   controller do
-    before_filter :check_duplicate_email, :only => :update
-
     def update
       super do |format|
         redirect_to admin_users_path, :notice => 'Staff updated successfully.' and return if resource.valid?
@@ -37,12 +35,6 @@ ActiveAdmin.register User, as: 'Staff' do
     def create
       super do |format|
         redirect_to admin_users_path, :notice => 'Staff created successfully.' and return if resource.valid?
-      end
-    end
-
-    def check_duplicate_email
-      if params[:user][:email] != resource.email && !User.find_by_email(params[:user][:email]).nil?
-        redirect_to edit_admin_staff_path, alert: 'Duplicate email.' and return
       end
     end
   end
