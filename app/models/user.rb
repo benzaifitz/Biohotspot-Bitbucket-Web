@@ -97,6 +97,7 @@ class User < ActiveRecord::Base
     self
   end
 
+
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)
   end
