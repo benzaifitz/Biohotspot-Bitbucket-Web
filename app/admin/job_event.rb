@@ -8,12 +8,16 @@ ActiveAdmin.register Job, as: 'Job Events' do
     id_column
     column :created_at
     column 'Customer Id', :offered_by_id
-    column 'Customer', :offered_by
+    column 'Customer' do |je|
+      link_to je.offered_by.username, admin_user_path(je.offered_by)
+    end
     column 'Customer Company' do |j|
       label j.offered_by.company
     end
     column 'Staff Id', :user_id
-    column 'Staff', :user
+    column 'Staff' do |je|
+      link_to je.user.username, admin_user_path(je.user)
+    end
     column :status
     actions do |r|
       item 'History', history_admin_job_event_path(r), class: 'job_history_link member_link', data: {id: r.id}, remote: true

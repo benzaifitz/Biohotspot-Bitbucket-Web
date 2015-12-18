@@ -7,7 +7,9 @@ ActiveAdmin.register ReportedRating do
 
   index do
     column :created_at
-    column :reported_by
+    column 'Reported By' do |r|
+      link_to r.reported_by.username, admin_user_path(r.reported_by)
+    end
     column 'Reported By Company' do |r|
       label r.reported_by.company
     end
@@ -18,7 +20,7 @@ ActiveAdmin.register ReportedRating do
       r.rating.rating
     end
     column 'Rating For' do |r|
-      label r.rating.rated_on.name
+      link_to r.rating.rated_on.username, admin_user_path(r.rating.rated_on)
     end
     column 'Rating For Company' do |r|
       label r.rating.rated_on.company
@@ -27,7 +29,7 @@ ActiveAdmin.register ReportedRating do
       label r.rating.rated_on.user_type
     end
     column 'Rating By' do |r|
-      label r.rating.user.name
+      link_to r.rating.user.username, admin_user_path(r.rating.user)
     end
     column 'Rating By Company' do |r|
       label r.rating.user.company

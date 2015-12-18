@@ -7,19 +7,16 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
   index do
     id_column
     column :created_at
-    column :first_name do |v|
-      label v.reify.first_name
-    end
-    column :last_name do |v|
-      label v.reify.last_name
+    column "User" do |v|
+      link_to v.item.username, admin_user_path(v.item)
     end
     column :email do |v|
-      label v.reify.email
+      label v.item.email
     end
     column :event
     column 'Admin' do |v|
       user = v.whodunnit.nil? ? nil : User.find(v.whodunnit)
-      label user.nil? ? '' : (user.full_name.nil? ? user.email : user.full_name)
+      label user.nil? ? '' : link_to(user.username, admin_user_path(user))
     end
     column :comment
   end

@@ -222,10 +222,12 @@ ActiveRecord::Schema.define(version: 20151218091646) do
     t.string   "device_token"
     t.string   "device_type"
     t.string   "profile_picture"
+    t.string   "username",                                 null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false

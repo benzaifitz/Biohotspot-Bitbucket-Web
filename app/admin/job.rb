@@ -8,13 +8,17 @@ ActiveAdmin.register Job do
     id_column
     column :created_at
     column 'Customer Id', :offered_by_id
-    column 'Customer', :offered_by
+    column 'Customer'do |j|
+      link_to j.offered_by.username, admin_user_path(j.offered_by)
+    end
     column 'Customer Company' do |j|
       label j.offered_by.company
     end
     column :description
     column 'Staff Id', :user_id
-    column 'Staff', :user
+    column 'Staff'do |j|
+      link_to j.user.username, admin_user_path(j.user)
+    end
     column :status
   end
 

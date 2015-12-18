@@ -17,7 +17,7 @@ ActiveAdmin.register Rating do
     column :created_at
     column :rating
     column 'Rating For' do |r|
-      label r.rated_on.name
+      link_to r.rated_on.username, admin_user_path(r.rated_on)
     end
     column 'Rating For Company' do |r|
       label r.rated_on.company
@@ -25,7 +25,9 @@ ActiveAdmin.register Rating do
     column 'Rating For User Type' do |r|
       label r.rated_on.user_type
     end
-    column 'Rating By', :user
+    column 'Rating By' do |r|
+      link_to r.user.username, admin_user_path(r.user)
+    end
     column 'Rating By Company' do |r|
       label r.user.company
     end

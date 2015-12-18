@@ -16,6 +16,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  name                   :string
+#  username               :string           not null, unique
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
@@ -59,6 +60,12 @@ class User < ActiveRecord::Base
   has_many :chats
   has_many :conversations
 
+  validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
+  validates_presence_of :username, :email
+  validates_presence_of :company, if: Proc.new { |user| user.staff? }
+  validates_uniqueness_of :username, :email
+
+
   attr_accessor :status_change_comment
 
   after_update :log_user_events
@@ -98,6 +105,7 @@ class User < ActiveRecord::Base
   def bannable
     self
   end
+
 
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)

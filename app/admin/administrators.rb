@@ -4,22 +4,23 @@ ActiveAdmin.register User, as: 'Administrator' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache]
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username]
     allowed.uniq
   end
   actions :all, :except => [:index]
 
   form do |f|
     f.inputs 'Administrator Details' do
-      f.input :first_name
-      f.input :last_name
       f.input :email
-      f.input :company
       f.input :password
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
         f.input :profile_picture_cache, :as => :hidden
       end
+      f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      f.input :company
+      f.input :first_name
+      f.input :last_name
     end
     f.actions do
       f.action(:submit)
@@ -28,7 +29,6 @@ ActiveAdmin.register User, as: 'Administrator' do
   end
 
   controller do
-    before_filter :check_duplicate_email, :only => :update
     def update
       super do |format|
         redirect_to admin_users_path, :notice => 'Admin updated successfully.' and return if resource.valid?
@@ -40,12 +40,6 @@ ActiveAdmin.register User, as: 'Administrator' do
         redirect_to admin_users_path, :notice => 'Admin created successfully.' and return if resource.valid?
       end
     end
-
-    def check_duplicate_email
-      if params[:user][:email] != resource.email && !User.find_by_email(params[:user][:email]).nil?
-        redirect_to edit_admin_staff_path, alert: 'Duplicate email.' and return
-      end
-    end
   end
 
   controller do
@@ -53,5 +47,4 @@ ActiveAdmin.register User, as: 'Administrator' do
       User.where(user_type: User.user_types[:administrator])
     end
   end
-
 end
