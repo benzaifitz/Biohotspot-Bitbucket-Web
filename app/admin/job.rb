@@ -14,7 +14,7 @@ ActiveAdmin.register Job do
     column 'Customer Company' do |j|
       label j.offered_by.company
     end
-    column :description
+    column :detail
     column 'Staff Id', :user_id
     column 'Staff'do |j|
       link_to j.user.username, admin_user_path(j.user)
