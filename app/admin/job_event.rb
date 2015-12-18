@@ -7,15 +7,15 @@ ActiveAdmin.register Job, as: 'Job Events' do
   index do
     id_column
     column :created_at
-    column 'Staff Id', :offered_by_id
-    column 'Staff' do |je|
+    column 'Customer Id', :offered_by_id
+    column 'Customer' do |je|
       link_to je.offered_by.username, admin_user_path(je.offered_by)
     end
-    column 'Staff Company' do |j|
+    column 'Customer Company' do |j|
       label j.offered_by.company
     end
-    column 'Customer Id', :user_id
-    column 'Customer' do |je|
+    column 'Staff Id', :user_id
+    column 'Staff' do |je|
       link_to je.user.username, admin_user_path(je.user)
     end
     column :status
@@ -31,8 +31,8 @@ ActiveAdmin.register Job, as: 'Job Events' do
   end
 
 
-  filter :offered_by
-  filter :user, label: 'Customer'
+  filter :offered_by, label: 'Customer'
+  filter :user, label: 'Staff'
   filter :status, as: :select, collection: -> { Job.statuses }
   filter :created_at
 end

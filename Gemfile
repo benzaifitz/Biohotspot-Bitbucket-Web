@@ -14,14 +14,17 @@ gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails'
 # MailChimp integration
 gem 'gibbon'
+# The push notification service.
+gem 'rpush'
 group :development, :test do
-  gem 'byebug'  
+  gem 'byebug'
 end
 group :development do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'letter_opener'
 end
+gem 'apipie-rails'
 gem 'devise'
 gem 'high_voltage'
 gem 'simple_form'
@@ -40,6 +43,7 @@ group :development do
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
+  gem 'capistrano-sidekiq'
 end
 group :development, :test do
   gem 'factory_girl_rails'

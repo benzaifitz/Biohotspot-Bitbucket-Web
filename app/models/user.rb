@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-
+  enum device_type: [:ios, :android]
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version
@@ -65,8 +65,8 @@ class User < ActiveRecord::Base
 
 
   after_update :log_user_events
-  after_update :update_on_mailchimp
   after_create :add_to_mailchimp
+  after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
   after_destroy :delete_from_mailchimp
 
   def log_user_events
@@ -102,6 +102,10 @@ class User < ActiveRecord::Base
 
   def delete_from_mailchimp
     MailchimpDeleteUserJob.perform_later(self.email)
+  end
+
+  def mailchimp_related_fields_updated?
+    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
   end
 
 end
