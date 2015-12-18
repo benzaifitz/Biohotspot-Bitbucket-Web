@@ -33,7 +33,7 @@ module Api
       # POST /api/v1/jobs.json
       api :POST, '/jobs.json', 'Create a new job.'
       param :user_id, Integer, desc: 'Id of the user whom job is offered.', required: false
-      params :description, String, desc: 'Description of job', required: false
+      param :description, String, desc: 'Description of job', required: false
       def create
         return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
         @job = Job.new(job_params.merge(offered_by: current_user))
