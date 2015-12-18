@@ -221,8 +221,8 @@ ActiveRecord::Schema.define(version: 20151218091646) do
     t.integer  "number_of_ratings",      default: 0
     t.string   "device_token"
     t.string   "device_type"
-    t.string   "profile_picture"
     t.string   "username",                                 null: false
+    t.string   "profile_picture"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

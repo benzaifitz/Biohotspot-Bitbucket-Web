@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   apipie
-  devise_for :users
+  devise_for :users, ActiveAdmin::Devise.config
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
@@ -16,8 +16,7 @@ Rails.application.routes.draw do
       resources :jobs
     end
   end
-  
   ActiveAdmin.routes(self)
-  root to: 'visitors#index'
+  root 'admin/dashboard#index'
   resources :users
 end
