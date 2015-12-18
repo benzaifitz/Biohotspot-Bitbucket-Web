@@ -19,11 +19,14 @@ ActiveAdmin.register User do
   index do
     selectable_column
     id_column
+    column :email
+    column :username do |user|
+      link_to user.username, admin_user_path(user)
+    end
+    column :company
     column :first_name
     column :last_name
-    column :email
     column :user_type
-    column :company
     column :last_sign_in_at
     column :status
     actions do |user|
@@ -36,11 +39,12 @@ ActiveAdmin.register User do
 
   show do
     attributes_table do
+      row :email
+      row :username
+      row :company
       row :first_name
       row :last_name
-      row :email
       row :user_type
-      row :company
       row :status
       row :rating
       row :number_of_ratings
