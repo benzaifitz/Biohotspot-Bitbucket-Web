@@ -8,7 +8,7 @@ ActiveAdmin.register User, as: 'Customer' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company, :username]
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username]
     allowed.uniq
   end
 
@@ -18,6 +18,10 @@ ActiveAdmin.register User, as: 'Customer' do
     f.inputs 'Customer Details' do
       f.input :email
       f.input :password
+      f.inputs "Profile Picture", :multipart => true do
+        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
+        f.input :profile_picture_cache, :as => :hidden
+      end
       f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       f.input :company
       f.input :first_name

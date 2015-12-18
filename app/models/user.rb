@@ -39,6 +39,8 @@ class User < ActiveRecord::Base
           :recoverable, :rememberable, :trackable, :validatable,
           :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
+
+  mount_uploader :profile_picture, ProfilePictureUploader
   
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
