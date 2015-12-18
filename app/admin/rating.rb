@@ -1,5 +1,7 @@
 ActiveAdmin.register Rating do
 
+  include SharedAdmin
+
   menu label: 'Ratings and Comments', parent: 'User Content', priority: 1
 
   actions :index
@@ -35,22 +37,11 @@ ActiveAdmin.register Rating do
     column :comment
     column :status
     actions do |r|
-      (item 'Ban', ban_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.active?
-      (item 'Enable', enable_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.banned?
+      (item 'Ban', confirm_status_change_admin_rating_path(r, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.active?
+      (item 'Enable', confirm_status_change_admin_rating_path(r, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.banned?
       (item 'Censor', censor_admin_rating_path(r), class: 'member_link', method: :put) if r.active? || r.allowed?
       (item 'Allow', allow_admin_rating_path(r), class: 'member_link', method: :put) if !r.allowed?
     end
-  end
-
-
-  member_action :ban, method: :put do
-    resource.rated_on.banned!
-    redirect_to admin_ratings_path, notice: 'User Banned!'
-  end
-
-  member_action :enable, method: :put do
-    resource.rated_on.active!
-    redirect_to admin_ratings_path, notice: 'User Enabled!'
   end
 
   member_action :censor, method: :put do
@@ -62,8 +53,4 @@ ActiveAdmin.register Rating do
     resource.allowed!
     redirect_to admin_ratings_path, notice: 'Rating Allowed!'
   end
-
-
-
-
 end

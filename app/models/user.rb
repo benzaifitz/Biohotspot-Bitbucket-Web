@@ -64,6 +64,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :email
 
 
+  attr_accessor :status_change_comment
+
   after_update :log_user_events
   after_create :add_to_mailchimp
   after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
@@ -80,12 +82,26 @@ class User < ActiveRecord::Base
     elsif self.changed_attributes.keys.include?('current_sign_in_at') && self.current_sign_in_at.nil?
       PaperTrail::Version.create(attr.merge(event: 'Logout'))
     elsif self.changed_attributes.keys.include?('status')
-      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit}))
+      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
     end
   end
 
   def full_name
     "#{first_name} #{last_name}"
+  end
+
+  def ban_with_comment(comment)
+    self.status_change_comment = comment
+    self.banned!
+  end
+
+  def enable_with_comment(comment)
+    self.status_change_comment = comment
+    self.active!
+  end
+
+  def bannable
+    self
   end
 
   def add_to_mailchimp
