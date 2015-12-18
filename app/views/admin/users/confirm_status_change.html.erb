@@ -1,0 +1,9 @@
+<div class="panel">
+  <h3><%= "#{@status_change_action.capitalize} user #{@user.full_name}(#{@user.email})" %></h3>
+  <div class="panel-contents">
+    <%= form_for resource, url: { action: @status_change_action }, method: :put do |f| %>
+      <%= text_area :user, :status_change_comment, cols: 50, rows: 5, placeholder: 'Please specify the reason.' %>
+      <%= f.submit "#{@status_change_action.capitalize} User" %>
+    <% end %>
+  </div>
+</div>

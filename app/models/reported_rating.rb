@@ -12,6 +12,9 @@
 class ReportedRating < ActiveRecord::Base
   belongs_to :rating
   belongs_to :reported_by, class_name: "User", foreign_key: "reported_by_id"
+
+  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :rating
+
   validates_uniqueness_of :rating_id, :scope => :reported_by_id
 
   after_create :update_rating_status_to_reported
@@ -19,5 +22,4 @@ class ReportedRating < ActiveRecord::Base
   def update_rating_status_to_reported
     Rating.find(self.rating_id).reported!
   end
-
 end

@@ -234,6 +234,7 @@ ActiveRecord::Schema.define(version: 20151218091646) do
     t.text     "object"
     t.datetime "created_at"
     t.json     "object_changes"
+    t.string   "comment"
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
