@@ -1,4 +1,7 @@
 ActiveAdmin.register BlockedUser, as: 'Blocked Users' do
+
+  menu label: 'Blocked Users', parent: 'Users', priority: 2
+
   actions :index
 
   index do

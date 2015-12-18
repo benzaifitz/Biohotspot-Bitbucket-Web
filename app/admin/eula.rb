@@ -1,5 +1,7 @@
 ActiveAdmin.register Eula, as: 'Terms And Condition' do
 
+  menu label: 'Terms and Conditions', parent: 'License', priority: 0
+
   permit_params :eula_text
 
   actions :all, except: [ :edit, :update ]

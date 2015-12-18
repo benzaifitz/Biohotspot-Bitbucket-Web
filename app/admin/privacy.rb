@@ -1,5 +1,7 @@
 ActiveAdmin.register Privacy, as: 'Privacy Policy' do
 
+  menu label: 'Privacy Policy', parent: 'License', priority: 1
+
   permit_params :privacy_text
 
   actions :all, except: [ :edit, :update ]

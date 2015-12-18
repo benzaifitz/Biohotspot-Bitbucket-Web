@@ -1,5 +1,7 @@
 ActiveAdmin.register User, as: 'Customer' do
 
+  menu false
+
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?

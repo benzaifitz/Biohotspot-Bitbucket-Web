@@ -1,5 +1,7 @@
 ActiveAdmin.register User do
 
+  menu label: 'User List', parent: 'Users', priority: 0
+
   actions :index, :show, :destroy
 
   action_item :view, only: :index do

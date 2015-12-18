@@ -1,5 +1,7 @@
 ActiveAdmin.register User, as: 'Staff' do
 
+  menu false
+  
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
@@ -43,7 +45,6 @@ ActiveAdmin.register User, as: 'Staff' do
         redirect_to edit_admin_staff_path, alert: 'Duplicate email.' and return
       end
     end
-
   end
 
   controller do

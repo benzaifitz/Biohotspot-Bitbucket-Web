@@ -1,5 +1,7 @@
 ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
 
+  menu label: 'User Events', parent: 'Users', priority: 1
+
   actions :index
 
   index do

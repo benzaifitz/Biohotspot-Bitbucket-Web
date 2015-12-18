@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-
+  enum device_type: [:ios, :android]
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version
@@ -60,6 +60,9 @@ class User < ActiveRecord::Base
   attr_accessor :status_change_comment
 
   after_update :log_user_events
+  after_create :add_to_mailchimp
+  after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
+  after_destroy :delete_from_mailchimp
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
@@ -75,7 +78,6 @@ class User < ActiveRecord::Base
       PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
     end
   end
-  
 
   def full_name
     "#{first_name} #{last_name}"
@@ -85,4 +87,25 @@ class User < ActiveRecord::Base
     self.status_change_comment = comment
     self.banned!
   end
+
+  def add_to_mailchimp
+    MailchimpAddUserJob.perform_later(self.id)
+  end
+
+  def update_on_mailchimp
+    if self.banned?
+      MailchimpDeleteUserJob.perform_later(self.email)
+    else
+      MailchimpUpdateUserJob.perform_later(self.id, self.email_was)
+    end
+  end
+
+  def delete_from_mailchimp
+    MailchimpDeleteUserJob.perform_later(self.email)
+  end
+
+  def mailchimp_related_fields_updated?
+    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
+  end
+
 end
