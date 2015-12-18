@@ -1,5 +1,7 @@
 ActiveAdmin.register User do
 
+  menu label: 'User List', parent: 'Users', priority: 0
+
   actions :index, :show, :destroy
 
   action_item :view, only: :index do
@@ -7,6 +9,10 @@ ActiveAdmin.register User do
   end
   action_item :view, only: :index do
     link_to 'New Staff', new_admin_staff_path
+  end
+
+  action_item :view, only: :index do
+    link_to 'New Administrator', new_admin_administrator_path
   end
 
   index do
@@ -20,22 +26,61 @@ ActiveAdmin.register User do
     column :last_sign_in_at
     column :status
     actions do |user|
-      # link_to 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
       (item 'Ban', ban_admin_user_path(user), class: 'member_link', method: :put) if user.active?
       (item 'Enable', enable_admin_user_path(user), class: 'member_link', method: :put) if user.banned?
-      item 'Events', '#'
+      item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end
-
   end
 
-  filter :firstname
+  show do
+    attributes_table do
+      row :first_name
+      row :last_name
+      row :email
+      row :user_type
+      row :company
+      row :status
+      row :rating
+      row :number_of_ratings
+      row :eula
+      row :sign_in_count
+      row :last_sign_in_at
+      row :current_sign_in_at
+      row :confirmed_at
+      row :reset_password_sent_at
+      row :created_at
+      row :updated_at
+    end
+  end
+
+  csv do
+    column :id
+    column :first_name
+    column :last_name
+    column :email
+    column :user_type
+    column :company
+    column :status
+    column :rating
+    column :number_of_ratings
+    column :eula
+    column :sign_in_count
+    column :last_sign_in_at
+    column :current_sign_in_at
+    column :confirmed_at
+    column :reset_password_sent_at
+    column :created_at
+    column :updated_at
+  end
+
+  filter :first_name
   filter :last_name
   filter :email
-  filter :user_type, as: :select, collection: -> { User.user_types.keys }
+  filter :user_type, as: :select, collection: -> { User.user_types }
   filter :company
   filter :last_sign_in_at
-  filter :status
+  filter :status, as: :select, collection: -> { User.statuses }
 
   member_action :ban, method: :put do
     resource.banned!

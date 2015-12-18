@@ -1,0 +1,41 @@
+ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
+
+  menu label: 'User Events', parent: 'Users', priority: 1
+
+  actions :index
+
+  index do
+    id_column
+    column :created_at
+    column :first_name do |v|
+      label v.reify.first_name
+    end
+    column :last_name do |v|
+      label v.reify.last_name
+    end
+    column :email do |v|
+      label v.reify.email
+    end
+    column :event
+    column 'Admin' do |v|
+      user = v.whodunnit.nil? ? nil : User.find(v.whodunnit)
+      label user.nil? ? '' : (user.name.nil? ? user.email : user.name)
+    end
+  end
+
+  controller do
+    def scoped_collection
+      PaperTrail::Version.where(item_type: 'User').order('id asc')
+    end
+  end
+
+  filter :event, as: :select, collection: -> { PaperTrail::Version.where(item_type: 'User').distinct.pluck :event }
+  filter :item_id, label: 'User Name', as: :select, collection: -> {
+                   User.where(id: PaperTrail::Version.where(item_type: 'User').distinct.pluck(:item_id)).map do |u|
+                     u.first_name.nil? ? [u.email, u.id] : ["#{u.first_name} #{u.last_name}", u.id]
+                   end
+                 }
+  filter :created_at
+
+end
+

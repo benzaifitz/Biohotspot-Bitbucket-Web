@@ -1,6 +1,15 @@
 ActiveAdmin.register Rating do
 
+  menu label: 'Ratings and Comments', parent: 'User Content', priority: 1
+
   actions :index
+
+  filter :rating
+  filter :comment
+  filter :rated_on
+  filter :user, label: 'Rated By'
+  filter :status, as: :select, collection: -> { Rating.statuses }
+  filter :created_at
 
   index do
     column :created_at
@@ -24,8 +33,8 @@ ActiveAdmin.register Rating do
     column :comment
     column :status
     actions do |r|
-      (item 'Ban', ban_admin_rating_path(r.rated_on), class: 'member_link', method: :put) if r.rated_on.active?
-      (item 'Enable', enable_admin_rating_path(r.rated_on), class: 'member_link', method: :put) if r.rated_on.banned?
+      (item 'Ban', ban_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.active?
+      (item 'Enable', enable_admin_rating_path(r), class: 'member_link', method: :put) if r.rated_on.banned?
       (item 'Censor', censor_admin_rating_path(r), class: 'member_link', method: :put) if r.active? || r.allowed?
       (item 'Allow', allow_admin_rating_path(r), class: 'member_link', method: :put) if !r.allowed?
     end
@@ -51,6 +60,8 @@ ActiveAdmin.register Rating do
     resource.allowed!
     redirect_to admin_ratings_path, notice: 'Rating Allowed!'
   end
+
+
 
 
 end
