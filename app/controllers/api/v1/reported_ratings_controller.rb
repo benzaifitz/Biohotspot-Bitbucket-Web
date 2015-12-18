@@ -10,8 +10,9 @@ module Api
         @reported_ratings = ReportedRating.all
       end
 
-      # GET /api/v1/reported_ratings/1
       # GET /api/v1/reported_ratings/1.json
+      api :GET, '/reported_ratings/:id.json', 'Returns reported ratings info for given ID.'
+      param :id, Integer, desc: 'ID of the reported rating.', required: true
       def show
       end
 
@@ -25,6 +26,8 @@ module Api
       end
 
       # POST /api/v1/reported_ratings.json
+      api :POST, '/reported_ratings.json', 'Create a new reported rating.'
+      param :rating_id, Float, desc: 'Id of rating which is being reported.', required: true
       def create
         @reported_rating = ReportedRating.new(reported_rating_params.merge(reported_by: current_user))
         if @reported_rating.save

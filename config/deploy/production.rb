@@ -25,7 +25,7 @@ server '52.62.100.77', user: 'ubuntu', roles: %w{web app db}
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, { :forward_agent => true, :keys => %w(~/misc/scancam-prod.pem) }
+set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/scancam-prod.pem) }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',

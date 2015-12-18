@@ -19,8 +19,9 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
     column :event
     column 'Admin' do |v|
       user = v.whodunnit.nil? ? nil : User.find(v.whodunnit)
-      label user.nil? ? '' : (user.name.nil? ? user.email : user.name)
+      label user.nil? ? '' : (user.full_name.nil? ? user.email : user.full_name)
     end
+    column :comment
   end
 
   controller do
@@ -36,6 +37,7 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
                    end
                  }
   filter :created_at
+  filter :whodunnit, label: "Performed By", as: :select, collection: -> { User.administrator }
 
 end
 
