@@ -67,6 +67,8 @@ GEM
       activerecord (>= 3.2, <= 4.3)
       rake (~> 10.4)
     ansi (1.5.0)
+    apipie-rails (0.3.5)
+      json
     arbre (1.0.3)
       activesupport (>= 3.0.0)
     arel (6.0.3)
@@ -335,6 +337,7 @@ PLATFORMS
 DEPENDENCIES
   activeadmin!
   annotate
+  apipie-rails
   better_errors
   byebug
   capistrano (~> 3.1.0)
