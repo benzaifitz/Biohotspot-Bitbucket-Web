@@ -13,11 +13,12 @@ ActiveAdmin.register User, as: 'Staff' do
 
   form do |f|
     f.inputs 'Staff Details' do
+      f.input :email
+      f.input :password
+      f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      f.input :company
       f.input :first_name
       f.input :last_name
-      f.input :email
-      f.input :company
-      f.input :password
     end
     f.actions do
       f.action(:submit)
