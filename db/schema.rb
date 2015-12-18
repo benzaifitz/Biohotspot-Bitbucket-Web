@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218091646) do
+ActiveRecord::Schema.define(version: 20151218050444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -219,9 +219,8 @@ ActiveRecord::Schema.define(version: 20151218091646) do
     t.string   "uid",                    default: "",      null: false
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
-    t.string   "device_token"
-    t.string   "device_type"
     t.string   "profile_picture"
+    t.string   "device_token"
     t.string   "username",                                 null: false
   end
 
