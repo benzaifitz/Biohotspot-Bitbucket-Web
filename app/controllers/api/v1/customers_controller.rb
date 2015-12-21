@@ -6,13 +6,13 @@ module Api
 
     # GET /api/v1/customers/1.json
     api :GET, '/customers/:id.json', 'Show single customer resource.'
-    param :id, Integer, desc: 'ID of customer to be shown.', required: true
+    # param :id, Integer, desc: 'ID of customer to be shown.', required: true
     def show
     end
 
     # PATCH/PUT /api/v1/customers/1.json
     api :PUT, '/customers/:id.json', 'Update single customer resource.'
-    param :id, Integer, desc: 'ID of customer to be updated', required: true
+    # param :id, Integer, desc: 'ID of customer to be updated', required: true
     param :first_name, String, desc: 'First Name of the customer', required: false
     param :last_name, String, desc: 'Last Name of the customer', required: false
     param :email, String, desc: 'Email of the customer', required: false
@@ -23,8 +23,10 @@ module Api
     param :device_type, String, desc: 'Device Type (iOS,Android)', required: false
     def update
       if @customer.update(customer_params)
+        Rails.logger.info "==============\n"
         render :show
       else
+        Rails.logger.info "==============1\n"
         render json: @customer.errors, status: :unprocessable_entity
       end
     end
