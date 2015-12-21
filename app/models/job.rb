@@ -40,7 +40,7 @@ class Job < ActiveRecord::Base
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
-    n.data = { job_id: id, status: status, user_id: user_id, description: description }
+    n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
     n.save!
   end
 
@@ -50,7 +50,7 @@ class Job < ActiveRecord::Base
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.user.device_token
     n.alert = "Status of job changed to #{status} by #{self.offered_by.full_name}"
-    n.data = { job_id: id, status: status, offered_by_id: offered_by_id, description: description }
+    n.data = { job_id: id, status: status, offered_by_id: offered_by_id, detail: detail }
     n.save!
   end
 

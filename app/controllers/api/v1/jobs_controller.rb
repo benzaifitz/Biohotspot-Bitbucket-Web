@@ -33,7 +33,7 @@ module Api
       # POST /api/v1/jobs.json
       api :POST, '/jobs.json', 'Create a new job.'
       param :user_id, Integer, desc: 'Id of the user whom job is offered.', required: false
-      param :description, String, desc: 'Description of job', required: false
+      param :detail, String, desc: 'Description of job', required: false
       def create
         return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
         @job = Job.new(job_params.merge(offered_by: current_user))
@@ -76,7 +76,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def job_params
-        permitted_params = [:user_id, :status, :description]
+        permitted_params = [:user_id, :status, :detail]
         params.require(:job).permit(permitted_params)
       end
 
