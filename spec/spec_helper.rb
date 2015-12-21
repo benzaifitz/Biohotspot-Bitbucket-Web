@@ -16,7 +16,9 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -89,4 +91,44 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :rspec
+    # with.test_framework :minitest
+    # with.test_framework :minitest_4
+    # with.test_framework :test_unit
+
+    # Choose one or more libraries:
+    # with.library :active_record
+    # with.library :active_model
+    # with.library :action_controller
+    # Or, choose the following (which implies all of the above):
+    with.library :rails
+  end
+end
+
+# RSpec::Sidekiq.configure do |config|
+#   # Clears all job queues before each example
+#   config.clear_all_enqueued_jobs = true # default => true
+#
+#   # Whether to use terminal colours when outputting messages
+#   config.enable_terminal_colours = true # default => true
+#
+#   # Warn when jobs are not enqueued to Redis but to a job array
+#   config.warn_when_jobs_not_processed_by_sidekiq = true # default => true
+# end
+
+redis_opts = {:url => "redis://127.0.0.1:6379/1", :namespace => "cms_queue"}
+# If fakeredis is loaded, use it explicitly
+redis_opts.merge!(:driver => Redis::Connection::Memory) if defined?(Redis::Connection::Memory)
+
+Sidekiq.configure_client do |config|
+  config.redis = redis_opts
+end
+
+Sidekiq.configure_server do |config|
+  config.redis = redis_opts
 end
