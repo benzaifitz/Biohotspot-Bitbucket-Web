@@ -1,11 +1,18 @@
 class Staff < User
-  paginates_per 20
   default_scope -> { where(user_type: User.user_types['staff']) }
   before_update :check_duplicate_email
 
-  def self.search(search)
-    if search
-      where('first_name LIKE ? OR last_name LIKE ?', "%#{search}%", "%#{search}%")
+  def self.search(options = {})
+    if options.present?
+      conditions = {}
+      conditions = ["first_name ILIKE ? OR last_name ILIKE ?", "%#{options[:first_name]}%", "%#{options[:first_name]}%"] if options[:first_name].present?
+
+      if options[:last_name].present?
+        conditions[0] = "#{conditions[0]} OR last_name ILIKE ? OR first_name ILIKE ?  "
+        conditions << "%#{options[:last_name]}%"
+        conditions << "%#{options[:last_name]}%"
+      end
+      where(conditions)
     else
       all
     end

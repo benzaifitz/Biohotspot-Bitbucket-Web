@@ -5,10 +5,15 @@ module Api
       before_action :set_staff, only: [:show, :update]
 
       #GET /api/v1/staffs.json
-      api :GET, '/staffs.json'
-      param :q, String, desc: 'Search staff resources with name'
+      api :GET, '/staffs.json', 'Return a list of staff with or without a search query'
+      param :query, String, desc: 'Search staff resources with name. If not provided will return a list of all staff 20 records at a time'
+      param :offset, String, desc: 'Offset of the records to be fetched. e.g offset=22'
       def index
-        @staffers = Staff.search(params[:q]).page(params[:page] || 1)
+        query = params[:query] || ""
+        query = query.split(' ')
+        first_name, last_name = query
+        @staffers = Staff.search({first_name: first_name,
+                      last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(20)
       end
 
       # GET /api/v1/staffs/1.json

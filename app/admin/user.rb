@@ -85,6 +85,7 @@ ActiveAdmin.register User do
   filter :first_name
   filter :last_name
   filter :email
+  filter :username
   filter :user_type, as: :select, collection: -> { User.user_types }
   filter :company
   filter :last_sign_in_at

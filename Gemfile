@@ -37,7 +37,6 @@ gem 'fancybox-rails', '~> 0.3.0'
 gem 'mini_magick', '~> 4.3', '>= 4.3.6'
 gem 'carrierwave', '~> 0.10.0'
 gem 'fog', '~> 1.36'
-gem 'kaminari', '~> 0.16.3'
 group :development do
   gem 'better_errors'
   gem 'quiet_assets'

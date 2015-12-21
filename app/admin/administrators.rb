@@ -13,14 +13,14 @@ ActiveAdmin.register User, as: 'Administrator' do
     f.inputs 'Administrator Details' do
       f.input :email
       f.input :password
-      f.inputs "Profile Picture", :multipart => true do
-        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
-        f.input :profile_picture_cache, :as => :hidden
-      end
       f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       f.input :company
       f.input :first_name
       f.input :last_name
+      f.inputs "Profile Picture", :multipart => true do
+        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
+        f.input :profile_picture_cache, :as => :hidden
+      end
     end
     f.actions do
       f.action(:submit)
