@@ -15,7 +15,7 @@ FactoryGirl.define do
     user
     association :offered_by, factory: :user
     status 0
-    description 'Some random string from Dapper Apps'
+    detail 'Some random string from Dapper Apps'
   end
 
 end

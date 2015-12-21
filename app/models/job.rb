@@ -17,7 +17,7 @@ class Job < ActiveRecord::Base
   enum status: [:offered, :completed, :accepted, :cancelled, :rejected, :withdrawn]
   attr_accessor :current_user_type
 
-  validates_presence_of :user_id, :offered_by_id, :status, :description
+  validates_presence_of :user_id, :offered_by_id, :status, :detail
 
   before_update :is_user_allowed_to_set_job_status
   after_update :send_push_notification_to_customer, if: :status_of_customers_interest_has_changed?

@@ -33,29 +33,21 @@ describe Job do
       expect(build(:job, status: nil)).to_not be_valid
     end
 
-    it 'is invalid without a description' do
-      expect(build(:job, description: nil)).to_not be_valid
+    it 'is invalid without a detail' do
+      expect(build(:job, detail: nil)).to_not be_valid
     end
   end
 
-  # describe 'ActiveModel validations' do
-  #   let(:user) { build(:user) }
-  #   # Format validations
-  #   it { should allow_value("zahid@dapperapps.com.au").for(:email) }
-  #   it { should_not allow_value("base@dapperapps").for(:email) }
-  #   it { should_not allow_value("blah").for(:email) }
-  #   it { should allow_value("zahidali").for(:username) }
-  #   it { should_not allow_value("zahid ali").for(:username) }
-  #
-  #   # Basic validations
-  #   it { should validate_presence_of(:email).with_message(/can't be blank/) }
-  #   it { should validate_presence_of(:username).with_message(/can't be blank/) }
-  #   it { should validate_uniqueness_of(:username) }
-  #   it {expect(User.user_types.keys.length).to eq(user_types_order.length)}
-  #   it {expect(User.device_types.keys.length).to eq(device_types_order.length)}
-  #   it {expect(User.statuses.keys.length).to eq(statuses_order.length)}
-  # end
-  #
+  describe 'ActiveModel validations' do
+    let(:job) { build(:job) }
+    # Basic validations
+    it { should validate_presence_of(:user_id).with_message(/can't be blank/) }
+    it { should validate_presence_of(:offered_by_id).with_message(/can't be blank/) }
+    it { should validate_presence_of(:status).with_message(/can't be blank/) }
+    it { should validate_presence_of(:detail).with_message(/can't be blank/) }
+    it {expect(Job.statuses.keys.length).to eq(statuses_order.length)}
+  end
+
 
   describe '#status' do
     it 'has the right index' do
@@ -73,10 +65,9 @@ describe Job do
 
   context 'callbacks' do
     let(:job) { create(:job) }
-    it { should callback(:add_to_mailchimp).after(:create) }
-    it { should callback(:log_user_events).after(:update) }
-    it { should callback(:update_on_mailchimp).after(:update) }
-    it { should callback(:delete_from_mailchimp).after(:destroy) }
+    it { should callback(:is_user_allowed_to_set_job_status).before(:update) }
+    it { should callback(:send_push_notification_to_customer).after(:update) }
+    it { should callback(:send_push_notification_to_staff).after(:update) }
   end
 
 end
