@@ -27,7 +27,7 @@ module Api
 
       # POST /api/v1/ratings.json
       api :POST, '/ratings.json', 'Create a new rating.'
-      param :rating, Float, desc: 'Rating value between 1 and 5.', required: false
+      param :rating, Float, desc: 'Rating value between 0 and 5.', required: false
       param :comment, String, desc: 'Comment.', required: false
       param :rated_on_id, Integer, desc: 'Id of user for which rating is provided.', required: false
       def create

@@ -49,6 +49,7 @@ describe Rating do
     it { should allow_value(2.5).for(:rating) }
     it { should_not allow_value(5.5).for(:rating) }
     # Basic validations
+    it { expect(create(:rating)).to validate_uniqueness_of(:rated_on_id).scoped_to(:user_id) }
     it { should validate_presence_of(:rating).with_message(/can't be blank/) }
     it { should validate_presence_of(:user_id).with_message(/can't be blank/) }
     it { should validate_presence_of(:rated_on_id).with_message(/can't be blank/) }

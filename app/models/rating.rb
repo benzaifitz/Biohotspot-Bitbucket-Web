@@ -21,6 +21,7 @@ class Rating < ActiveRecord::Base
 
   validates_presence_of :rating, :user_id, :rated_on_id, :status
   validates :rating, inclusion: { in: 0..5 }
+  validates_uniqueness_of :rated_on_id, :scope => :user_id
 
   delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
 
