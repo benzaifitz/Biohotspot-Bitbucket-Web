@@ -50,7 +50,6 @@ ActiveAdmin.register Privacy, as: 'Privacy Policy' do
     def create
       privacy_policy = Privacy.new(permitted_params[:privacy].merge(is_latest: true))
       if privacy_policy.save
-        Privacy.where('id != ?', privacy_policy.id).update_all(is_latest: false)
         redirect_to admin_privacy_policy_path(privacy_policy), notice: 'Privacy policy has been created successfully.'
       else
         redirect_to admin_privacy_policies_path, flash: { error: 'Privacy policy could not be created.' }
