@@ -52,6 +52,6 @@ FactoryGirl.define do
     factory :customer do
       user_type 'customer'
     end
-    
+
   end
 end
