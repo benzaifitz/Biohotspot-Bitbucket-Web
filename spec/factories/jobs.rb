@@ -8,11 +8,14 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  status     :integer          default(0)
-#
+#  description :string
 
 FactoryGirl.define do
   factory :job do
-    
+    user
+    association :offered_by, factory: :user
+    status 0
+    description 'Some random string from Dapper Apps'
   end
 
 end
