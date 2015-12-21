@@ -74,10 +74,9 @@ describe Rating do
   end
 
   context 'callbacks' do
-    let(:user) { create(:user) }
+    let(:rating) { create(:rating) }
     it { should callback(:add_to_average_rating).before(:save) }
     it { should callback(:minus_from_average_rating).before(:save) }
-
   end
 
 end
