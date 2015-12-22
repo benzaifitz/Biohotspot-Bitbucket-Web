@@ -2,7 +2,8 @@ module Api
   module V1
     class CustomersController < ApiController
       before_action :authenticate_user!
-      before_action :set_customer, only: [:show, :update]
+      before_action :verify_customer, only: [:update]
+      before_action :set_customer, only: [:show]
 
     # GET /api/v1/customers/1.json
     api :GET, '/customers/:id.json', 'Show single customer resource.'
@@ -22,19 +23,28 @@ module Api
     param :device_token, String, desc: 'Device Token', required: false
     param :device_type, String, desc: 'Device Type (iOS,Android)', required: false
     def update
-      if @customer.update(customer_params)
-        Rails.logger.info "==============\n"
+      @customer = current_user
+      begin
+        @customer.update(customer_params)
         render :show
-      else
-        Rails.logger.info "==============1\n"
-        render json: @customer.errors, status: :unprocessable_entity
+      rescue *RecoverableExceptions => e
+        error(E_INTERNAL, @customer.errors.full_messages[0])
       end
+      # if @customer.update(customer_params)
+      #   render :show
+      # else
+      #   render json: @customer.errors, status: :unprocessable_entity
+      # end
     end
 
     private
     # Use callbacks to share common setup or constraints between actions.
     def set_customer
-      @customer = current_user || Customer.new
+      @customer = Customer.find(params[:id])
+    end
+
+    def verify_customer
+      error(E_INTERNAL, 'Update not allowed.') if params[:id].to_i != current_user.id
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

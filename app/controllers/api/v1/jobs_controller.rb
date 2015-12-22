@@ -26,13 +26,19 @@ module Api
       param :user_id, Integer, desc: 'Id of the user whom job is offered.', required: false
       param :detail, String, desc: 'Description of job', required: false
       def create
-        return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
+        # return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
         @job = Job.new(job_params.merge(offered_by: current_user))
-        if @job.save
+        begin
+          @job.save!
           render :show
-        else
-          render json: @job.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @job.errors.full_messages[0])
         end
+        # if @job.save
+        #   render :show
+        # else
+        #   render json: @job.errors, status: :unprocessable_entity
+        # end
       end
 
       # PATCH/PUT /api/v1/jobs/1.json

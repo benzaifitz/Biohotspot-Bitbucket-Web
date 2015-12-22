@@ -34,9 +34,9 @@ describe Api::V1::JobsController do
       it 'staff cannot create a new job record' do
         sign_in create(:staff)
         post :create, job: attributes_for(:job, user_id: create(:user).id, detail: 'Job description'), format: :json
-        is_expected.to respond_with :ok
+        is_expected.to respond_with 500
         expect(Job.count).to eq(0)
-        expect(response.body).to match /User Must be a customer to create a job/
+        expect(response.body).to match /Must be a customer/
       end
 
     end
