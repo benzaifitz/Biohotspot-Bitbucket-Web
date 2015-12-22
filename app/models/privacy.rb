@@ -10,4 +10,11 @@
 #
 
 class Privacy < ActiveRecord::Base
+  after_commit :set_is_latest_for_old_records
+
+  private
+
+  def set_is_latest_for_old_records
+    Privacy.where('id != ?', self.id).update_all(is_latest: false)
+  end
 end
