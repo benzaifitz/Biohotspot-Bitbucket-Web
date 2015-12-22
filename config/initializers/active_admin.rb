@@ -233,8 +233,12 @@ ActiveAdmin.setup do |config|
       menu.add label: 'Users', priority: 1
       menu.add label: 'License', priority: 2
       menu.add label: 'Jobs', priority: 3
+      menu.add label: 'Notifications', priority: 4
       menu.add label: 'User Content', priority: 5 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
+      end
+      menu.add label: 'Communicate', priority: 6 do |communicate|
+        communicate.add label: 'Send Push Notification', url: '/admin/push_notifications/new'
       end
       menu.add label: 'Settings', priority: 7 do |settings_menu|
         settings_menu.add label: 'Logout', url: '/users/sign_out', html_options: { method: 'delete' }, priority: 3

@@ -1,0 +1,22 @@
+class RpushNotificationQueueJob < ActiveJob::Base
+  queue_as :rpush_notifications
+
+  def perform(attrs = {})
+    users = attrs[:user_id].blank? ? User.where(user_type: attrs[:user_type]) : User.where(id: attrs[:user_id])
+    app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    users.find_each do |user|
+      begin
+        n = RpushNotification.new
+        n.app = app
+        n.device_token = user.device_token
+        n.sent_by_id = attrs[:sent_by_id]
+        n.user_id = user.id
+        n.user_type = user[:user_type]
+        n.alert = attrs[:alert]
+        n.save!
+      rescue StandardError => err
+        Rails.logger.error "[Push Notification] - #{err.message}"
+      end
+    end
+  end
+end

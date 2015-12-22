@@ -1,5 +1,5 @@
 <div class="panel">
-  <h3><%= @notification.subject %></h3>
+  <h3><%= @notification.try(:subject) || 'Push Notification' %></h3>
   <div class="panel-contents">
     <table style="width: 400px">
       <tr>
@@ -17,17 +17,17 @@
       <tr>
         <td>
           <h6>Recipient</h6>
-          <%= link_to "#{@recipient.full_name}(#{@recipient.email})", admin_user_path(@recipient) %>
+          <%= link_to "#{@recipient.username}(#{@recipient.email})", admin_user_path(@recipient) %>
         </td>
       </tr>
       <tr>
-        <td><h6>Message Type</h6><%= @notification.notification_type %></td>
+        <td><h6>Message Type</h6><%= @notification.try(:notification_type) %></td>
       </tr>
       <tr>
         <td><h6>Message</h6></td>
       </tr>
       <tr>
-        <td><%= raw @notification.message %></td>
+        <td><%= raw @notification.try(:message) || @notification.alert %></td>
       </tr>
     </table>
   </div>
