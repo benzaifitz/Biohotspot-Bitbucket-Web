@@ -11,7 +11,7 @@
 
 FactoryGirl.define do
   factory :eula do
-    eula_text "MyText"
+    eula_text 'Some really long text for eula'
   end
 
 end

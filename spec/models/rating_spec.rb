@@ -65,7 +65,6 @@ describe Rating do
     end
   end
 
-
   describe 'ActiveRecord associations' do
     let(:rating) { build(:rating) }
     it { should belong_to(:user) }
@@ -77,6 +76,30 @@ describe Rating do
     let(:rating) { create(:rating) }
     it { should callback(:add_to_average_rating).before(:save) }
     it { should callback(:minus_from_average_rating).before(:save) }
+  end
+
+  describe 'callbacks calculate value correctly' do
+    it '.calculated avg rating for rated on person correctly' do
+      rated_on = create(:customer)
+      rated_by_1 = create(:staff)
+      rated_by_2 = create(:staff)
+      create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
+      create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
+      rated_on.reload
+      expect(rated_on.rating).to eq(4.0)
+    end
+
+    it '.recalculated avg rating for rated on person correctly after rating status is changed to censored' do
+      rated_on = create(:customer)
+      rated_by_1 = create(:staff)
+      rated_by_2 = create(:staff)
+      create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
+      rating_2 = create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
+      rating_2.update({status: 2})
+      rated_on.reload
+      expect(rated_on.rating).to eq(5.0)
+    end
+
   end
 
 end
