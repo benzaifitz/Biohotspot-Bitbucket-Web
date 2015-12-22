@@ -15,11 +15,17 @@ module Api
       # param :rating_id, Float, desc: 'Id of rating which is being reported.', required: true
       def create
         @reported_rating = ReportedRating.new(reported_rating_params.merge(reported_by: current_user))
-        if @reported_rating.save
+        begin
+          @reported_rating.save!
           render :show
-        else
-          render json: @reported_rating.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @reported_rating.errors.full_messages[0])
         end
+        # if @reported_rating.save
+        #   render :show
+        # else
+        #   render json: @reported_rating.errors, status: :unprocessable_entity
+        # end
       end
 
 

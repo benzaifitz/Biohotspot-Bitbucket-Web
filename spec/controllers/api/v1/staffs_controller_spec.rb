@@ -3,9 +3,9 @@ require 'rails_helper'
 describe Api::V1::StaffsController do
 
   describe 'when user is logged in' do
-    let(:user) {create(:user)}
+    let(:staff) {create(:staff)}
     before do
-      sign_in user
+      sign_in staff
     end
 
     describe 'GET #show' do
@@ -17,11 +17,20 @@ describe Api::V1::StaffsController do
     end
 
     describe 'PUT #update' do
-      it 'updates staff record' do
-        put :update, id: user.id, staff: {first_name: 'New First Name'}, format: :json
+      it 'updates currently logged in staff record' do
+        put :update, id: staff.id, staff: {first_name: 'New First Name'}, format: :json
         is_expected.to respond_with :ok
-        user.reload
-        expect(user.first_name).to eq('New First Name')
+        staff.reload
+        expect(staff.first_name).to eq('New First Name')
+      end
+
+      it 'does not update non logged in staff' do
+        not_logged_staff = create(:staff, first_name: 'not_logged_in_first_name')
+        put :update, id: not_logged_staff.id, staff: {first_name: 'New First Name'}, format: :json
+        is_expected.to respond_with 500
+        not_logged_staff.reload
+        expect(not_logged_staff.first_name).to eq('not_logged_in_first_name')
+        expect(response.body).to match /Update not allowed/
       end
     end
 
