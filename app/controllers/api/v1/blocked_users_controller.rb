@@ -22,10 +22,11 @@ module Api
       # param :user_id, Integer, desc: 'ID of users who is to be blocked.', required: true
       def create
         @blocked_user = BlockedUser.new(blocked_user_params.merge(blocked_by: current_user))
-        if @blocked_user.save
+        begin
+          @blocked_user.save
           render :show
-        else
-          render json: @blocked_user.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @blocked_user.errors.full_messages[0])
         end
       end
 
@@ -41,7 +42,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_blocked_user
-        @blocked_user = BlockedUser.find(params[:id])
+        @blocked_user = BlockedUser.where(id: params[:id], blocked_by_id: current_user.id).first
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
