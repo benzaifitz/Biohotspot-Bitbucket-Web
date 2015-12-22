@@ -12,7 +12,7 @@
 class Eula < ActiveRecord::Base
   has_many :users
 
-  after_commit :set_is_latest_for_old_records
+  after_create :set_is_latest_for_old_records
 
   private
 
