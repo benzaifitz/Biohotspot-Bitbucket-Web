@@ -17,22 +17,34 @@ module Api
       # param :rated_on_id, Integer, desc: 'Id of user for which rating is provided.', required: false
       def create
         @rating = Rating.new(rating_params.merge(user_id: current_user.id))
-        if @rating.save
+        begin
+          @rating.save!
           render :show
-        else
-          render json: @rating.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @rating.errors.full_messages[0])
         end
+        # if @rating.save
+        #   render :show
+        # else
+        #   render json: @rating.errors, status: :unprocessable_entity
+        # end
       end
 
       # PATCH/PUT /api/v1/ratings/1.json
       api :PUT, '/ratings/:id.json', 'Sets new status for Rating.'
       # param :status, Integer, desc: 'Possible values 0 (active), 1 (reported), 2 (censored), 3 (allowed)', required: true
       def update
-        if @rating.update(rating_params)
+        begin
+          @rating.update(rating_params)
           render :show
-        else
-          render json: @rating.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @rating.errors.full_messages[0])
         end
+        # if @rating.update(rating_params)
+        #   render :show
+        # else
+        #   render json: @rating.errors, status: :unprocessable_entity
+        # end
       end
 
       private
