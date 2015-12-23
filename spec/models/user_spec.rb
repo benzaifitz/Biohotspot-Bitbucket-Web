@@ -24,12 +24,13 @@
 #  first_name             :string
 #  last_name              :string
 #  company                :string
-#  rating                 :decimal(, )
+#  rating                 :decimal(, )      default(0.0)
 #  status                 :integer          default(0), not null
 #  user_type              :integer          default(0), not null
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  tokens                 :json
+#  number_of_ratings      :integer          default(0)
 #
 
 describe User do

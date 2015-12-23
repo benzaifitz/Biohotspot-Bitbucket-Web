@@ -6,7 +6,9 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :users
     end
-    
+    resources :conversations, only: [:index] do
+      resources :messages, only: [:index, :create]
+    end
   end
   
   ActiveAdmin.routes(self)
