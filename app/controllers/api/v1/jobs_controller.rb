@@ -11,9 +11,9 @@ module Api
       def index
         @jobs = []
         if current_user.customer?
-          @jobs = Job.where(offered_by: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
+          @jobs = Job.includes(:user, :offered_by).where(offered_by: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
         elsif current_user.staff?
-          @jobs = Job.where(user: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
+          @jobs = Job.includes(:user, :offered_by).where(user: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
         end
       end
 
