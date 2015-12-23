@@ -40,5 +40,26 @@ class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
 
   attr_accessor :user_type
+  attr_accessor :notification_type
 
+  after_commit :enqueue_email_for_sending, on: :create
+
+  class << self
+    def enqueue_email_and_mark_it_sent(notification)
+      begin
+        NotificationMailer.notification_email(notification).deliver_now
+        notification.sent!
+      rescue StandardError => e
+        notification.failed!
+      end
+    end
+  end
+
+  private
+
+  def enqueue_email_for_sending
+    if self.device_token.nil?
+      RpushNotification.delay.enqueue_email_and_mark_it_sent(self)
+    end
+  end
 end

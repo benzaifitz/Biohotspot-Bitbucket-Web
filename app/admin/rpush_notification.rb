@@ -14,7 +14,7 @@ ActiveAdmin.register RpushNotification, as: 'Push Notifications' do
   filter :user_id, label: 'Recipient Id'
   filter :user_first_name_cont, label: 'Recipient First Name'
   filter :user_last_name_cont, label: 'Recipient Last Name'
-  filter :user, label: 'Recipient'
+  filter :user_username_cont, label: 'Recipient Username'
 
   filter :delivered
   filter :failed
@@ -55,7 +55,8 @@ ActiveAdmin.register RpushNotification, as: 'Push Notifications' do
       input :user_id, label: 'User Id'
       input :user_type, label: 'Group Type', as: :select, collection: User.user_types,
             selected: User.user_types[:staff], include_blank: false
-      input :alert, required: true, as: :text
+      input :notification_type, as: :select, collection: [:email, :push], include_blank: false
+      input :alert, required: true, as: :ckeditor
     end
     f.actions do
       f.action :submit, label: 'Create Push Notification'
