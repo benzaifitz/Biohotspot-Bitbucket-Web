@@ -223,10 +223,10 @@ ActiveRecord::Schema.define(version: 20151222050602) do
     t.string   "uid",                    default: "",      null: false
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
-    t.string   "profile_picture"
     t.string   "device_token"
-    t.string   "username",                                 null: false
     t.string   "device_type"
+    t.string   "username",                                 null: false
+    t.string   "profile_picture"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

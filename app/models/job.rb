@@ -17,9 +17,20 @@ class Job < ActiveRecord::Base
   enum status: [:offered, :completed, :accepted, :cancelled, :rejected, :withdrawn]
   attr_accessor :current_user_type
 
+  validates_presence_of :user_id, :offered_by_id, :status, :detail
+
+  before_create :is_created_by_customer?
   before_update :is_user_allowed_to_set_job_status
   after_update :send_push_notification_to_customer, if: :status_of_customers_interest_has_changed?
   after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
+
+  def is_created_by_customer?
+     if self.offered_by.customer?
+       true
+     else
+       self.errors.add(:offered_by_id, 'Must be a customer!') && false
+     end
+  end
 
   def is_user_allowed_to_set_job_status
     return true if !['cancelled', 'withdrawn'].include?(status)

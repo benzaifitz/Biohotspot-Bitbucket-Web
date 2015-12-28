@@ -11,7 +11,7 @@
 
 FactoryGirl.define do
   factory :privacy do
-    privacy_text "MyText"
+    privacy_text 'Some really long provacy text'
   end
 
 end
