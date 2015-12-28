@@ -21,7 +21,10 @@
         </td>
       </tr>
       <tr>
-        <td><h6>Message Type</h6><%= @notification.try(:notification_type) %></td>
+        <td><h6>Message Type</h6><%= @notification.notification_type %></td>
+      </tr>
+      <tr>
+        <td><h6>Subject</h6><%= @notification.category %></td>
       </tr>
       <tr>
         <td><h6>Message</h6></td>

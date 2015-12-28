@@ -44,15 +44,25 @@ class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
 
   after_commit :enqueue_email_for_sending, on: :create
 
+  NOTIFICATION_TYPE = { email: 'email', push: 'push'}
+
   class << self
     def enqueue_email_and_mark_it_sent(notification)
       begin
         NotificationMailer.notification_email(notification).deliver_now
-        notification.sent!
+        notification.delivered = true
+        notification.delivered_at = Time.now
+        notification.save(validate: false)
       rescue StandardError => e
-        notification.failed!
+        notification.failed = true
+        notification.failed_at = Time.now
+        notification.save(validate: false)
       end
     end
+  end
+
+  def notification_type
+    self.device_token.nil? ? RpushNotification::NOTIFICATION_TYPE[:email].capitalize : RpushNotification::NOTIFICATION_TYPE[:push].capitalize
   end
 
   private
