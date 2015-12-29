@@ -33,12 +33,12 @@
 # integer  "user_id"
 # integer  "sent_by_id"
 
-class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
-  #belongs_to :user_type
+class Rpush::Client::ActiveRecord::Apns::Notification
   belongs_to :user
-  #belongs_to :notification_type
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
+end
 
+class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   attr_accessor :user_type
   attr_accessor :notification_type
 
@@ -47,7 +47,8 @@ class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   NOTIFICATION_TYPE = { email: 'email', push: 'push'}
 
   class << self
-    def enqueue_email_and_mark_it_sent(notification)
+    def enqueue_email_and_mark_it_sent(notification_id)
+      notification = RpushNotification.find(notification_id)
       begin
         NotificationMailer.notification_email(notification).deliver_now
         notification.delivered = true
@@ -69,7 +70,7 @@ class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
 
   def enqueue_email_for_sending
     if self.device_token.nil?
-      RpushNotification.delay.enqueue_email_and_mark_it_sent(self)
+      RpushNotification.delay.enqueue_email_and_mark_it_sent(self.id)
     end
   end
 end
