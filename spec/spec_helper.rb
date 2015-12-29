@@ -16,7 +16,6 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
@@ -120,15 +119,16 @@ end
 #   # Warn when jobs are not enqueued to Redis but to a job array
 #   config.warn_when_jobs_not_processed_by_sidekiq = true # default => true
 # end
+if Rails.env.test?
+  redis_opts = {:url => "redis://127.0.0.1:6379/1", :namespace => "cms_queue"}
+  # If fakeredis is loaded, use it explicitly
+  redis_opts.merge!(:driver => Redis::Connection::Memory) if defined?(Redis::Connection::Memory)
 
-redis_opts = {:url => "redis://127.0.0.1:6379/1", :namespace => "cms_queue"}
-# If fakeredis is loaded, use it explicitly
-redis_opts.merge!(:driver => Redis::Connection::Memory) if defined?(Redis::Connection::Memory)
+  Sidekiq.configure_client do |config|
+    config.redis = redis_opts
+  end
 
-Sidekiq.configure_client do |config|
-  config.redis = redis_opts
-end
-
-Sidekiq.configure_server do |config|
-  config.redis = redis_opts
+  Sidekiq.configure_server do |config|
+    config.redis = redis_opts
+  end
 end
