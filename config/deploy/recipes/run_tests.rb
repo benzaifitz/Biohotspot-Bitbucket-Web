@@ -1,18 +1,14 @@
 namespace :deploy do
-  desc "Runs test before deploying, can't deploy unless they pass"
+  desc "Runs specs before deploying, can't deploy unless they pass."
   task :run_tests do
-    test_log = "log/capistrano.test.log"
-    tests = fetch(:tests)
-    tests.each do |test|
-      puts "--> Running tests: '#{test}', please wait ..."
-      unless system "bundle exec rspec #{test} > #{test_log} 2>&1"
-        puts "--> Tests: '#{test}' failed. Results in: #{test_log} and below:"
-        system "cat #{test_log}"
-        exit;
-      end
-      puts "--> '#{test}' passed"
+    test_log = "log/capistrano.spec.log"
+    puts '--> Running specs: please wait ...'
+    unless system "bundle exec rspec spec > #{test_log} 2>&1"
+      puts "--> Specs failed. Results in: #{test_log} and below:"
+      system "cat #{test_log}"
+      exit;
     end
-    puts "--> All tests passed"
+    puts '--> All specs passed'
     system "rm #{test_log}"
   end
   before :deploy, "deploy:run_tests"
