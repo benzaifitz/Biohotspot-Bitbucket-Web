@@ -69,7 +69,7 @@ class User < ActiveRecord::Base
 
   after_update :log_user_events
   after_create :add_to_mailchimp
-  # after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
+  after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
   after_destroy :delete_from_mailchimp
 
   def log_user_events

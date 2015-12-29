@@ -6,7 +6,7 @@ class AddUsernameToUsers < ActiveRecord::Migration
     User.all.each_with_index do |user, index|
       user.username = user.full_name.blank? ? user.email.gsub(/[^0-9A-Za-z]/, '') : "#{user.full_name.gsub(/ /, "")}_#{index}"
       user.company = 'Testing Company' if user.staff?
-      user.save!
+      user.save
     end
 
     change_column :users, :username, :string, null: false
