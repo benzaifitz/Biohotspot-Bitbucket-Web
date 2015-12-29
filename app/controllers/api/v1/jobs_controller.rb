@@ -1,7 +1,7 @@
 module Api
   module V1
     class JobsController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
       before_action :set_job, only: [:show, :update, :destroy]
       
       # GET /api/v1/jobs.json
@@ -9,7 +9,6 @@ module Api
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
       param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
-        current_user = User.find(3)
         @jobs = []
         if current_user.customer?
           @jobs = Job.includes(:user, :offered_by).where(offered_by: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
