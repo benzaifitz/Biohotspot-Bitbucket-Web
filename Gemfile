@@ -16,6 +16,7 @@ gem 'dotenv-rails'
 gem 'gibbon'
 # The push notification service.
 gem 'rpush'
+gem 'fakeredis', :require => 'fakeredis/rspec'
 group :development, :test do
   gem 'byebug'
 end
@@ -54,7 +55,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 3.0'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'fakeredis', :require => 'fakeredis/rspec'
   gem 'redis-namespace'
 end
 group :test do
