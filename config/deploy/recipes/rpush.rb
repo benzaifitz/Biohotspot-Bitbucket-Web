@@ -3,7 +3,7 @@ namespace :rpush do
     desc "#{command} rpush"
     task command do
       on roles(:web), in: :sequence, wait: 1 do
-        run "rpush #{command}"
+        execute "rpush #{command}"
       end
     end
   end
