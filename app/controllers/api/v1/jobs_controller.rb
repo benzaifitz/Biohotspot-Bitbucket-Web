@@ -6,12 +6,14 @@ module Api
       
       # GET /api/v1/jobs.json
       api :GET, '/jobs.json', 'If customer is logged in that it returns all the jobs offered by the customer or if staff is logged in than all jobs accepted by staff will be returned.'
+      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
+      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
         @jobs = []
         if current_user.customer?
-          @jobs = Job.where(offered_by: current_user)
+          @jobs = Job.includes(:user, :offered_by).where(offered_by: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
         elsif current_user.staff?
-          @jobs = Job.where(user: current_user)
+          @jobs = Job.includes(:user, :offered_by).where(user: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
         end
       end
 
