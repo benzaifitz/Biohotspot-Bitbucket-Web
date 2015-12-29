@@ -1,6 +1,6 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
-
+load 'deploy/recipes/redis'
 set :application, 'framework'
 set :repo_url, 'git@bitbucket.org:applabsservice/framework.git'
 
