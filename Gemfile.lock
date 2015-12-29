@@ -387,6 +387,10 @@ GEM
       net-http-persistent
       railties
       thor (>= 0.18.1, < 2.0)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
     rspec-core (3.4.1)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -505,6 +509,7 @@ DEPENDENCIES
   rails_layout
   redis-namespace
   rpush
+  rspec
   rspec-rails
   sass-rails (~> 5.0)
   selenium-webdriver
