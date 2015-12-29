@@ -11,6 +11,8 @@
 #
 
 class Job < ActiveRecord::Base
+  include TimestampPagination
+
   has_paper_trail :on => [:update, :destroy]
   belongs_to :user
   belongs_to :offered_by, class_name: "User", foreign_key: "offered_by_id"
