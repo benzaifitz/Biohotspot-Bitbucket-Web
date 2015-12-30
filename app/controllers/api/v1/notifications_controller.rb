@@ -16,13 +16,8 @@ module Api
       api :DELETE, '/notifications/:id.json', 'Delete the notification.'
       param :id, String, desc: 'Id of the job which is to be deleted.', required: true
       def destroy
-        @notification = Rpush::Apns::Notification.where(id: params[:id], user: current_user).first
-        if !@notification.blank?
-          @notification.destroy
-          render json: {success: 'Notification deleted successfully.'}
-        else
-          render json: {error: 'Notification cannot be deleted.'}, status: :unprocessable_entity
-        end
+        Rpush::Apns::Notification.where(id: params[:id], user: current_user).delete_all
+        render json: {success: 'Notification deleted successfully.'}
       end
     end
   end
