@@ -6,6 +6,6 @@ CarrierWave.configure do |config|
       region:                'ap-southeast-2'
   }
   config.fog_directory  = 'framework-dev'
-  config.fog_public     = false
+  config.fog_public     = true
   config.fog_attributes = { 'Cache-Control' => "max-age=315576000" }
 end

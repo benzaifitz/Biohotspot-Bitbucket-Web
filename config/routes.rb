@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
-      resources :staffs, only: [:show, :update]
+      resources :staffs, only: [:show, :update, :index]
       resources :customers, only: [:show, :update]
       resources :blocked_users, only: [:index, :create, :show]
       delete 'un_blocked_user' => 'blocked_users#destroy'
