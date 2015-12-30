@@ -53,6 +53,8 @@ class Job < ActiveRecord::Base
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
     n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
     n.save!
+    NotificationMailer.delay.send_email({to: offered_by.email, from: user.email,
+      subject: "Job status changed to #{status}", message: "Job Detail: #{detail} <br> #{n.alert}"})
   end
 
   def send_push_notification_to_staff
