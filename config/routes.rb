@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :ratings, only: [:show, :create, :update]
       resources :reported_ratings, only: [:show, :create]
       resources :jobs
+      resources :notifications, only: [:index, :destroy]
     end
   end
   ActiveAdmin.routes(self)
