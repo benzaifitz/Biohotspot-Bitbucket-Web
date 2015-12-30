@@ -11,8 +11,7 @@ module Api
       param :offset, String, desc: 'Offset of the records to be fetched. e.g offset=22'
       def index
         query = params[:query] || ""
-        query = query.split(' ')
-        first_name, last_name = query
+        first_name, last_name = query.split(' ')
         @staffers = Staff.search({first_name: first_name,
                       last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(20)
       end
