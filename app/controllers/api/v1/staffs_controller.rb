@@ -1,7 +1,8 @@
 module Api
   module V1
     class StaffsController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
+      before_action :verify_staff, only: [:update]
       before_action :set_staff, only: [:show, :update]
 
       #GET /api/v1/staffs.json
@@ -18,13 +19,13 @@ module Api
 
       # GET /api/v1/staffs/1.json
       api :GET, '/staffs/:id.json', 'Show single staff resource.'
-      param :id, Integer, desc: 'ID of Staff to be shown.', required: true
+      # param :id, Integer, desc: 'ID of Staff to be shown.', required: true
       def show
       end
 
       # PATCH/PUT /api/v1/staffs/1.json
       api :PUT, '/staffs/:id.json', 'Update single staff resource.'
-      param :id, Integer, desc: 'ID of Staff to be updated', required: true
+      # param :id, Integer, desc: 'ID of Staff to be updated', required: true
       param :first_name, String, desc: 'First Name of the Staff', required: false
       param :last_name, String, desc: 'Last Name of the Staff', required: false
       param :email, String, desc: 'Email of the Staff', required: false
@@ -34,10 +35,12 @@ module Api
       param :device_token, String, desc: 'Device Token', required: false
       param :device_type, String, desc: 'Device Type (iOS,Android)', required: false
       def update
-        if @staff.update(staff_params)
+        @staff = current_user
+        begin
+          @staff.update(staff_params)
           render :show
-        else
-          render json: @staff.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @staff.errors.full_messages[0])
         end
       end
 
@@ -45,6 +48,10 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_staff
         @staff = current_user || Staff.new #Staff.find(params[:id])
+      end
+
+      def verify_staff
+        error(E_INTERNAL, 'Update not allowed.') if params[:id].to_i != current_user.id
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.

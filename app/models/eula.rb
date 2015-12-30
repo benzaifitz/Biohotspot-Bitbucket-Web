@@ -12,4 +12,11 @@
 class Eula < ActiveRecord::Base
   has_many :users
 
+  after_create :set_is_latest_for_old_records
+
+  private
+
+  def set_is_latest_for_old_records
+    Eula.where('id != ?', self.id).update_all(is_latest: false)
+  end
 end

@@ -11,7 +11,8 @@
 
 FactoryGirl.define do
   factory :blocked_user do
-    
+    user
+    association :blocked_by, factory: :user
   end
 
 end

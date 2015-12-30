@@ -41,7 +41,6 @@ class User < ActiveRecord::Base
   include DeviseTokenAuth::Concerns::User
 
   mount_uploader :profile_picture, ProfilePictureUploader
-  
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
   enum device_type: [:ios, :android]
