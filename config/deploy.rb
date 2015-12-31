@@ -39,7 +39,8 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :sidekiq_role, :app
 # set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 set :sidekiq_env, 'production'
-
+# sed :sidekiq_queue
+set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
 namespace :deploy do
 
   desc 'Restart application'
