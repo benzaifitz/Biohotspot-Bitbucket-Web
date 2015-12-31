@@ -22,12 +22,16 @@
 </head>
 <body class="active_admin logged_out <%= controller.action_name %>">
 <div id="wrapper">
-
   <div class="header" id="header">
     <h1 class="site_title" id="site_title"><%= link_to image_tag('dapper-logo.gif', style: 'height: 50px;'), 'http://dapperapps.com.au' %></h1>
     <ul class="header-item tabs" id="tabs">
       <li><%= link_to 'Home', 'http://dapperapps.com.au'%></li>
-      <li><%= link_to 'Sign In', new_user_session_path %></li>
+      <% if request.path != new_user_session_path %>
+        <li><%= link_to 'Sign In', new_user_session_path %></li>
+      <% end %>
+      <% if request.path != new_user_registration_path %>
+        <li><%= link_to 'Sign Up', new_user_registration_path %></li>
+      <% end %>
     </ul>
   </div>
   <div id="content_wrapper">
