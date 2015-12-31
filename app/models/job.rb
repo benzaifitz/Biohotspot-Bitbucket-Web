@@ -23,7 +23,7 @@ class Job < ActiveRecord::Base
 
   before_create :is_created_by_customer?
   before_update :is_user_allowed_to_set_job_status
-  after_update :send_push_notification_to_customer, if: :status_of_customers_interest_has_changed?
+  after_update :send_push_notification_to_customer, :send_email_notification_to_customer, if: :status_of_customers_interest_has_changed?
   after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
 
   def is_created_by_customer?
@@ -52,7 +52,19 @@ class Job < ActiveRecord::Base
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
     n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
+    n.user_id = offered_by_id
+    n.sent_by_id = user_id
     n.save!
+  end
+
+  def send_email_notification_to_customer
+    return if self.offered_by.nil?
+    n = RpushNotification.new
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n.category = "Job status changed to #{status}"
+    n.alert = "Job Detail: #{detail} <br> Status of job changed to #{status} by #{self.user.full_name}"
+    n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
+    n.save(validate: false)
   end
 
   def send_push_notification_to_staff
@@ -62,6 +74,8 @@ class Job < ActiveRecord::Base
     n.device_token = self.user.device_token
     n.alert = "Status of job changed to #{status} by #{self.offered_by.full_name}"
     n.data = { job_id: id, status: status, offered_by_id: offered_by_id, detail: detail }
+    n.user_id = user_id
+    n.sent_by_id = offered_by_id
     n.save!
   end
 
