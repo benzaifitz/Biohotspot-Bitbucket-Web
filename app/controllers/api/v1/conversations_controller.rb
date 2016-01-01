@@ -5,7 +5,8 @@ module Api
       respond_to :json
 
       def index
-        @conversations = Conversation.all
+        @conversations = Conversation.where('user_id = ? OR from_user_id = ?', current_user.id, current_user.id)
+                             .paginate_with_timestamp(params[:timestamp], params[:direction])
         respond_with @conversations
       end
 
