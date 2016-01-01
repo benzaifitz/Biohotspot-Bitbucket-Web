@@ -43,6 +43,7 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = true
   # Send email in development mode?
   config.action_mailer.perform_deliveries = true
+  config.action_mailer.logger = Logger.new('log/email.log')
 
 
   # Asset digests allow you to set far-future HTTP expiration dates on all assets,
