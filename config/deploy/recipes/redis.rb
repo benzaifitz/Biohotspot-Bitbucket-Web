@@ -18,7 +18,7 @@ namespace :redis do
     task command do
       on roles(:web), in: :sequence, wait: 1 do
         # run "#{sudo} service redis-server #{command}"
-        execute :sudo, "service redis-server #{command}"
+        execute :sudo, "nohup service redis-server #{command}"
       end
     end
   end
