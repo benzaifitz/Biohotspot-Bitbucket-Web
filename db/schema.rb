@@ -226,10 +226,10 @@ ActiveRecord::Schema.define(version: 20160101113650) do
     t.string   "uid",                    default: "",      null: false
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
-    t.string   "device_token"
-    t.string   "device_type"
-    t.string   "username",                                 null: false
     t.string   "profile_picture"
+    t.string   "device_token"
+    t.string   "username",                                 null: false
+    t.string   "device_type"
     t.string   "uuid_iphone"
   end
 
