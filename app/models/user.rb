@@ -54,6 +54,7 @@ class User < ActiveRecord::Base
 
   belongs_to :eula
   has_many :ratings
+  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
   has_many :blocked_users
   has_many :jobs
   has_many :notifications

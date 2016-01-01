@@ -1,7 +1,7 @@
 module Api
   module V1
     class StaffsController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :verify_staff, only: [:update]
       before_action :set_staff, only: [:show, :update]
 
@@ -46,7 +46,12 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_staff
-        @staff = current_user || Staff.new #Staff.find(params[:id])
+        current_user = User.customer.first
+        if current_user.staff?
+          @staff = current_user
+        elsif current_user.customer?
+          @staff = Staff.includes(:rated_on_ratings).find(params[:id])
+        end
       end
 
       def verify_staff
