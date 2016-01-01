@@ -12,6 +12,7 @@
 #
 
 class Chat < ActiveRecord::Base
+  include TimestampPagination
   belongs_to :conversation
   belongs_to :user
   #belongs_to :user_content_status
