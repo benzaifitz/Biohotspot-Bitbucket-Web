@@ -8,6 +8,7 @@ module Api
       end
 
       api :POST, '/reported_chats.json', 'Create a new reported chat.'
+      param :chat_id, String, desc: 'Id of chat which is being reported.', required: false
       def create
         @reported_chat = ReportedChat.new(reported_chat_params.merge(reported_by_id: 14))
         begin
