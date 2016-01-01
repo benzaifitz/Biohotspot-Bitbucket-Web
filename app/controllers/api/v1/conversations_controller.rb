@@ -4,6 +4,7 @@ module Api
       before_action :authenticate_user!
       respond_to :json
 
+      api :GET, 'conversations.json', 'Returns all conversations that they are the to/from user.'
       def index
         @conversations = Conversation.where('user_id = ? OR from_user_id = ?', current_user.id, current_user.id)
                              .paginate_with_timestamp(params[:timestamp], params[:direction])
