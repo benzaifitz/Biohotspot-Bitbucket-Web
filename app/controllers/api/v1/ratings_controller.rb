@@ -6,15 +6,15 @@ module Api
 
       # GET /api/v1/ratings/1.json
       api :GET, '/ratings/:id.json', 'Returns rating info for given ID.'
-      param :id, Integer, desc: 'ID of the rating.', required: true
+      # param :id, Integer, desc: 'ID of the rating.', required: true
       def show
       end
 
       # POST /api/v1/ratings.json
       api :POST, '/ratings.json', 'Create a new rating.'
-      param :rating, Float, desc: 'Rating value between 0.0 and 5.0', required: false
-      param :comment, String, desc: 'Comment.', required: false
-      param :rated_on_id, Integer, desc: 'Id of user for which rating is provided.', required: false
+      # param :rating, Float, desc: 'Rating value between 0.0 and 5.0', required: false
+      # param :comment, String, desc: 'Comment.', required: false
+      # param :rated_on_id, Integer, desc: 'Id of user for which rating is provided.', required: false
       def create
         @rating = Rating.new(rating_params.merge(user_id: current_user.id))
         begin
@@ -32,7 +32,7 @@ module Api
 
       # PATCH/PUT /api/v1/ratings/1.json
       api :PUT, '/ratings/:id.json', 'Sets new status for Rating.'
-      param :status, Integer, desc: 'Possible values 0 (active), 1 (reported), 2 (censored), 3 (allowed)', required: true
+      # param :status, Integer, desc: 'Possible values 0 (active), 1 (reported), 2 (censored), 3 (allowed)', required: true
       def update
         begin
           @rating.update(rating_params)
