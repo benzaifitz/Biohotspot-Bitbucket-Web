@@ -2,6 +2,16 @@ module Api
   module V1
     class MessagesController < ApiController
       before_action :authenticate_user!
+
+      respond_to :json
+
+      api :GET, 'messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
+      def index
+        @chats = Chat.where(user_id: current_user.id, conversation_id: params[:conversation_id])
+                             .paginate_with_timestamp(params[:timestamp], params[:direction])
+        respond_with @chats
+      end
+
       def create
         conversation = Conversation.find(params[:conversation_id])
         if conversation
