@@ -31,6 +31,7 @@
 #  uid                    :string           default(""), not null
 #  tokens                 :json
 #  number_of_ratings      :integer          default(0)
+#  uuid_iphone            :string
 #
 
 describe User do

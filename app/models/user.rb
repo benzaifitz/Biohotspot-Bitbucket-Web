@@ -31,6 +31,7 @@
 #  uid                    :string           default(""), not null
 #  tokens                 :json
 #  number_of_ratings      :integer          default(0)
+#  uuid_iphone            :string
 #
 
 class User < ActiveRecord::Base
@@ -53,12 +54,24 @@ class User < ActiveRecord::Base
   has_many :notifications
   has_many :chats
   has_many :conversations
-    
+  
+  def unread_conversations
+    count = 0
+    conversations.each do |conv|
+      conv.chats.each do |chat|
+        # make sure I am not the sender and chat status is not read / marked / removed
+        if chat.user_id != self.id && chat.status == 0
+          count += 1
+        end
+      end
+    end
+    count
+  end
+  
   def push_notification(msg)
     uuid = self.uuid_iphone #TODO Add this field to table
     if uuid
-      unread_conversation = chats.length # Need to change this
-      badge_counter = unread_conversation # add other notifications to counter
+      badge_counter = unread_conversation # Also add other notifications to counter
       Push::MessageApns.create(
         app: ENV['APP_NAME'],
         device: uuid,
