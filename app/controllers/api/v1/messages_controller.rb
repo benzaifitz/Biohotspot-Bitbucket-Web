@@ -6,12 +6,19 @@ module Api
       respond_to :json
 
       api :GET, 'messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
+      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
+      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
         @chats = Chat.where(user_id: current_user.id, conversation_id: params[:conversation_id])
                              .paginate_with_timestamp(params[:timestamp], params[:direction])
         respond_with @chats
       end
 
+      api :POST, '/api/v1/conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
+      param :conversation_id, String, desc: 'Id of the conversation.', required: false
+      param :user_id, String, desc: 'Id of user whom message was send.', required: false
+      param :from_user_id, String, desc: 'Id of user who send the message.', required: false
+      param :message, String, desc: 'Chat Message', required: false
       def create
         conversation = Conversation.find(params[:conversation_id])
         if conversation
@@ -78,7 +85,7 @@ module Api
       private
 
       def chat_params
-        params.require(:chat).permit(:user_id, :message)
+        params.require(:chat).permit(:user_id, :message, :from_user_id)
       end
     end
   end
