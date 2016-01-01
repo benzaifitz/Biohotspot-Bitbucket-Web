@@ -16,4 +16,6 @@ class Chat < ActiveRecord::Base
   belongs_to :user
   #belongs_to :user_content_status
   has_many :reported_chats
+  enum status: [:active, :reported, :censored, :allowed]
+  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
 end
