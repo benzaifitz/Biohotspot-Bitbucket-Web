@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(version: 20151222050602) do
     t.integer  "from_user_id", null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+    t.text     "last_message"
+    t.integer  "last_user_id"
   end
 
   add_index "conversations", ["user_id"], name: "index_conversations_on_user_id", using: :btree
@@ -229,6 +231,7 @@ ActiveRecord::Schema.define(version: 20151222050602) do
     t.string   "device_type"
     t.string   "username",                                 null: false
     t.string   "profile_picture"
+    t.string   "uuid_iphone"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

@@ -25,12 +25,13 @@
 #  first_name             :string
 #  last_name              :string
 #  company                :string
-#  rating                 :decimal(, )
+#  rating                 :decimal(, )      default(0.0)
 #  status                 :integer          default(0), not null
 #  user_type              :integer          default(0), not null
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  tokens                 :json
+#  number_of_ratings      :integer          default(0)
 #
 
 class User < ActiveRecord::Base
@@ -124,5 +125,25 @@ class User < ActiveRecord::Base
 
   def mailchimp_related_fields_updated?
     email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
+  end
+    
+  def push_notification(msg)
+    uuid = self.uuid_iphone #TODO Add this field to table
+    if uuid
+      unread_conversation = chats.length # Need to change this
+      badge_counter = unread_conversation # add other notifications to counter
+      Push::MessageApns.create(
+        app: ENV['APP_NAME'],
+        device: uuid,
+        alert: msg,
+        sound: '1.aiff',
+        badge: badge_counter,
+        expiry: 1.day.to_i,
+        attributes_for_device: {
+         key: 'MSG',
+         unread_conversations: unread_conversation 
+        }  
+      )
+    end
   end
 end

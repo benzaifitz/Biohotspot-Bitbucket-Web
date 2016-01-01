@@ -8,6 +8,8 @@
 #  from_user_id :integer          not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  last_message :text
+#  last_user_id :integer
 #
 
 require 'rails_helper'
