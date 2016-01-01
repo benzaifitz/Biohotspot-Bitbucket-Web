@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223083852) do
+ActiveRecord::Schema.define(version: 20151222050602) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 20151223083852) do
 
   create_table "blocked_users", force: :cascade do |t|
     t.integer  "user_id"
-    t.integer  "blocked_by", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "blocked_by_id", null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "blocked_users", ["user_id"], name: "index_blocked_users_on_user_id", using: :btree
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20151223083852) do
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.integer  "status",        default: 0
+    t.string   "detail"
   end
 
   add_index "jobs", ["user_id"], name: "index_jobs_on_user_id", using: :btree
@@ -90,6 +91,7 @@ ActiveRecord::Schema.define(version: 20151223083852) do
     t.datetime "updated_at",                    null: false
     t.integer  "notification_type", default: 0, null: false
     t.integer  "user_type",         default: 0, null: false
+    t.integer  "status",            default: 0, null: false
   end
 
   add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
@@ -131,6 +133,69 @@ ActiveRecord::Schema.define(version: 20151223083852) do
 
   add_index "reported_ratings", ["rating_id"], name: "index_reported_ratings_on_rating_id", using: :btree
 
+  create_table "rpush_apps", force: :cascade do |t|
+    t.string   "name",                                null: false
+    t.string   "environment"
+    t.text     "certificate"
+    t.string   "password"
+    t.integer  "connections",             default: 1, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "type",                                null: false
+    t.string   "auth_key"
+    t.string   "client_id"
+    t.string   "client_secret"
+    t.string   "access_token"
+    t.datetime "access_token_expiration"
+  end
+
+  create_table "rpush_feedback", force: :cascade do |t|
+    t.string   "device_token", limit: 64, null: false
+    t.datetime "failed_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "app_id"
+  end
+
+  add_index "rpush_feedback", ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
+
+  create_table "rpush_notifications", force: :cascade do |t|
+    t.integer  "badge"
+    t.string   "device_token",      limit: 64
+    t.string   "sound",                        default: "default"
+    t.string   "alert"
+    t.text     "data"
+    t.integer  "expiry",                       default: 86400
+    t.boolean  "delivered",                    default: false,     null: false
+    t.datetime "delivered_at"
+    t.boolean  "failed",                       default: false,     null: false
+    t.datetime "failed_at"
+    t.integer  "error_code"
+    t.text     "error_description"
+    t.datetime "deliver_after"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "alert_is_json",                default: false
+    t.string   "type",                                             null: false
+    t.string   "collapse_key"
+    t.boolean  "delay_while_idle",             default: false,     null: false
+    t.text     "registration_ids"
+    t.integer  "app_id",                                           null: false
+    t.integer  "retries",                      default: 0
+    t.string   "uri"
+    t.datetime "fail_after"
+    t.boolean  "processing",                   default: false,     null: false
+    t.integer  "priority"
+    t.text     "url_args"
+    t.string   "category"
+    t.integer  "user_id"
+    t.integer  "sent_by_id"
+  end
+
+  add_index "rpush_notifications", ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
+  add_index "rpush_notifications", ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
+  add_index "rpush_notifications", ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",      null: false
     t.string   "encrypted_password",     default: "",      null: false
@@ -160,19 +225,28 @@ ActiveRecord::Schema.define(version: 20151223083852) do
     t.string   "uid",                    default: "",      null: false
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
+    t.string   "profile_picture"
+    t.string   "username",                                 null: false
+    t.string   "device_token"
+    t.string   "device_type"
+    t.string   "username",                                 null: false
+    t.string   "profile_picture"
     t.string   "uuid_iphone"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.string   "item_type",  null: false
-    t.integer  "item_id",    null: false
-    t.string   "event",      null: false
+    t.string   "item_type",      null: false
+    t.integer  "item_id",        null: false
+    t.string   "event",          null: false
     t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
+    t.json     "object_changes"
+    t.string   "comment"
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree

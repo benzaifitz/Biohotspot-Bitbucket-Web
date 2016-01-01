@@ -55,5 +55,9 @@ module Fram
     config.assets.precompile += ['active_admin.css', 'active_admin.js']
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    # Setup sidkiq to be used for delayed jobs
+    config.active_job.queue_adapter = :sidekiq
+    # Setup autoload for lib
+    config.autoload_paths += Dir["#{Rails.root}/lib"]
   end
 end

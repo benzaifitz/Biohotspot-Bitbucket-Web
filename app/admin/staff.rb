@@ -1,14 +1,28 @@
 ActiveAdmin.register User, as: 'Staff' do
 
-  permit_params :name, :email, :company, :password
+  menu false
+  
+  permit_params do
+    allowed = []
+    allowed.push :password if params[:user] && !params[:user][:password].blank?
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username]
+    allowed.uniq
+  end
+
   actions :all, :except => [:index]
 
   form do |f|
     f.inputs 'Staff Details' do
-      f.input :name
       f.input :email
-      f.input :company
       f.input :password
+      f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      f.input :company
+      f.input :first_name
+      f.input :last_name
+      f.inputs "Profile Picture", :multipart => true do
+        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
+        f.input :profile_picture_cache, :as => :hidden
+      end
     end
     f.actions do
       f.action(:submit)
@@ -18,26 +32,16 @@ ActiveAdmin.register User, as: 'Staff' do
 
   controller do
     def update
-      @user = User.find(params[:id])
-      if permitted_params[:user][:password].blank?
-        @user.update_without_password(permitted_params[:user])
-      else
-        @user.update_attributes(permitted_params[:user])
-      end
-      if @user.errors.blank?
-        redirect_to admin_users_path, :notice => 'Staff updated successfully.'
-      else
-        render :edit
+      super do |format|
+        redirect_to admin_users_path, :notice => 'Staff updated successfully.' and return if resource.valid?
       end
     end
 
     def create
-      super do |success,failure|
-        success.html { redirect_to admin_users_path, :notice => 'Staff created successfully.' }
-        failure.html { render :edit }
+      super do |format|
+        redirect_to admin_users_path, :notice => 'Staff created successfully.' and return if resource.valid?
       end
     end
-
   end
 
   controller do

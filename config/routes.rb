@@ -1,17 +1,29 @@
 Rails.application.routes.draw do
 
-  devise_for :users
-  namespace :api do
-    mount_devise_token_auth_for 'User', at: 'auth'
-    namespace :admin do
-      resources :users
-    end
-    resources :conversations, only: [:index] do
-      resources :messages, only: [:index, :create]
+  apipie
+  devise_for :users, ActiveAdmin::Devise.config
+  namespace :api, defaults: {format: 'json'} do
+    namespace :v1 do
+      mount_devise_token_auth_for 'User', at: 'auth'
+      # namespace :admin do
+      #   resources :users
+      # end
+      resources :conversations, only: [:index] do
+        resources :messages, only: [:index, :create]
+      end
+      resources :staffs, only: [:show, :update, :index]
+      resources :customers, only: [:show, :update]
+      resources :blocked_users, only: [:index, :create, :show]
+      delete 'un_blocked_user' => 'blocked_users#destroy'
+      get 'eula/latest' => 'eulas#latest'
+      get 'privacy/latest' => 'privacies#latest'
+      resources :ratings, only: [:show, :create, :update]
+      resources :reported_ratings, only: [:show, :create]
+      resources :jobs
+      resources :notifications, only: [:index, :destroy]
     end
   end
-  
   ActiveAdmin.routes(self)
-  root to: 'visitors#index'
+  root 'admin/dashboard#index'
   resources :users
 end
