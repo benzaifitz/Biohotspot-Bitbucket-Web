@@ -9,13 +9,13 @@ ActiveAdmin.register Chat do
     column :created_at
     column :conversation_id
     column 'From' do |c|
-      link_to c.conversation.from_user.full_name , admin_user_path(c.conversation.from_user)
+      link_to c.from_user.full_name , admin_user_path(c.from_user) if c.from_user
     end
     column 'From Company' do |c|
-      c.conversation.from_user.company
+      c.from_user.company if c.from_user
     end
     column 'From User Type' do |c|
-      c.conversation.from_user.user_type
+      c.from_user.user_type if c.from_user
     end
 
     column 'To' do |c|
