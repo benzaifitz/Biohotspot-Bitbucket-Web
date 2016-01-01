@@ -8,7 +8,7 @@ class Api::Admin::UsersController #< ApiController
   #   @users = User.all
   #   respond_with @users
   # end
-  # 
+  #
   # def create
   #   @user = User.new(user_params)
   #   respond_with(@user) if @user.save

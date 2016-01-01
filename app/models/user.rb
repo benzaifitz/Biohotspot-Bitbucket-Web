@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    first_name.blank? ? username : "#{first_name} #{last_name}"
   end
 
   def ban_with_comment(comment)
