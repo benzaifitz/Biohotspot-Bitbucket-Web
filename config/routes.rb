@@ -5,10 +5,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
-      # namespace :admin do
-      #   resources :users
-      # end
-      resources :conversations, only: [:index] do
+      resources :conversations, only: [:index, :create] do
         resources :messages, only: [:index, :create]
       end
       resources :staffs, only: [:show, :update, :index]
