@@ -18,14 +18,18 @@ class Chat < ActiveRecord::Base
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"
   has_many :reported_chats
   enum status: [:active, :reported, :censored, :allowed]
-  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
-  
+
+  validates_presence_of :user_id, :from_user_id, :conversation_id, :status
+
+  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :from_user
+
+
   def recipient
-    from_user
+    user
   end
 
   def sender
-    user
+    from_user
   end
   
   def mark_read
