@@ -135,7 +135,7 @@ class User < ActiveRecord::Base
     convs.each do |conv|
       conv.chats.each do |chat|
         # make sure I am not the sender and chat status is not read / marked / removed
-        if chat.user_id != self.id && chat.status == 0
+        if chat.from_user_id != self.id && !chat.is_read?
           count += 1
         end
       end
