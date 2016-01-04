@@ -13,7 +13,9 @@
 #
 
 class Conversation < ActiveRecord::Base
+  include TimestampPagination
   has_many :chats
   belongs_to :user
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"
+  validates_uniqueness_of :user_id, :scope => :from_user_id
 end

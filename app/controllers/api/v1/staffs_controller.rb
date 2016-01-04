@@ -46,7 +46,11 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_staff
-        @staff = current_user || Staff.new #Staff.find(params[:id])
+        if current_user.staff?
+          @staff = current_user
+        elsif current_user.customer?
+          @staff = Staff.includes(:rated_on_ratings).find(params[:id])
+        end
       end
 
       def verify_staff

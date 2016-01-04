@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222050602) do
+ActiveRecord::Schema.define(version: 20160101113650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20151222050602) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "status",          default: 0, null: false
+    t.integer  "from_user_id",    default: 0, null: false
   end
 
   add_index "chats", ["conversation_id"], name: "index_chats_on_conversation_id", using: :btree
@@ -226,11 +227,9 @@ ActiveRecord::Schema.define(version: 20151222050602) do
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
     t.string   "profile_picture"
-    t.string   "username",                                 null: false
     t.string   "device_token"
-    t.string   "device_type"
     t.string   "username",                                 null: false
-    t.string   "profile_picture"
+    t.string   "device_type"
     t.string   "uuid_iphone"
   end
 

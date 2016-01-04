@@ -56,6 +56,7 @@ class User < ActiveRecord::Base
 
   belongs_to :eula
   has_many :ratings
+  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
   has_many :blocked_users
   has_many :jobs
   has_many :notifications
@@ -92,7 +93,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    first_name.blank? ? username : "#{first_name} #{last_name}"
   end
 
   def ban_with_comment(comment)
