@@ -16,4 +16,18 @@ class Chat < ActiveRecord::Base
   belongs_to :user
   #belongs_to :user_content_status
   has_many :reported_chats
+  enum status: [:unread, :read, :inappropriate, :removed]
+  
+  # def recipient
+  #   conversation.user
+  # end
+  #
+  # def sender
+  #   user
+  # end
+  
+  def mark_read
+    self.read!
+  end
+  
 end
