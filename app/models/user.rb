@@ -32,7 +32,9 @@
 #  uid                    :string           default(""), not null
 #  tokens                 :json
 #  number_of_ratings      :integer          default(0)
-#
+#  uuid_iphone            :string
+#  device_token           :string
+#  device_type            :string
 
 class User < ActiveRecord::Base
   # Include default devise modules.
@@ -60,6 +62,7 @@ class User < ActiveRecord::Base
   has_many :notifications
   has_many :chats
   has_many :conversations
+  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id"
 
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
   validates_presence_of :username, :email
@@ -107,7 +110,6 @@ class User < ActiveRecord::Base
     self
   end
 
-
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)
   end
@@ -127,12 +129,25 @@ class User < ActiveRecord::Base
   def mailchimp_related_fields_updated?
     email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
   end
-    
+
+  def unread(convs)
+    count = 0
+    convs.each do |conv|
+      conv.chats.each do |chat|
+        # make sure I am not the sender and chat status is not read / marked / removed
+        if chat.from_user_id != self.id && !chat.is_read?
+          count += 1
+        end
+      end
+    end
+    count
+  end
+
   def push_notification(msg)
     uuid = self.uuid_iphone #TODO Add this field to table
     if uuid
-      unread_conversation = chats.length # Need to change this
-      badge_counter = unread_conversation # add other notifications to counter
+      unread_conversations = unread(conversations) + unread(user_conversations)
+      badge_counter = unread_conversations # Also add other notifications to counter
       Push::MessageApns.create(
         app: ENV['APP_NAME'],
         device: uuid,

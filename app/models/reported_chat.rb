@@ -13,7 +13,7 @@ class ReportedChat < ActiveRecord::Base
   belongs_to :chat
   belongs_to :reported_by, class_name: "User", foreign_key: "reported_by_id"
 
-  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
+  delegate :ban_with_comment, :enable_with_comment, :bannable, to: :chat
 
   validates_presence_of :chat_id, :reported_by_id
   validates_uniqueness_of :chat_id, :scope => :reported_by_id
