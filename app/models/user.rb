@@ -144,22 +144,19 @@ class User < ActiveRecord::Base
   end
 
   def push_notification(msg)
-    uuid = self.uuid_iphone #TODO Add this field to table
-    if uuid
-      unread_conversations = unread(conversations) + unread(user_conversations)
-      badge_counter = unread_conversations # Also add other notifications to counter
-      Push::MessageApns.create(
-        app: ENV['APP_NAME'],
-        device: uuid,
-        alert: msg,
-        sound: '1.aiff',
-        badge: badge_counter,
-        expiry: 1.day.to_i,
-        attributes_for_device: {
-         key: 'MSG',
-         unread_conversations: unread_conversation 
-        }  
-      )
-    end
+    return if self.device_token.nil?
+    unread_conversations = unread(conversations) + unread(user_conversations)
+    badge_counter = unread_conversations # Also add other notifications to counter
+
+    n = Rpush::Apns::Notification.new
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n.device_token = self.device_token
+    n.alert = msg
+    n.data = { key: 'MSG', unread_conversations: unread_conversations }
+    n.user_id = self.id
+    n.badge = badge_counter
+    # TODO add sent by id
+    #n.sent_by_id = offered_by_id
+    n.save!
   end
 end
