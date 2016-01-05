@@ -14,7 +14,7 @@ module Api
       api :POST, '/ratings.json', 'Create a new rating.'
       # param :rating, String, desc: 'Rating value between 0.0 and 5.0', required: false
       param :comment, String, desc: 'Comment.', required: false
-      param :rated_on_id, String, desc: 'Id of user for which rating is provided. An additional param rating is also to be sent in range 0.0 to 5.0', required: false
+      param :rated_on_id, Integer, desc: 'Id of user for which rating is provided. An additional param rating is also to be sent in range 0.0 to 5.0', required: false
       def create
         @rating = Rating.new(rating_params.merge(user_id: current_user.id))
         begin
