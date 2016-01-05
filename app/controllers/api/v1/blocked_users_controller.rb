@@ -13,7 +13,7 @@ module Api
 
       # GET /api/v1/customers/1.json
       api :GET, '/blocked_users/:id.json', 'Returns user_id and blocked_by_id'
-      param :id, Integer, desc: 'ID of blocked user to be shown.', required: false
+      # param :id, Integer, desc: 'ID of blocked user to be shown.', required: false
       def show
       end
 
