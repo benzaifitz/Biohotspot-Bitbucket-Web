@@ -43,4 +43,24 @@ describe Chat do
     it { should belong_to(:from_user) }
     it { should have_many(:reported_chats) }
   end
+
+  describe 'instance methods' do
+    it 'should mark the chat as read' do
+      chat = create(:chat)
+      chat.mark_read
+      expect(chat.is_read).to eq true
+    end
+
+    it 'should return sender' do
+      chat = create(:chat)
+      expect(chat.sender).to eq chat.from_user
+    end
+
+    it 'should return recipient' do
+      chat = create(:chat)
+      expect(chat.recipient).to eq chat.user
+    end
+  end
+
+
 end

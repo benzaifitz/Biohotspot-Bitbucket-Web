@@ -18,5 +18,6 @@ FactoryGirl.define do
     user
     association :from_user, factory: :user
     status 0
+    is_read false
   end
 end

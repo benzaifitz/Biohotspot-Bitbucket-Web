@@ -12,10 +12,10 @@ module Api
       end
 
       def create
-        @conversation = Conversation.new(conversation_params)
+        @conversation = Conversation.new(conversation_params.merge(from_user_id: current_user.id))
         begin
           @conversation.save!
-          respond_with @conversation
+          render json: @conversation
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @conversation.errors.full_messages[0])
         end
@@ -24,7 +24,7 @@ module Api
       private
 
       def conversation_params
-        params.require(:conversation).permit(:user_id, :from_user_id)
+        params.require(:conversation).permit(:user_id, :name)
       end
 
     end
