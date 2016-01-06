@@ -12,7 +12,7 @@ module Api
       def index
         query = params[:query] || ""
         first_name, last_name = query.split(' ')
-        @staffers = Staff.search({first_name: first_name,
+        @staffers = Staff.without_blocked_users(current_user.id).search({first_name: first_name,
                       last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(20)
       end
 

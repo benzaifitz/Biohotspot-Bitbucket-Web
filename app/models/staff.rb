@@ -1,5 +1,7 @@
 class Staff < User
   default_scope -> { where(user_type: User.user_types['staff']) }
+  scope :without_blocked_users, -> (blocked_by_id) { where('users.id NOT IN(SELECT user_id FROM blocked_users where blocked_by_id = ?)', blocked_by_id) }
+
   before_update :check_duplicate_email
 
   def self.search(options = {})
