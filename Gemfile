@@ -66,3 +66,4 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
 end
+gem 'sinatra', :require => nil

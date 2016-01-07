@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
   apipie
   devise_for :users, ActiveAdmin::Devise.config
   namespace :api, defaults: {format: 'json'} do

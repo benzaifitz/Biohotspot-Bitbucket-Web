@@ -30,6 +30,7 @@ set :linked_files, %w{config/database.yml .env}
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
+set :sidekiq_config, 'config/sidekiq.yml'
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
