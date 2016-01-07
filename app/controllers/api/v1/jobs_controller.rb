@@ -71,7 +71,11 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_job
-        @job = Job.where(id: params[:id], offered_by: current_user).first
+        if current_user.customer?
+          @job = Job.where(id: params[:id], offered_by: current_user).first
+        elsif current_user.staff?
+          @job = Job.where(id: params[:id], user: current_user).first
+        end
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
