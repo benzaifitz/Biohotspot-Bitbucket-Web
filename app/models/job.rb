@@ -20,6 +20,7 @@ class Job < ActiveRecord::Base
   attr_accessor :current_user_type
 
   validates_presence_of :user_id, :offered_by_id, :status, :detail
+  validate :offered_by_user_is_customer, :offered_to_user_is_staff
 
   before_create :is_created_by_customer?
   before_update :is_user_allowed_to_set_job_status
@@ -87,4 +88,11 @@ class Job < ActiveRecord::Base
     status_changed? && (offered? || withdrawn?)
   end
 
+  def offered_by_user_is_customer
+    errors.add(:offering, "user must be a customer." ) unless offered_by.nil? || offered_by.customer?
+  end
+
+  def offered_to_user_is_staff
+    errors.add(:offered, "user must be staff." ) unless user.nil? || user.staff?
+  end
 end
