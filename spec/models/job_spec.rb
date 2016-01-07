@@ -46,6 +46,20 @@ describe Job do
     it { should validate_presence_of(:status).with_message(/can't be blank/) }
     it { should validate_presence_of(:detail).with_message(/can't be blank/) }
     it {expect(Job.statuses.keys.length).to eq(statuses_order.length)}
+    describe 'Custom Validations' do
+      it 'can only have offered by user as a customer' do
+        staff1 = create(:staff)
+        staff2 = create(:staff)
+        job = Job.create(detail: 'Test', user: staff1, offered_by: staff2)
+        expect(job.errors.messages[:offering]).to eq ["user must be a customer."]
+      end
+      it 'can only have offered to user as a staff' do
+        customer1 = create(:customer)
+        customer2 = create(:staff)
+        job = Job.create(detail: 'Test', user: customer1, offered_by: customer2)
+        expect(job.errors.messages[:offered]).to eq ["user must be staff."]
+      end
+    end
   end
 
 

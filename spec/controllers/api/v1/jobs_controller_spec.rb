@@ -36,9 +36,16 @@ describe Api::V1::JobsController do
         post :create, job: attributes_for(:job, user_id: create(:user).id, detail: 'Job description'), format: :json
         is_expected.to respond_with 500
         expect(Job.count).to eq(0)
-        expect(response.body).to match /Must be a customer/
+        expect(response.body).to match /Offering user must be a customer./
       end
 
+      it 'customer cannot offer a job to another customer or themselves' do
+        sign_in create(:customer)
+        post :create, job: attributes_for(:job, user_id: create(:customer).id, detail: 'Job description'), format: :json
+        is_expected.to respond_with 500
+        expect(Job.count).to eq(0)
+        expect(response.body).to match /Offered user must be staff./
+      end
     end
 
     describe 'POST #update' do
