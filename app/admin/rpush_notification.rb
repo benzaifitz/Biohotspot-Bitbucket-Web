@@ -74,7 +74,7 @@ ActiveAdmin.register RpushNotification, as: 'Email/Push Notification' do
 
   controller do
     def scoped_collection
-      super.includes :user, :sender
+      super.where("user_id is NOT NULL").includes :user, :sender
     end
 
     def show
