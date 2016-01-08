@@ -1,5 +1,6 @@
 json.array!(@jobs) do |job|
   json.extract! job, :id, :status, :detail, :created_at, :updated_at
+  json.status_num job[:status]
   if job.offered_by.present? && current_user.staff?
     json.set! 'offered_by' do |j|
       json.extract! job.offered_by, :id, :full_name, :first_name, :last_name, :username, :company, :rating
