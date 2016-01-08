@@ -41,7 +41,7 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_customer
         if current_user.staff?
-          @customer = Customer.find(params[:id])
+          @customer = Customer.includes(:rated_on_ratings).find(params[:id])
         elsif current_user.customer?
           @customer = current_user
         end
