@@ -6,7 +6,7 @@ describe Api::V1::ReportedRatingsController do
     let(:user) {create(:user)}
 
     before do
-      sign_in user
+      auth_request user
     end
 
     describe 'GET #show' do

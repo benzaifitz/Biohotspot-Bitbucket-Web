@@ -5,7 +5,7 @@ describe Api::V1::StaffsController do
   describe 'when user is logged in' do
     let(:staff) {create(:staff)}
     before do
-      sign_in staff
+      auth_request staff
     end
 
     describe 'GET #show' do

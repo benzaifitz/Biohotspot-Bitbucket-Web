@@ -6,7 +6,7 @@ describe Api::V1::MessagesController do
     let(:user) {create(:user)}
     let(:conversation) {create(:conversation)}
     before do
-      sign_in user
+      auth_request user
     end
 
     describe 'GET #index' do

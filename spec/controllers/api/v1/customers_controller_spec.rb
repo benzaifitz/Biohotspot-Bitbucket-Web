@@ -5,7 +5,7 @@ describe Api::V1::CustomersController do
   describe 'when customer is logged in' do
     let(:customer) {create(:customer)}
     before do
-      sign_in customer
+      auth_request customer
     end
 
     describe 'GET #show' do

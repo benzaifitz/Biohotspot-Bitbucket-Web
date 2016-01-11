@@ -5,7 +5,7 @@ describe Api::V1::BlockedUsersController do
   describe 'when user is logged in' do
     let(:user) {create(:user)}
     before do
-      sign_in user
+      auth_request user
     end
 
     describe 'GET #index' do
