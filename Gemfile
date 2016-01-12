@@ -33,7 +33,12 @@ gem 'omniauth'
 gem 'devise_token_auth'
 gem 'sidekiq', '~> 4.0', '>= 4.0.1'
 gem 'ckeditor', '~> 4.1', '>= 4.1.5'
+gem 'socket.io-client-simple'
+gem 'houston'
 gem 'fancybox-rails', '~> 0.3.0'
+gem 'mini_magick', '~> 4.3', '>= 4.3.6'
+gem 'carrierwave', '~> 0.10.0'
+gem 'fog', '~> 1.36'
 group :development do
   gem 'better_errors'
   gem 'quiet_assets'
@@ -48,7 +53,12 @@ end
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'rspec'
+  gem 'fakeredis'
   gem 'rspec-rails'
+  gem 'shoulda-matchers', '~> 3.0'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
+  gem 'redis-namespace'
 end
 group :test do
   gem 'capybara'
@@ -56,3 +66,4 @@ group :test do
   gem 'launchy'
   gem 'selenium-webdriver'
 end
+gem 'sinatra', :require => nil

@@ -1,6 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
-
+load 'config/deploy/recipes/redis.rb'
+load 'config/deploy/recipes/rpush.rb'
+load 'config/deploy/recipes/run_tests.rb'
 set :application, 'framework'
 set :repo_url, 'git@bitbucket.org:applabsservice/framework.git'
 
@@ -20,7 +22,7 @@ set :format, :pretty
 set :log_level, :debug
 
 # Default value for :pty is false
-# set :pty, true
+set :pty, true
 
 # Default value for :linked_files is []
 set :linked_files, %w{config/database.yml .env}
@@ -28,6 +30,7 @@ set :linked_files, %w{config/database.yml .env}
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
+set :sidekiq_config, 'config/sidekiq.yml'
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
@@ -37,7 +40,8 @@ set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/sys
 set :sidekiq_role, :app
 # set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 set :sidekiq_env, 'production'
-
+# sed :sidekiq_queue
+set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
 namespace :deploy do
 
   desc 'Restart application'

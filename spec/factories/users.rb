@@ -24,19 +24,36 @@
 #  first_name             :string
 #  last_name              :string
 #  company                :string
-#  rating                 :decimal(, )
+#  rating                 :decimal(, )      default(0.0)
 #  status                 :integer          default(0), not null
 #  user_type              :integer          default(0), not null
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  tokens                 :json
+#  number_of_ratings      :integer          default(0)
+#  uuid_iphone            :string
 #
 
 FactoryGirl.define do
   factory :user do
     confirmed_at Time.now
     name "Test User"
-    email "test@example.com"
+    sequence(:username) {|n| "testuser#{n}"}
+    company "Test Company"
+    sequence(:email) {|n| "test#{n}@dapperapps.com.au"}
     password "please123"
+
+    factory :staff do
+      user_type 'staff'
+    end
+
+    factory :admin do
+      user_type 'administrator'
+    end
+
+    factory :customer do
+      user_type 'customer'
+    end
+
   end
 end

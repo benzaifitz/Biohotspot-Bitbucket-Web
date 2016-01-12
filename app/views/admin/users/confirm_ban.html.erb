@@ -1,0 +1,9 @@
+<div class="panel">
+  <h3><%= "Ban user #{@user.full_name} (#{@user.email})" %></h3>
+  <div class="panel-contents">
+    <%= form_for resource, url: { action: "ban" }, method: :put do |f| %>
+      <%= text_area :user, :status_change_comment, cols: 50, rows: 5, placeholder: 'Please specify the reason for banning this user.' %>
+      <%= f.submit 'Ban User' %>
+    <% end %>
+  </div>
+</div>

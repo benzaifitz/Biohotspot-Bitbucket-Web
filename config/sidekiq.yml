@@ -1,0 +1,5 @@
+# configuration file for Sidekiq
+:queues:
+  - rpush_notifications
+  - notifications
+  - mailchimp

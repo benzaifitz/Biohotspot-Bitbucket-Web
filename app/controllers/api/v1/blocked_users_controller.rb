@@ -13,24 +13,25 @@ module Api
 
       # GET /api/v1/customers/1.json
       api :GET, '/blocked_users/:id.json', 'Returns user_id and blocked_by_id'
-      param :id, Integer, desc: 'ID of blocked user to be shown.', required: true
+      # param :id, Integer, desc: 'ID of blocked user to be shown.', required: false
       def show
       end
 
       # POST /api/v1/blocked_users.json
       api :POST, '/blocked_users.json', 'Create single record of blocked user.'
-      param :user_id, Integer, desc: 'ID of users who is to be blocked.', required: true
+      param :user_id, Integer, desc: 'ID of users who is to be blocked.', required: false
       def create
         @blocked_user = BlockedUser.new(blocked_user_params.merge(blocked_by: current_user))
-        if @blocked_user.save
+        begin
+          @blocked_user.save
           render :show
-        else
-          render json: @blocked_user.errors, status: :unprocessable_entity
+        rescue *RecoverableExceptions => e
+          error(E_INTERNAL, @blocked_user.errors.full_messages[0])
         end
       end
 
-      api :POST, '/un_blocked_user.json', 'Un blocks the user.'
-      param :user_id, Integer, desc: 'ID of user who is to be un blocked.', required: true
+      api :DELETE, '/un_blocked_user.json', 'Un blocks the user.'
+      param :user_id, Integer, desc: 'ID of user who is to be un blocked.', required: false
       def destroy
         @blocked_user = BlockedUser.where(blocked_user_params.merge(blocked_by: current_user))
         @blocked_user.destroy_all
@@ -41,7 +42,7 @@ module Api
 
       # Use callbacks to share common setup or constraints between actions.
       def set_blocked_user
-        @blocked_user = BlockedUser.find(params[:id])
+        @blocked_user = BlockedUser.where(id: params[:id], blocked_by_id: current_user.id).first
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.

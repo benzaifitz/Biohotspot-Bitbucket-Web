@@ -16,6 +16,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  name                   :string
+#  username               :string           not null, unique
 #  confirmation_token     :string
 #  confirmed_at           :datetime
 #  confirmation_sent_at   :datetime
@@ -24,13 +25,16 @@
 #  first_name             :string
 #  last_name              :string
 #  company                :string
-#  rating                 :decimal(, )
+#  rating                 :decimal(, )      default(0.0)
 #  status                 :integer          default(0), not null
 #  user_type              :integer          default(0), not null
 #  provider               :string           default("email"), not null
 #  uid                    :string           default(""), not null
 #  tokens                 :json
-#
+#  number_of_ratings      :integer          default(0)
+#  uuid_iphone            :string
+#  device_token           :string
+#  device_type            :string
 
 class User < ActiveRecord::Base
   # Include default devise modules.
@@ -38,10 +42,11 @@ class User < ActiveRecord::Base
           :recoverable, :rememberable, :trackable, :validatable,
           :confirmable, :omniauthable
   include DeviseTokenAuth::Concerns::User
-  
+
+  mount_uploader :profile_picture, ProfilePictureUploader
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-
+  enum device_type: [:ios, :android]
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version
@@ -51,11 +56,21 @@ class User < ActiveRecord::Base
 
   belongs_to :eula
   has_many :ratings
+  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
   has_many :blocked_users
   has_many :jobs
   has_many :notifications
   has_many :chats
   has_many :conversations
+  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id"
+
+  validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
+  validates_presence_of :username, :email
+  validates_presence_of :company, if: Proc.new { |user| user.staff? }
+  validates_uniqueness_of :username, :email
+
+
+  attr_accessor :status_change_comment
 
   after_update :log_user_events
   after_create :add_to_mailchimp
@@ -73,12 +88,26 @@ class User < ActiveRecord::Base
     elsif self.changed_attributes.keys.include?('current_sign_in_at') && self.current_sign_in_at.nil?
       PaperTrail::Version.create(attr.merge(event: 'Logout'))
     elsif self.changed_attributes.keys.include?('status')
-      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit}))
+      PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
     end
   end
 
   def full_name
-    "#{first_name} #{last_name}"
+    first_name.blank? ? username : "#{first_name} #{last_name}"
+  end
+
+  def ban_with_comment(comment)
+    self.status_change_comment = comment
+    self.banned!
+  end
+
+  def enable_with_comment(comment)
+    self.status_change_comment = comment
+    self.active!
+  end
+
+  def bannable
+    self
   end
 
   def add_to_mailchimp
@@ -101,4 +130,33 @@ class User < ActiveRecord::Base
     email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
   end
 
+  def unread(convs)
+    count = 0
+    convs.each do |conv|
+      conv.chats.each do |chat|
+        # make sure I am not the sender and chat status is not read / marked / removed
+        if chat.from_user_id != self.id && !chat.is_read?
+          count += 1
+        end
+      end
+    end
+    count
+  end
+
+  def push_notification(msg)
+    return if self.device_token.nil?
+    unread_conversations = unread(conversations) + unread(user_conversations)
+    badge_counter = unread_conversations # Also add other notifications to counter
+
+    n = Rpush::Apns::Notification.new
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n.device_token = self.device_token
+    n.alert = msg
+    n.data = { key: 'MSG', unread_conversations: unread_conversations }
+    n.user_id = self.id
+    n.badge = badge_counter
+    # TODO add sent by id
+    #n.sent_by_id = offered_by_id
+    n.save!
+  end
 end

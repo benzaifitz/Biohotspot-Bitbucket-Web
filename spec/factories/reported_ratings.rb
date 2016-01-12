@@ -11,7 +11,8 @@
 
 FactoryGirl.define do
   factory :reported_rating do
-    rating nil
+    rating
+    association :reported_by, factory: :user
   end
 
 end

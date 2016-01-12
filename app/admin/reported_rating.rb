@@ -1,4 +1,5 @@
 ActiveAdmin.register ReportedRating do
+  include SharedAdmin
 
   menu label: 'Reported Comments', parent: 'User Content', priority: 2
 
@@ -6,7 +7,9 @@ ActiveAdmin.register ReportedRating do
 
   index do
     column :created_at
-    column :reported_by
+    column 'Reported By' do |r|
+      link_to r.reported_by.username, admin_user_path(r.reported_by)
+    end
     column 'Reported By Company' do |r|
       label r.reported_by.company
     end
@@ -17,7 +20,7 @@ ActiveAdmin.register ReportedRating do
       r.rating.rating
     end
     column 'Rating For' do |r|
-      label r.rating.rated_on.name
+      link_to r.rating.rated_on.username, admin_user_path(r.rating.rated_on)
     end
     column 'Rating For Company' do |r|
       label r.rating.rated_on.company
@@ -26,7 +29,7 @@ ActiveAdmin.register ReportedRating do
       label r.rating.rated_on.user_type
     end
     column 'Rating By' do |r|
-      label r.rating.user.name
+      link_to r.rating.user.username, admin_user_path(r.rating.user)
     end
     column 'Rating By Company' do |r|
       label r.rating.user.company
@@ -44,22 +47,11 @@ ActiveAdmin.register ReportedRating do
       label r.rating.status
     end
     actions do |r|
-      (item 'Ban', ban_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.rated_on.active?
-      (item 'Enable', enable_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.rated_on.banned?
+      (item 'Ban', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.active?
+      (item 'Enable', confirm_status_change_admin_reported_rating_path(r, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if r.bannable.banned?
       (item 'Censor', censor_admin_reported_rating_path(r), class: 'member_link', method: :put) if r.rating.active? || r.rating.allowed?
       (item 'Allow', allow_admin_reported_rating_path(r), class: 'member_link', method: :put) if !r.rating.allowed?
     end
-  end
-
-
-  member_action :ban, method: :put do
-    resource.rating.rated_on.banned!
-    redirect_to admin_reported_ratings_path, notice: 'User Banned!'
-  end
-
-  member_action :enable, method: :put do
-    resource.rating.rated_on.active!
-    redirect_to admin_reported_ratings_path, notice: 'User Enabled!'
   end
 
   member_action :censor, method: :put do
