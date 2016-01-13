@@ -9,20 +9,23 @@ module Api
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
       param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
-        @chats = Chat.where(user_id: current_user.id, conversation_id: params[:conversation_id])
-                             .paginate_with_timestamp(params[:timestamp], params[:direction])
-        respond_with @chats
+        conversation = Conversation.find(params[:conversation_id])
+        if conversation.has_participant?(current_user.id)
+          @chats = Chat.where(conversation_id: params[:conversation_id])
+                               .paginate_with_timestamp(params[:timestamp], params[:direction])
+          respond_with @chats
+        else
+          error(E_INTERNAL, 'The logged in user is not participant of this chat.')
+        end
       end
 
       api :POST, '/api/v1/conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
       param :conversation_id, String, desc: 'Id of the conversation.', required: false
-      param :user_id, String, desc: 'Id of user whom message was send.', required: false
-      param :from_user_id, String, desc: 'Id of user who send the message.', required: false
-      param :message, String, desc: 'Chat Message', required: false
+      param :message, String, desc: "Chat Message encapsulted in chat object like chat: {message: 'Test Message'}", required: false
       def create
         conversation = Conversation.find(params[:conversation_id])
-        if conversation
-          message = conversation.chats.create(chat_params)
+        if conversation.has_participant?(current_user.id)
+          message = conversation.chats.create(chat_params.merge(from_user_id: current_user.id))
           # conversation.last_message = message[:body]
           # conversation.last_user_id = message[:user_id]
           #
@@ -85,7 +88,7 @@ module Api
       private
 
       def chat_params
-        params.require(:chat).permit(:user_id, :message, :from_user_id)
+        params.require(:chat).permit(:message)
       end
     end
   end

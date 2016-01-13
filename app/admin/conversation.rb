@@ -1,12 +1,13 @@
 ActiveAdmin.register Conversation do
 
-  menu label: 'Conversation', parent: 'Chat', priority: 0
+  menu label: 'Conversation', parent: 'Communicate', priority: 0
 
   actions :index
 
   index do
     column :id
     column :created_at
+    column :conversation_type
     column 'From' do |c|
       link_to c.from_user.full_name , admin_user_path(c.from_user)
     end
@@ -18,13 +19,22 @@ ActiveAdmin.register Conversation do
     end
 
     column 'To' do |c|
-      link_to c.user.full_name , admin_user_path(c.user)
+      if c.direct?
+        link_to c.recipient.full_name , admin_user_path(c.recipient)
+      end
     end
     column 'To Company' do |c|
-      c.user.company
+      if c.direct?
+        c.recipient.company
+      end
     end
     column 'To User Type' do |c|
-      c.user.user_type
+      if c.direct?
+        c.recipient.user_type
+      end
+    end
+    column 'Topic' do |c|
+      c.name
     end
     actions do |c|
       item 'Messages', "#{admin_chats_path}?q[conversation_id_eq]=#{c.id}"
@@ -34,5 +44,7 @@ ActiveAdmin.register Conversation do
   filter :from_user
   filter :user
   filter :created_at
+  filter :conversation_type
+  filter :name, label: 'Topic'
 
 end

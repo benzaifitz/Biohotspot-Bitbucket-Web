@@ -51,7 +51,7 @@ describe Conversation do
   describe 'ActiveRecord associations' do
     let(:conversation) { build(:conversation) }
     it { should have_many(:chats) }
-    it { should belong_to(:user) }
+    it { should belong_to(:recipient) }
     it { should belong_to(:from_user) }
   end
 end
