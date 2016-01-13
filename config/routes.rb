@@ -8,7 +8,8 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for 'User', at: 'auth'
       resources :conversations, only: [:index, :create] do
         resources :messages, only: [:index, :create]
-        put :add_paticipants
+        get :participants
+        put :add_participants
       end
       resources :staffs, only: [:show, :update, :index]
       resources :customers, only: [:show, :update]

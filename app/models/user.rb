@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
   has_many :blocked_users
   has_many :jobs
   has_many :notifications
-  has_many :chats
+  has_many :chats, foreign_key: 'from_user_id'
   has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id"
   has_many :conversation_participants
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'

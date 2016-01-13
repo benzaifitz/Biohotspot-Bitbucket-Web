@@ -1,6 +1,6 @@
 ActiveAdmin.register Chat do
   include SharedAdmin
-  menu label: 'Chat Messages', parent: 'Chat', priority: 0
+  menu label: 'Chat', parent: 'Communicate', priority: 1
 
   actions :index
 
@@ -16,16 +16,6 @@ ActiveAdmin.register Chat do
     end
     column 'From User Type' do |c|
       c.from_user.user_type if c.from_user
-    end
-
-    column 'To' do |c|
-      link_to c.user.full_name , admin_user_path(c.user)
-    end
-    column 'To Company' do |c|
-      c.user.company
-    end
-    column 'To User Type' do |c|
-      c.user.user_type
     end
     column :message
     column :status

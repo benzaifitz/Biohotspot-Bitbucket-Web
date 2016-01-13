@@ -30,14 +30,18 @@ class Conversation < ActiveRecord::Base
   validates_presence_of :user_id, if: "direct?"
   validate :users_do_not_have_chat, if: "user_id.present? && from_user_id.present? && direct?"
 
-  def add_participants(user_ids=[])
+  def add_participants(user_ids)
     self.errors.add(:base, 'Cannot add participants to a private chat.') and return unless community?
-    user_ids.each do |id|
-      conversation = ConversationParticipant.new(conversation_id: self.id, user_id: id)
+    user_ids.split(',').each do |user_id|
+      conversation = ConversationParticipant.new(conversation_id: self.id, user_id: user_id)
       unless conversation.save
         self.errors.add(:base, 'An error occured while adding one or more participants.')
       end
     end
+  end
+
+  def has_participant?(user_id)
+    Conversation.get_all_chats_for_user(user_id).exists?
   end
 
   def self.get_all_chats_for_user(user_id)

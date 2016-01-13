@@ -141,7 +141,7 @@ describe User do
     it { should have_many(:blocked_users) }
     it { should have_many(:jobs) }
     it { should have_many(:notifications) }
-    it { should have_many(:conversations) }
+    it { should have_many(:user_conversations) }
     it { should have_many(:chats) }
   end
 
