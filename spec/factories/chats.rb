@@ -15,7 +15,6 @@ FactoryGirl.define do
   factory :chat do
     message "Test Message"
     conversation
-    user
     association :from_user, factory: :user
     status 0
     is_read false

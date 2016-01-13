@@ -46,9 +46,9 @@ class Conversation < ActiveRecord::Base
 
   def self.get_all_chats_for_user(user_id)
     Conversation.joins("LEFT JOIN #{ConversationParticipant.table_name} ON #{ConversationParticipant.table_name}.conversation_id = #{Conversation.table_name}.id")
-            .where("(#{Conversation.table_name}.user_id = ? OR #{Conversation.table_name}.from_user_id = ? AND conversation_type = ?)
-            OR (#{ConversationParticipant.table_name}.user_id = ? AND conversation_type = ?)",
-            user_id, user_id, conversation_types[:direct], user_id, conversation_types[:community])
+            .where("((#{Conversation.table_name}.user_id = ? OR #{Conversation.table_name}.from_user_id = ?) AND conversation_type = ?)
+            OR ((#{Conversation.table_name}.from_user_id = ? OR #{ConversationParticipant.table_name}.user_id = ?) AND conversation_type = ?)",
+            user_id, user_id, conversation_types[:direct], user_id, user_id, conversation_types[:community])
   end
 
   private
