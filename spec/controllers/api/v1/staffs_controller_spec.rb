@@ -34,6 +34,19 @@ describe Api::V1::StaffsController do
       end
     end
 
+    describe 'PUT #update_profile_picture' do
+      it 'updates currently logged in staffs profile picture' do
+        uri = URI("http://cdn4.iconfinder.com/data/icons/small-n-flat/24/calendar-128.png")
+        data = Base64.encode64 Net::HTTP.get(uri)
+        put :update_profile_picture, staff_id: staff.id, staff: {image_data: data, image_extension: 'png', image_type: 'image/png', image_name: 'customer_image'}, format: :json
+        is_expected.to respond_with :ok
+        expect(response.body).to match /profile_picture_url/
+        staff.remove_profile_picture = true
+        staff.save
+        expect(staff.profile_picture_url).to eq nil
+      end
+    end
+
   end
 
   describe 'when user is not logged in' do
@@ -48,5 +61,9 @@ describe Api::V1::StaffsController do
       is_expected.to respond_with(401)
     end
 
+    it 'returns 401 for staff profile picture update'  do
+      put :update_profile_picture, staff_id: 99, format: :json
+      is_expected.to respond_with(401)
+    end
   end
 end

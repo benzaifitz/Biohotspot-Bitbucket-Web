@@ -44,7 +44,7 @@ module Api
       end
 
       # PATCH/PUT /api/v1/staffs/1/update_profile_picture.json
-      api :PUT, '/staffs/:id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
+      api :PUT, '/staffs/:staff_id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
       def update_profile_picture
         current_user.update(convert_data_to_upload(staff_params))
         if current_user.errors.empty?

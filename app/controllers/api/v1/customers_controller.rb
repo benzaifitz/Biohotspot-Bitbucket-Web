@@ -1,7 +1,7 @@
 module Api
   module V1
     class CustomersController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
       before_action :verify_customer, only: [:update]
       before_action :set_customer, only: [:show]
 
@@ -38,9 +38,8 @@ module Api
       end
 
       # PATCH/PUT /api/v1/customers/1/update_profile_picture.json
-      api :PUT, '/customers/:id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
+      api :put, '/customers/:customer_id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
       def update_profile_picture
-        current_user = User.find(3)
         current_user.update(convert_data_to_upload(customer_params))
         if current_user.errors.empty?
           render json: {id: current_user.id, profile_picture_url: current_user.profile_picture_url}
