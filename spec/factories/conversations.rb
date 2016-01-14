@@ -15,7 +15,7 @@
 FactoryGirl.define do
   factory :conversation do
     name "MyString"
-    user
+    association :recipient, factory: :user
     association :from_user, factory: :user
   end
 end
