@@ -82,12 +82,27 @@ describe Conversation do
       expect(conversation.has_participant?(conversation.from_user_id+10)).to eq false
     end
 
-    it 'should add participants to a conversation' do
-
+    it 'should add participants to a community conversation' do
+      conversation = create(:conversation, conversation_type: 1)
+      users = []
+      3.times do
+        users << create(:user)
+      end
+      users << conversation.from_user
+      conversation.add_participants(users.map(&:id).join(','))
+      expect(conversation.conversation_participants.count).to eq 4
+      expect(conversation.conversation_participants.map(&:user_id).include?(conversation.from_user_id)).to eq true
     end
 
     it 'should not add participants to a direct conversation' do
-      
+      conversation = create(:conversation, conversation_type: 0)
+      users = []
+      3.times do
+        users << create(:user)
+      end
+      users << conversation.from_user
+      conversation.add_participants(users.map(&:id).join(','))
+      expect(conversation.errors.full_messages[0]).to match /Cannot add participants to a private chat/
     end
   end
 end
