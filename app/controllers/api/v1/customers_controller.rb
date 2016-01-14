@@ -1,7 +1,7 @@
 module Api
   module V1
     class CustomersController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :verify_customer, only: [:update]
       before_action :set_customer, only: [:show]
 
@@ -37,6 +37,18 @@ module Api
         # end
       end
 
+      # PATCH/PUT /api/v1/customers/1/update_profile_picture.json
+      api :PUT, '/customers/:id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
+      def update_profile_picture
+        current_user = User.find(3)
+        current_user.update(convert_data_to_upload(customer_params))
+        if current_user.errors.empty?
+          render json: {id: current_user.id, profile_picture_url: current_user.profile_picture_url}
+        else
+          error(E_INTERNAL, current_user.errors.full_messages[0])
+        end
+      end
+
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_customer
@@ -53,7 +65,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def customer_params
-        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type]
+        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type, :image_data, :image_type, :image_extension, :image_name]
         permitted_params += [:password] if params[:customer] && !params[:customer][:password].blank?
         params.require(:customer).permit(permitted_params)
       end

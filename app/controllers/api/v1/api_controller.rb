@@ -37,6 +37,25 @@ module Api
         render json: { status: STATUS_OK }.merge(object)
       end
 
+      def convert_data_to_upload(obj_hash)
+        if obj_hash[:image_data]
+          image_data_string = obj_hash[:image_data]
+          image_data_binary = Base64.decode64(image_data_string)
+
+          temp_img_file = Tempfile.new("")
+          temp_img_file.binmode
+          temp_img_file << image_data_binary
+          temp_img_file.rewind
+
+          img_params = {:filename => "#{obj_hash[:image_name]}.#{obj_hash[:image_extension]}", :type => obj_hash[:image_type], :tempfile => temp_img_file}
+          uploaded_file = ActionDispatch::Http::UploadedFile.new(img_params)
+
+          obj_hash[:profile_picture] = uploaded_file
+          [:image_data, :image_name, :image_extension, :image_type].each {|attr| obj_hash.delete(attr)}
+        end
+        return obj_hash
+      end
+
     end
   end
 end
