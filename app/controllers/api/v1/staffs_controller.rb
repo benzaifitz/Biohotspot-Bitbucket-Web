@@ -43,6 +43,17 @@ module Api
         end
       end
 
+      # PATCH/PUT /api/v1/staffs/1/update_profile_picture.json
+      api :PUT, '/staffs/:staff_id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
+      def update_profile_picture
+        current_user.image_data(staff_params[:image_data], staff_params[:image_type])
+        if current_user.save
+          render json: {id: current_user.id, profile_picture_url: current_user.profile_picture_url}
+        else
+          error(E_INTERNAL, current_user.errors.full_messages[0])
+        end
+      end
+
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_staff
@@ -59,7 +70,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def staff_params
-        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type]
+        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type, :image_data, :image_type, :image_extension, :image_name]
         permitted_params += [:password] if params[:staff] && !params[:staff][:password].blank?
         params.require(:staff).permit(permitted_params)
       end

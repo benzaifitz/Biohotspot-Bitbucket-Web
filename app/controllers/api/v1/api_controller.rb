@@ -36,7 +36,6 @@ module Api
         object = JSON.parse(object.to_json) unless object.instance_of?(Hash)
         render json: { status: STATUS_OK }.merge(object)
       end
-
     end
   end
 end

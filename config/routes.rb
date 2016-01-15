@@ -11,8 +11,12 @@ Rails.application.routes.draw do
         get :participants
         put :add_participants
       end
-      resources :staffs, only: [:show, :update, :index]
-      resources :customers, only: [:show, :update]
+      resources :staffs, only: [:show, :update, :index] do
+        put :update_profile_picture
+      end
+      resources :customers, only: [:show, :update] do
+        put :update_profile_picture
+      end
       resources :blocked_users, only: [:index, :create, :show]
       delete 'un_blocked_user' => 'blocked_users#destroy'
       get 'eula/latest' => 'eulas#latest'

@@ -160,4 +160,27 @@ class User < ActiveRecord::Base
     #n.sent_by_id = offered_by_id
     n.save!
   end
+
+  def image_data(data, content_type)
+    # decode data and create stream on them
+    io = CarrierStringIO.new(Base64.decode64(data), content_type)
+
+    self.profile_picture = io
+  end
+end
+
+class CarrierStringIO < StringIO
+
+  def initialize(data, content_type)
+    super(data)
+    @content_type = content_type
+  end
+
+  def original_filename
+    "profile_picture.png"
+  end
+
+  def content_type
+    @content_type
+  end
 end
