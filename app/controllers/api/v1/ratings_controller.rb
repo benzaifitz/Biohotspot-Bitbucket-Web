@@ -2,6 +2,7 @@ module Api
   module V1
     class RatingsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
       before_action :set_rating, only: [:show, :update]
 
       # GET /api/v1/ratings/1.json

@@ -2,6 +2,8 @@ module Api
   module V1
     class ConversationsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
+
       respond_to :json
 
       api :GET, 'conversations.json', 'Returns all conversations that they are the to/from user or user has participated in(community). pass 1 in conversation_type for community chat'

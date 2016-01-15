@@ -61,4 +61,7 @@ end
 def auth_request(user)
   sign_in user
   request.headers.merge!(user.create_new_auth_token)
+  eula = create(:eula)
+  privacy = create(:privacy)
+  user.update_attributes(eula_id: eula.id, privacy_id: privacy.id)
 end

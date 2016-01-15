@@ -2,8 +2,9 @@ module Api
   module V1
     class JobsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
       before_action :set_job, only: [:show, :update, :destroy]
-      
+
       # GET /api/v1/jobs.json
       api :GET, '/jobs.json', 'If customer is logged in that it returns all the jobs offered by the customer or if staff is logged in than all jobs accepted by staff will be returned.'
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'

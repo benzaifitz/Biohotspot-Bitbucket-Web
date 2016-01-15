@@ -21,6 +21,7 @@
 #  confirmation_sent_at   :datetime
 #  unconfirmed_email      :string
 #  eula_id                :integer
+#  privacy_id             :integer
 #  first_name             :string
 #  last_name              :string
 #  company                :string

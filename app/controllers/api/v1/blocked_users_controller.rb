@@ -2,8 +2,8 @@ module Api
   module V1
     class BlockedUsersController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
       before_action :set_blocked_user, only: [:show]
-
 
       # GET /api/v1/blocked_users.json
       api :GET, '/blocked_users.json', 'Get all the users who are blocked by current user.'

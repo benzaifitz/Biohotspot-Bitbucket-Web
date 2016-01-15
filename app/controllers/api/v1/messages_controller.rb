@@ -2,6 +2,7 @@ module Api
   module V1
     class MessagesController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
 
       respond_to :json
 

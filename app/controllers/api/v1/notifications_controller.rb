@@ -3,6 +3,7 @@ module Api
     class NotificationsController < ApiController
       before_action :authenticate_user!
       before_action :set_reported_rating, only: [:show]
+      before_action :check_user_eula_and_privacy
 
       # GET /api/v1/notifications.json
       api :GET, '/notifications.json', 'Returns a list of notifications recieved by the current user.'
