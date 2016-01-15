@@ -46,8 +46,8 @@ module Api
       # PATCH/PUT /api/v1/staffs/1/update_profile_picture.json
       api :PUT, '/staffs/:staff_id/update_profile_picture.json', 'Update profile picture of currently signed in user. Accepts image_data, image_extension, image_type(image/jpeg), image_name e.g {staff: image_data: "base 64 encoded data"..}'
       def update_profile_picture
-        current_user.update(convert_data_to_upload(staff_params))
-        if current_user.errors.empty?
+        current_user.image_data(staff_params[:image_data], staff_params[:image_type])
+        if current_user.save
           render json: {id: current_user.id, profile_picture_url: current_user.profile_picture_url}
         else
           error(E_INTERNAL, current_user.errors.full_messages[0])
