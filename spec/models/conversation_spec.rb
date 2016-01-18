@@ -105,4 +105,22 @@ describe Conversation do
       expect(conversation.errors.full_messages[0]).to match /Cannot add participants to a private chat/
     end
   end
+
+  describe 'dependent destroy for conversation' do
+    it 'should delete chats of a conversation' do
+      conversation = create(:conversation)
+      conversation.chats.create(attributes_for(:chat).merge(from_user: create(:user)))
+      expect(conversation.chats.count).to eq 1
+      conversation.destroy!
+      expect(conversation.chats.count).to eq 0
+    end
+
+    it 'should delete conversation_participants of a conversation' do
+      conversation = create(:conversation, conversation_type: Conversation.conversation_types[:community])
+      conversation.conversation_participants.create(community_conversation: conversation, participant: create(:user))
+      expect(conversation.conversation_participants.count).to eq 1
+      conversation.destroy!
+      expect(conversation.conversation_participants.count).to eq 0
+    end
+  end
 end

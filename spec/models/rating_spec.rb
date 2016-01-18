@@ -102,5 +102,14 @@ describe Rating do
 
   end
 
+  describe 'dependent destroy for rating' do
+    it 'should delete chats of a conversation' do
+      rating = create(:rating)
+      rating.reported_ratings.create(reported_by: create(:user))
+      expect(rating.reported_ratings.count).to eq 1
+      rating.destroy!
+      expect(rating.reported_ratings.count).to eq 0
+    end
+  end
 end
 

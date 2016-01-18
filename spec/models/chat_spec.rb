@@ -55,5 +55,14 @@ describe Chat do
     end
   end
 
+  describe 'dependent destroy for rating' do
+    it 'should delete reported chats of a chat' do
+      chat = create(:chat)
+      chat.reported_chats.create(reported_by: create(:user))
+      expect(chat.reported_chats.count).to eq 1
+      chat.destroy!
+      expect(chat.reported_chats.count).to eq 0
+    end
+  end
 
 end

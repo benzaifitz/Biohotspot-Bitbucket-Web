@@ -56,15 +56,18 @@ class User < ActiveRecord::Base
 
   belongs_to :eula
   belongs_to :privacy
-  has_many :ratings
-  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
-  has_many :blocked_users
-  has_many :jobs
-  has_many :notifications
-  has_many :chats, foreign_key: 'from_user_id'
-  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id"
-  has_many :conversation_participants
+  has_many :ratings, dependent: :destroy
+  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
+  has_many :blocked_users, dependent: :destroy
+  has_many :blocked_by_blocked_users, class_name: 'BlockedUser', foreign_key: 'blocked_by_id', dependent: :destroy
+  has_many :jobs, dependent: :destroy
+  has_many :offered_by_jobs, class_name: 'Job', foreign_key: 'offered_by_id', dependent: :destroy
+  has_many :chats, foreign_key: 'from_user_id', dependent: :destroy
+  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id", dependent: :destroy
+  has_many :recipient_conversations, ->{ where conversation_type: Conversation.conversation_types[:direct]}, class_name: 'Conversation', foreign_key: 'user_id', dependent: :destroy
+  has_many :conversation_participants, dependent: :destroy
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
+  has_many :rpush_notifications, dependent: :destroy
 
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
   validates_presence_of :username, :email
@@ -95,7 +98,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    first_name.blank? ? username : "#{first_name} #{last_name}"
+    (first_name.blank? && last_name.blank?) ? username : "#{first_name} #{last_name}"
   end
 
   def ban_with_comment(comment)
