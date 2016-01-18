@@ -2,6 +2,7 @@ module Api
   module V1
     class ReportedChatsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
       before_action :set_reported_chat, only: [:show]
 
       def show

@@ -21,6 +21,7 @@ module Api
     VERSION = '1.0.0'
 
     DIRECTION = { up: 0, down: 1 }
+    LIMIT = 20
 
     class CatchJsonParseErrors
       def initialize(app)

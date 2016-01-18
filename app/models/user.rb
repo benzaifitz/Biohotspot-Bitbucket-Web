@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
   attr_accessor self.version_association_name
 
   belongs_to :eula
+  belongs_to :privacy
   has_many :ratings
   has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
   has_many :blocked_users

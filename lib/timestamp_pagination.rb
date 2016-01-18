@@ -11,7 +11,7 @@ module TimestampPagination
         if direction.to_i == Api::V1::DIRECTION[:up]
           records = records.updated_after(timestamp)
         elsif direction.to_i == Api::V1::DIRECTION[:down]
-          records = records.updated_before(timestamp).limit(20)
+          records = records.updated_before(timestamp).limit(Api::V1::LIMIT)
         end
         records.order('updated_at DESC')
       end

@@ -36,6 +36,15 @@ module Api
         object = JSON.parse(object.to_json) unless object.instance_of?(Hash)
         render json: { status: STATUS_OK }.merge(object)
       end
+
+      def check_user_eula_and_privacy
+        latest_eula = Eula.find_by_is_latest(true)
+        latest_privacy = Privacy.find_by_is_latest(true)
+        if latest_eula.id != current_user.eula_id || latest_privacy.id != current_user.privacy_id
+          render json: { deprecated_eula: latest_eula.id != current_user.eula_id,
+                         deprecated_privacy: latest_privacy.id != current_user.privacy_id }, status: '419' and return
+        end
+      end
     end
   end
 end
