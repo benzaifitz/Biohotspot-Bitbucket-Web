@@ -6,7 +6,7 @@ module Api
 
       respond_to :json
 
-      api :GET, 'conversations.json', 'Returns all conversations that they are the to/from user or user has participated in(community). pass 1 in conversation_type for community chat'
+      api :GET, 'conversations.json', 'Returns all conversations that they are the to/from user or user has participated in(community).'
       def index
         @conversations = Conversation.includes(:recipient, :from_user).get_all_chats_for_user(current_user.id)
                              .paginate_with_timestamp(params[:timestamp], params[:direction])
