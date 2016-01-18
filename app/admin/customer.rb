@@ -42,7 +42,10 @@ ActiveAdmin.register User, as: 'Customer' do
 
     def create
       super do |format|
-        redirect_to admin_users_path, :notice => 'Customer created successfully.' and return if resource.valid?
+        if resource.valid?
+          resource.send_confirmation_instructions
+          redirect_to admin_users_path, :notice => 'Customer created successfully.' and return
+        end
       end
     end
   end

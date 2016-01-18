@@ -7,7 +7,10 @@ class ApplicationController < ActionController::Base
 
   def authenticate_active_admin_user!
     authenticate_user!
-    redirect_to root_path unless current_user.administrator?
+    unless current_user.administrator?
+      sign_out current_user
+      redirect_to root_path and return
+    end
   end
 
   def after_sign_in_path_for(resource)
