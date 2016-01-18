@@ -2,6 +2,7 @@ module Api
   module V1
     class CustomersController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy, except: [:update]
       before_action :verify_customer, only: [:update]
       before_action :set_customer, only: [:show]
 
@@ -64,7 +65,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def customer_params
-        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :device_token, :device_type, :image_data, :image_type, :image_extension, :image_name]
+        permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :privacy_id, :device_token, :device_type, :image_data, :image_type, :image_extension, :image_name]
         permitted_params += [:password] if params[:customer] && !params[:customer][:password].blank?
         params.require(:customer).permit(permitted_params)
       end

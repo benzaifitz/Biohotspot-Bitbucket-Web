@@ -12,6 +12,7 @@
 FactoryGirl.define do
   factory :eula do
     eula_text 'Some really long text for eula'
+    is_latest true
   end
 
 end
