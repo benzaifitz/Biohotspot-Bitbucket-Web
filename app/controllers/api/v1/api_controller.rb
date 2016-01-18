@@ -38,6 +38,7 @@ module Api
       end
 
       def check_user_eula_and_privacy
+        #TODO incorporate caching
         latest_eula = Eula.find_by_is_latest(true)
         latest_privacy = Privacy.find_by_is_latest(true)
         if latest_eula.id != current_user.eula_id || latest_privacy.id != current_user.privacy_id

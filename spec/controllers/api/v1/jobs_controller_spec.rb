@@ -85,6 +85,39 @@ describe Api::V1::JobsController do
         expect(response.body).to match /Job cannot be deleted/
       end
     end
+
+
+    #TODO find a way to add below tests to all controllers using shared contexts
+    describe 'User has not accepted latest eula and privacy' do
+      describe 'User has nil set in eula/privacy_id' do
+        it 'should return 419 with depracted eula/privacy message' do
+          user.update_attributes(eula_id: nil, privacy_id: nil)
+          get :index, format: :json
+          is_expected.to respond_with(419)
+          expect(response.body).to match /"deprecated_eula":true/
+          expect(response.body).to match /"deprecated_privacy":true/
+        end
+      end
+      describe 'Latest eula gets updated' do
+        it 'should return 419 with depracted eula message' do
+          create(:eula)
+          get :index, format: :json
+          is_expected.to respond_with(419)
+          expect(response.body).to match /"deprecated_eula":true/
+          expect(response.body).to match /"deprecated_privacy":false/
+        end
+      end
+      describe 'Latest eula gets updated' do
+        it 'should return 419 with depracted eula message' do
+          create(:privacy)
+          get :index, format: :json
+          is_expected.to respond_with(419)
+          expect(response.body).to match /"deprecated_eula":false/
+          expect(response.body).to match /"deprecated_privacy":true/
+        end
+      end
+    end
+
   end
 
   describe 'when user is not logged in' do
