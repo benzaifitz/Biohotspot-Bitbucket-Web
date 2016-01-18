@@ -17,7 +17,7 @@ class Rating < ActiveRecord::Base
   enum status: [:active, :reported, :censored, :allowed]
   belongs_to :user # rated by
   belongs_to :rated_on, class_name: "User", foreign_key: "rated_on_id"
-  has_many :reported_ratings
+  has_many :reported_ratings, dependent: :destroy
 
   validates_presence_of :rating, :user_id, :rated_on_id, :status
   validates :rating, inclusion: { in: 0..5 }

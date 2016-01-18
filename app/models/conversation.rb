@@ -16,8 +16,8 @@
 
 class Conversation < ActiveRecord::Base
   include TimestampPagination
-  has_many :chats
-  has_many :conversation_participants
+  has_many :chats, dependent: :destroy
+  has_many :conversation_participants, dependent: :destroy
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"
   belongs_to :recipient, class_name: "User", foreign_key: "user_id"
   has_many :participants, through: :conversation_participants

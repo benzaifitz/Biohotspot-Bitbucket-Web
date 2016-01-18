@@ -14,7 +14,7 @@ class Chat < ActiveRecord::Base
   include TimestampPagination
   belongs_to :conversation
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"
-  has_many :reported_chats
+  has_many :reported_chats, dependent: :destroy
   enum status: [:active, :reported, :censored, :allowed]
 
   validates_presence_of :from_user_id, :conversation_id, :status
