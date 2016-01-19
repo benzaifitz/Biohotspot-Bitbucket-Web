@@ -32,7 +32,7 @@ module Api
         query = params[:query] || ""
         first_name, last_name = query.split(' ')
         @staffers = Staff.without_blocked_users(current_user.id).search({first_name: first_name,
-                      last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(API::V1::LIMIT)
+                      last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(Api::V1::LIMIT)
       end
 
       # GET /api/v1/staffs/1.json
