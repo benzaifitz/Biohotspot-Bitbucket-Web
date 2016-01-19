@@ -6,6 +6,24 @@ module Api
       before_action :verify_staff, only: [:update]
       before_action :set_staff, only: [:show, :update]
 
+      #POST /
+      api :POST, '/auth/', 'Create a new user(staff or customer). No encapsulation needed'
+      param :email, String
+      param :password, String
+      param :password_confirmation, String
+      param :first_name, String
+      param :last_name, String
+      param :user_type, Integer, desc: 'Staff => 0, Customer => 2. By default a user will be a staff'
+      param :company, String, desc: 'Required for staff type user'
+      param :user_name, String, desc: 'Required. Unique username of user. Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      param :eula_id, Integer, desc: 'id of accepted terms and conditions(EULA)'
+      param :privacy_id, Integer, desc: 'id of accepted privacy policy'
+      param :device_token, Integer, desc: 'device token'
+      param :device_type, Integer, desc: 'iOS/Android'
+      def register
+        #Dummy stub to provide API docs
+      end
+
       #GET /api/v1/staffs.json
       api :GET, '/staffs.json', 'Return a list of staff with or without a search query'
       param :query, String, desc: 'Search staff resources with name. If not provided will return a list of all staff 20 records at a time'
