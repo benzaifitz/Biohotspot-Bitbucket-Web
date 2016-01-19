@@ -6,6 +6,24 @@ module Api
       before_action :verify_customer, only: [:update]
       before_action :set_customer, only: [:show]
 
+      #POST /
+      api :POST, '/auth/', 'Create a new user(staff or customer). No encapsulation needed'
+      param :email, String
+      param :password, String
+      param :password_confirmation, String
+      param :first_name, String
+      param :last_name, String
+      param :user_type, Integer, desc: 'Staff => 0, Customer => 2. By default a user will be a staff'
+      param :company, String, desc: 'Required for staff type user'
+      param :user_name, String, desc: 'Required. Unique username of user. Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      param :eula_id, Integer, desc: 'id of accepted terms and conditions(EULA)'
+      param :privacy_id, Integer, desc: 'id of accepted privacy policy'
+      param :device_token, Integer, desc: 'device token'
+      param :device_type, Integer, desc: 'iOS/Android'
+      def register
+        #Dummy stub to provide API docs
+      end
+
       # GET /api/v1/customers/1.json
       api :GET, '/customers/:id.json', 'Show single customer resource.'
       # param :id, Integer, desc: 'ID of customer to be shown.', required: true
