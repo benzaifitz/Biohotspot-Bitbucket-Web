@@ -39,9 +39,10 @@ describe Api::V1::CustomersController do
       it 'updates currently logged in customers profile picture' do
         uri = URI("http://cdn4.iconfinder.com/data/icons/small-n-flat/24/calendar-128.png")
         data = Base64.encode64 Net::HTTP.get(uri)
-        put :update_profile_picture, customer_id: customer.id, customer: {image_data: data, image_extension: 'png', image_type: 'image/png', image_name: 'customer_image'}, format: :json
+        put :update, id: customer.id, customer: {image_data: data, image_type: 'image/png'}, format: :json
         is_expected.to respond_with :ok
-        expect(response.body).to match /profile_picture_url/
+        customer.reload
+        expect(customer.profile_picture_url).to_not eq nil
         customer.remove_profile_picture = true
         customer.save
         expect(customer.profile_picture_url).to eq nil
@@ -59,11 +60,6 @@ describe Api::V1::CustomersController do
 
     it 'returns 401 for customer update' do
       put :update, id: 99, format: :json
-      is_expected.to respond_with(401)
-    end
-
-    it 'returns 401 for customer profile picture update'  do
-      put :update_profile_picture, customer_id: 99, format: :json
       is_expected.to respond_with(401)
     end
   end
