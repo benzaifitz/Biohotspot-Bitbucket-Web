@@ -49,12 +49,21 @@ describe Rating do
     it { should allow_value(2.5).for(:rating) }
     it { should_not allow_value(5.5).for(:rating) }
     # Basic validations
-    it { expect(create(:rating)).to validate_uniqueness_of(:rated_on_id).scoped_to(:user_id) }
     it { should validate_presence_of(:rating).with_message(/can't be blank/) }
     it { should validate_presence_of(:user_id).with_message(/can't be blank/) }
     it { should validate_presence_of(:rated_on_id).with_message(/can't be blank/) }
     it { should validate_presence_of(:status).with_message(/can't be blank/) }
     it {expect(Rating.statuses.keys.length).to eq(statuses_order.length)}
+  end
+
+  describe 'Custom validations' do
+    it "should not allow two ratings to be added by customer for a staff within 24hrs" do
+      rating = create(:rating, attributes_for(:rating).merge(user: create(:customer), rated_on: create(:staff)))
+      expect(rating).to be_valid
+      rating_2 = Rating.create(attributes_for(:rating).merge(user_id: rating.user_id, rated_on_id: rating.rated_on_id))
+      expect(rating_2).to_not be_valid
+      expect(rating_2.errors.full_messages[0]).to match /does not allow more than 1 comment in 24 hours./
+    end
   end
 
   describe '#status' do

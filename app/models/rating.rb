@@ -21,7 +21,7 @@ class Rating < ActiveRecord::Base
 
   validates_presence_of :rating, :user_id, :rated_on_id, :status
   validates :rating, inclusion: { in: 0..5 }
-  validates_uniqueness_of :rated_on_id, :scope => :user_id
+  validate :check_24_hr_throttle, on: :create, if: "user_id.present? && rated_on_id.present?"
 
   delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
 
@@ -47,4 +47,9 @@ class Rating < ActiveRecord::Base
     self.rated_on.update_attributes(rating: avg_rating, number_of_ratings: rated_on.number_of_ratings - 1)
   end
 
+  def check_24_hr_throttle
+    if self.user.customer? && self.rated_on.staff? && Rating.where("user_id = ? AND rated_on_id = ? AND created_at > ?", self.user_id, self.rated_on_id, Time.now.utc - 1.day).exists?
+      self.errors.add(:one_day_throttle_limit, "does not allow more than 1 comment in 24 hours.")
+    end
+  end
 end
