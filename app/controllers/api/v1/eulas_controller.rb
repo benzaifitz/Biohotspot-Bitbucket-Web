@@ -1,6 +1,6 @@
 module Api
   module V1
-    class EulasController < ApiController
+    class EulasController < ApplicationController
 
       # GET /api/v1/eula/latest.json
       api :GET, '/eula/latest.json', 'Returns the latest EULA.'
