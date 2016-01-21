@@ -33,12 +33,14 @@
 # integer  "user_id"
 # integer  "sent_by_id"
 
-class Rpush::Client::ActiveRecord::Apns::Notification
+class Rpush::Client::ActiveRecord::Notification
+  include TimestampPagination
+
   belongs_to :user
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
 end
 
-class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
+class RpushNotification < Rpush::Client::ActiveRecord::Notification
   attr_accessor :user_type
   attr_accessor :notification_type
 
