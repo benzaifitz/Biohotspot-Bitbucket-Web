@@ -97,7 +97,6 @@ ActiveAdmin.register RpushNotification, as: 'Notification' do
     end
 
     def create
-      byebug
       attrs = permitted_params[:rpush_notification]
       if attrs[:alert].present?
         RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_user.id}))
