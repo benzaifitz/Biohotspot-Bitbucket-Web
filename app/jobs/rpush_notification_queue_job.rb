@@ -18,7 +18,7 @@ class RpushNotificationQueueJob < ActiveJob::Base
   end
 
   def create_push_notification(attrs)
-    n = RpushNotification.new
+    n = Rpush::Client::ActiveRecord::Apns::Notification.new
     n.app = attrs[:app]
     n.device_token = attrs[:user].device_token
     n.sent_by_id = attrs[:sent_by_id]
