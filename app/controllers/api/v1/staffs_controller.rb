@@ -15,7 +15,7 @@ module Api
       param :last_name, String
       param :user_type, Integer, desc: 'Staff => 0, Customer => 2. By default a user will be a staff'
       param :company, String, desc: 'Required for staff type user'
-      param :user_name, String, desc: 'Required. Unique username of user. Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
+      param :username, String, desc: 'Required. Unique username of user. Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       param :eula_id, Integer, desc: 'id of accepted terms and conditions(EULA)'
       param :privacy_id, Integer, desc: 'id of accepted privacy policy'
       param :device_token, Integer, desc: 'device token'

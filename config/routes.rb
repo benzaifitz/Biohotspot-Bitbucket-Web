@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   devise_for :users, ActiveAdmin::Devise.config
   namespace :api, defaults: {format: 'json'} do
     namespace :v1 do
-      mount_devise_token_auth_for 'User', at: 'auth'
+      mount_devise_token_auth_for 'User', at: 'auth', :controllers => { :registrations => "api/v1/users/registrations" }
       resources :conversations, only: [:index, :create] do
         resources :messages, only: [:index, :create]
         get :participants
