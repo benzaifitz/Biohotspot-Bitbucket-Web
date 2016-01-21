@@ -1,4 +1,4 @@
-ActiveAdmin.register RpushNotification, as: 'Notification' do
+ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notification' do
 
   menu label: 'Notifications List', parent: 'Notifications', priority: 0
 
@@ -86,7 +86,8 @@ ActiveAdmin.register RpushNotification, as: 'Notification' do
 
   controller do
     def scoped_collection
-      super.where("user_id is NOT NULL").includes :user, :sender
+      #Add more types in below query as more notifications e.g GCM are added
+      super.where("user_id is NOT NULL AND type IN ('RpushNotification')").includes :user, :sender
     end
 
     def show
@@ -97,7 +98,7 @@ ActiveAdmin.register RpushNotification, as: 'Notification' do
     end
 
     def create
-      attrs = permitted_params[:rpush_notification]
+      attrs = permitted_params[:rpush_client_active_record_notification]
       if attrs[:alert].present?
         RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_user.id}))
         redirect_to admin_notifications_path,
