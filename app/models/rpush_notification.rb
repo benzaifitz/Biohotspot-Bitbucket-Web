@@ -38,19 +38,20 @@ class Rpush::Client::ActiveRecord::Notification
 
   belongs_to :user
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
+end
 
+class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   attr_accessor :user_type
   attr_accessor :notification_type
 
-  after_save :enqueue_email_for_sending, on: :create
+  after_commit :enqueue_email_for_sending, on: :create
 
   NOTIFICATION_TYPE = { email: 'email', push: 'push'}
 
 
   class << self
     def enqueue_email_and_mark_it_sent(notification_id)
-      byebug
-      notification = Rpush::Client::ActiveRecord::Notification.find(notification_id)
+      notification = RpushNotification.find(notification_id)
       begin
         NotificationMailer.notification_email(notification).deliver_now
         notification.delivered = true
@@ -72,13 +73,9 @@ class Rpush::Client::ActiveRecord::Notification
 
   def enqueue_email_for_sending
     if self.device_token.nil?
-      Rpush::Client::ActiveRecord::Notification.delay.enqueue_email_and_mark_it_sent(self.id)
+      RpushNotification.delay.enqueue_email_and_mark_it_sent(self.id)
     end
   end
-end
-
-class RpushNotification < Rpush::Apns::Notification
-  #Will be used to store push notifications initiated by admin
 end
 
 

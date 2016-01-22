@@ -25,6 +25,7 @@ class RpushNotificationQueueJob < ActiveJob::Base
     n.user_id = attrs[:user].id
     n.user_type = attrs[:user][:user_type]
     n.alert = attrs[:alert].gsub(/<\/?[^>]*>/, "")
+    n.is_admin_notification = true
     n.save!
   end
 
@@ -37,6 +38,7 @@ class RpushNotificationQueueJob < ActiveJob::Base
     n.alert = attrs[:alert]
     n.delivered = false
     n.category = attrs[:category]
+    n.is_admin_notification = true
     n.save(validate: false)
   end
 end

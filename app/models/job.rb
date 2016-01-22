@@ -60,8 +60,7 @@ class Job < ActiveRecord::Base
 
   def send_email_notification_to_customer
     return if self.offered_by.nil?
-    byebug
-    n = Rpush::Apns::Notification.new
+    n = RpushNotification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.category = "Job status changed to #{status}"
     n.alert = "Job Detail: #{detail} <br> Status of job changed to #{status} by #{self.user.full_name}"

@@ -86,8 +86,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
 
   controller do
     def scoped_collection
-      #Add more types in below query as more notifications e.g GCM are added
-      super.where("user_id is NOT NULL AND type IN ('RpushNotification')").includes :user, :sender
+      super.where(is_admin_notification: true).where.not(user_id: nil).includes :user, :sender
     end
 
     def show
