@@ -40,13 +40,14 @@ class Rpush::Client::ActiveRecord::Notification
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
 end
 
-class RpushNotification < Rpush::Client::ActiveRecord::Notification
+class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   attr_accessor :user_type
   attr_accessor :notification_type
 
   after_commit :enqueue_email_for_sending, on: :create
 
   NOTIFICATION_TYPE = { email: 'email', push: 'push'}
+
 
   class << self
     def enqueue_email_and_mark_it_sent(notification_id)
@@ -65,10 +66,10 @@ class RpushNotification < Rpush::Client::ActiveRecord::Notification
   end
 
   def notification_type
-    self.device_token.nil? ? RpushNotification::NOTIFICATION_TYPE[:email].capitalize : RpushNotification::NOTIFICATION_TYPE[:push].capitalize
+    self.device_token.nil? ? NOTIFICATION_TYPE[:email].capitalize : NOTIFICATION_TYPE[:push].capitalize
   end
 
-  private
+  protected
 
   def enqueue_email_for_sending
     if self.device_token.nil?
@@ -76,3 +77,5 @@ class RpushNotification < Rpush::Client::ActiveRecord::Notification
     end
   end
 end
+
+

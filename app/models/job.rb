@@ -65,6 +65,8 @@ class Job < ActiveRecord::Base
     n.category = "Job status changed to #{status}"
     n.alert = "Job Detail: #{detail} <br> Status of job changed to #{status} by #{self.user.full_name}"
     n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
+    n.user_id = user_id
+    n.sent_by_id = offered_by_id
     n.save(validate: false)
   end
 

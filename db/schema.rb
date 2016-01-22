@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160121051401) do
+ActiveRecord::Schema.define(version: 20160122072003) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,38 +161,40 @@ ActiveRecord::Schema.define(version: 20160121051401) do
 
   create_table "rpush_notifications", force: :cascade do |t|
     t.integer  "badge"
-    t.string   "device_token",      limit: 64
-    t.string   "sound",                        default: "default"
+    t.string   "device_token",          limit: 64
+    t.string   "sound",                            default: "default"
     t.string   "alert"
     t.text     "data"
-    t.integer  "expiry",                       default: 86400
-    t.boolean  "delivered",                    default: false,     null: false
+    t.integer  "expiry",                           default: 86400
+    t.boolean  "delivered",                        default: false,     null: false
     t.datetime "delivered_at"
-    t.boolean  "failed",                       default: false,     null: false
+    t.boolean  "failed",                           default: false,     null: false
     t.datetime "failed_at"
     t.integer  "error_code"
     t.text     "error_description"
     t.datetime "deliver_after"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "alert_is_json",                default: false
-    t.string   "type",                                             null: false
+    t.boolean  "alert_is_json",                    default: false
+    t.string   "type",                                                 null: false
     t.string   "collapse_key"
-    t.boolean  "delay_while_idle",             default: false,     null: false
+    t.boolean  "delay_while_idle",                 default: false,     null: false
     t.text     "registration_ids"
-    t.integer  "app_id",                                           null: false
-    t.integer  "retries",                      default: 0
+    t.integer  "app_id",                                               null: false
+    t.integer  "retries",                          default: 0
     t.string   "uri"
     t.datetime "fail_after"
-    t.boolean  "processing",                   default: false,     null: false
+    t.boolean  "processing",                       default: false,     null: false
     t.integer  "priority"
     t.text     "url_args"
     t.string   "category"
     t.integer  "user_id"
     t.integer  "sent_by_id"
+    t.boolean  "is_admin_notification",            default: false
   end
 
   add_index "rpush_notifications", ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
+  add_index "rpush_notifications", ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
   add_index "rpush_notifications", ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
   add_index "rpush_notifications", ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
 
