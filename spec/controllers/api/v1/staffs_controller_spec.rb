@@ -33,7 +33,7 @@ describe Api::V1::StaffsController do
         expect(staff.profile_picture_url).to_not eq nil
         staff.remove_profile_picture = true
         staff.save
-        expect(staff.profile_picture_url).to eq nil
+        expect(staff.profile_picture.url).to eq nil
       end
 
       it 'does not update non logged in staff' do

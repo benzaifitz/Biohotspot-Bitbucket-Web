@@ -171,6 +171,10 @@ class User < ActiveRecord::Base
 
     self.profile_picture = io
   end
+
+  def profile_picture_url
+    "#{self.send(:profile_picture).url}?#{Random.rand(100)}"
+  end
 end
 
 class CarrierStringIO < StringIO

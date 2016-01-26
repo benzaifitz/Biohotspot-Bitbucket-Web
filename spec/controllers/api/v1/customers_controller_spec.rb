@@ -45,7 +45,7 @@ describe Api::V1::CustomersController do
         expect(customer.profile_picture_url).to_not eq nil
         customer.remove_profile_picture = true
         customer.save
-        expect(customer.profile_picture_url).to eq nil
+        expect(customer.profile_picture.url).to eq nil
       end
     end
 
