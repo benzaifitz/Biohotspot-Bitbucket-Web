@@ -38,6 +38,10 @@ describe Rating do
       expect(build(:rating, status: nil)).to_not be_valid
     end
 
+    it 'is invalid without a job if staff rates customer' do
+      expect(build(:rating, user: create(:staff), rated_on: create(:customer))).to_not be_valid
+    end
+
   end
 
   describe 'ActiveModel validations' do
@@ -64,6 +68,16 @@ describe Rating do
       expect(rating_2).to_not be_valid
       expect(rating_2.errors.full_messages[0]).to match /does not allow more than 1 comment in 24 hours./
     end
+
+    it "should not allow two ratings to be added by a staff for a customer for the same job" do
+      job = create(:job)
+      expect(job).to be_valid
+      rating = create(:rating, attributes_for(:rating).merge(user: job.user, rated_on: job.offered_by, job: job))
+      expect(rating).to be_valid
+      rating_2 = Rating.create(attributes_for(:rating).merge(user: job.user, rated_on: job.offered_by, job: job))
+      expect(rating_2).to_not be_valid
+      expect(rating_2.errors.full_messages[0]).to match /user already has a rating provided by you for this job./
+    end
   end
 
   describe '#status' do
@@ -89,9 +103,9 @@ describe Rating do
 
   describe 'callbacks calculate value correctly' do
     it '.calculated avg rating for rated on person correctly' do
-      rated_on = create(:customer)
-      rated_by_1 = create(:staff)
-      rated_by_2 = create(:staff)
+      rated_on = create(:staff)
+      rated_by_1 = create(:customer)
+      rated_by_2 = create(:customer)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rated_on.reload
@@ -99,9 +113,9 @@ describe Rating do
     end
 
     it '.recalculated avg rating for rated on person correctly after rating status is changed to censored' do
-      rated_on = create(:customer)
-      rated_by_1 = create(:staff)
-      rated_by_2 = create(:staff)
+      rated_on = create(:staff)
+      rated_by_1 = create(:customer)
+      rated_by_2 = create(:customer)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       rating_2 = create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rating_2.update({status: 2})
