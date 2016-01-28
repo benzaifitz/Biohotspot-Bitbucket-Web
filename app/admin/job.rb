@@ -23,9 +23,19 @@ ActiveAdmin.register Job do
   end
 
 
-  filter :offered_by, label: 'Customer'
-  filter :user, label: 'Staff'
+  filter :offered_by_username_cont, label: 'Customer(Username)'
+  filter :offered_by_first_name_cont, label: 'Customer(First Name)'
+  filter :offered_by_last_name_cont, label: 'Customer(Last Name)'
+  filter :user_username_cont, label: 'Staff(Username)'
+  filter :user_first_name_cont, label: 'Staff(First Name)'
+  filter :user_last_name_cont, label: 'Staff(Last Name)'
+  filter :detail, label: 'Job Description'
   filter :status, as: :select, collection: -> { Job.statuses }
   filter :created_at
 
+  controller do
+    def scoped_collection
+      super.includes(:offered_by, :user)
+    end
+  end
 end

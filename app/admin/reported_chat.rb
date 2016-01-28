@@ -8,7 +8,7 @@ ActiveAdmin.register ReportedChat do
   index do
     column :created_at
     column 'Reported By' do |r|
-      link_to r.reported_by.full_name, admin_user_path(r.reported_by)
+      link_to r.reported_by.username, admin_user_path(r.reported_by)
     end
     column 'Reported By Company' do |r|
       label r.reported_by.company
@@ -21,24 +21,14 @@ ActiveAdmin.register ReportedChat do
     end
     column :chat_id
 
-    column 'From' do |r|
-      link_to r.chat.from_user.full_name , admin_user_path(r.chat.from_user) if r.chat.from_user
+    column 'Sender' do |r|
+      link_to r.chat.from_user.username , admin_user_path(r.chat.from_user) if r.chat.from_user
     end
-    column 'From Company' do |r|
+    column 'Sender\'s Company' do |r|
       r.chat.from_user.company if r.chat.from_user
     end
-    column 'From User Type' do |r|
+    column 'Sender\'s User Type' do |r|
       r.chat.from_user.user_type if r.chat.from_user
-    end
-
-    column 'To' do |r|
-      link_to r.chat.user.full_name , admin_user_path(r.chat.user)
-    end
-    column 'To Company' do |r|
-      r.chat.user.company
-    end
-    column 'To User Type' do |r|
-      r.chat.user.user_type
     end
     column 'Message' do |r|
       r.chat.message
@@ -65,6 +55,15 @@ ActiveAdmin.register ReportedChat do
     redirect_to admin_reported_chats_path, notice: 'Chat Allowed!'
   end
 
-  filter :reported_by
-  filter :created_at
+  filter :reported_by_username_cont, label: 'Reported By(Username)'
+  filter :reported_by_first_name_cont, label: 'Reported By(First Name)'
+  filter :reported_by_last_name_cont, label: 'Reported By(Last Name)'
+  filter :created_at, label: 'Reported At'
+
+
+  controller do
+    def scoped_collection
+      super.includes(:reported_by, chat: :from_user)
+    end
+  end
 end

@@ -16,13 +16,14 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
 
   filter :sent_by_id, label: 'Sender Id'
   filter :sender, as: :select, collection: -> { User.administrator }
-  filter :sender_first_name_cont, label: 'Sender First Name'
-  filter :sender_last_name_cont, label: 'Sender Last Name'
+  filter :sender_username_cont, label: 'Sender(Username)'
+  filter :sender_first_name_cont, label: 'Sender(First Name)'
+  filter :sender_last_name_cont, label: 'Sender(Last Name)'
 
   filter :user_id, label: 'Recipient Id'
-  filter :user_first_name_cont, label: 'Recipient First Name'
-  filter :user_last_name_cont, label: 'Recipient Last Name'
-  filter :user_username_cont, label: 'Recipient Username'
+  filter :user_username_cont, label: 'Recipient(Username)'
+  filter :user_first_name_cont, label: 'Recipient(First Name)'
+  filter :user_last_name_cont, label: 'Recipient(Last Name)'
   filter :user_user_type_eq, label: 'Recipient Usertype', as: :select, collection: -> { User.user_types }
 
 
