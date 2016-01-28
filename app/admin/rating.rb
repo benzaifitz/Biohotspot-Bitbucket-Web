@@ -8,8 +8,8 @@ ActiveAdmin.register Rating do
 
   filter :rating
   filter :comment
-  filter :rated_on
-  filter :user, label: 'Rated By'
+  filter :rated_on_username_cont, label: 'Rating For(Username)'
+  filter :user_username_cont, label: 'Rating By(Username)'
   filter :status, as: :select, collection: -> { Rating.statuses }
   filter :created_at
 
