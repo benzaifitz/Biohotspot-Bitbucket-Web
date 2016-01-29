@@ -23,7 +23,7 @@ module Api
         end
       end
 
-      api :PUT, '/conversations/:conversation_id/add_participants.json', 'Add participant to a public conversation. Will do nothing for private conversations. Accepts comma separated participant_ids list'
+      api :PUT, '/conversations/:conversation_id/add_participants.json', 'Add participant to a public conversation. Will do nothing for private conversations. Accepts comma separated participant_ids list like "2,3,32,45"'
       def add_participants
         @conversation = Conversation.where(from_user: current_user, id: params[:conversation_id]).first
         @conversation.add_participants(params[:participant_ids])

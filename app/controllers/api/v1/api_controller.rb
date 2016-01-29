@@ -19,7 +19,7 @@ module Api
                    status: STATUS_ERROR,
                    error_no: code,
                    message: message
-               }, :status=>500
+               }, :status=>406
       end
 
       def validate_json
