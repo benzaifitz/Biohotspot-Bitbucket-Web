@@ -34,7 +34,7 @@ describe Api::V1::JobsController do
       it 'staff cannot create a new job record' do
         auth_request create(:staff)
         post :create, job: attributes_for(:job, user_id: create(:user).id, detail: 'Job description'), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(Job.count).to eq(0)
         expect(response.body).to match /Offering user must be a customer./
       end
@@ -42,7 +42,7 @@ describe Api::V1::JobsController do
       it 'customer cannot offer a job to another customer or themselves' do
         auth_request create(:customer)
         post :create, job: attributes_for(:job, user_id: create(:customer).id, detail: 'Job description'), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(Job.count).to eq(0)
         expect(response.body).to match /Offered user must be staff./
       end

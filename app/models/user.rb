@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
   after_update :log_user_events
   after_commit :add_to_mailchimp, on: :create
   # Be careful not to update user in this callback, as it might start an infinite loop
-  after_save :update_on_mailchimp, on: :update, if: :mailchimp_related_fields_updated?
+  after_save :update_on_mailchimp, if: 'mailchimp_related_fields_updated? && (created_at != updated_at)'
   after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events

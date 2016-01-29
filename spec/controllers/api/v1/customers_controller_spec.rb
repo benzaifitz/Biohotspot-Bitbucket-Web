@@ -28,7 +28,7 @@ describe Api::V1::CustomersController do
       it 'does not update non logged in customer' do
         not_logged_customer = create(:customer, first_name: 'not_logged_in_first_name')
         put :update, id: not_logged_customer.id, customer: {first_name: 'New First Name'}, format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         customer.reload
         expect(not_logged_customer.first_name).to eq('not_logged_in_first_name')
         expect(response.body).to match /Update not allowed/

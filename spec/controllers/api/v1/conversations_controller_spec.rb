@@ -32,7 +32,7 @@ describe Api::V1::ConversationsController do
 
       it 'cannot create a new direct conversation record without user_id' do
         post :create, conversation: attributes_for(:conversation, user_id: nil), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(Conversation.count).to eq(0)
       end
 
@@ -40,7 +40,7 @@ describe Api::V1::ConversationsController do
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
         is_expected.to respond_with :ok
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(Conversation.count).to eq(1)
       end
     end
@@ -63,7 +63,7 @@ describe Api::V1::ConversationsController do
         post :create, conversation: attributes_for(:conversation, user_id: create(:user).id, conversation_type: Conversation.conversation_types[:direct]), format: :json
         is_expected.to respond_with :ok
         put :add_participants, conversation_id: Conversation.first.id, participant_ids: Conversation.first.from_user_id.to_s, format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
       end
     end
   end
