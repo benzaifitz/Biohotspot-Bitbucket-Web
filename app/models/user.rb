@@ -78,9 +78,10 @@ class User < ActiveRecord::Base
   attr_accessor :status_change_comment
 
   after_update :log_user_events
-  after_create :add_to_mailchimp
-  after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
-  after_destroy :delete_from_mailchimp
+  after_commit :add_to_mailchimp, on: :create
+  # Be careful not to update user in this callback, as it might start an infinite loop
+  after_save :update_on_mailchimp, on: :update, if: :mailchimp_related_fields_updated?
+  after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
@@ -132,7 +133,7 @@ class User < ActiveRecord::Base
   end
 
   def mailchimp_related_fields_updated?
-    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
+    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed? || status_changed?
   end
 
   def unread(convs)
