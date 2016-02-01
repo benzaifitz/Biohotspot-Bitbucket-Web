@@ -75,12 +75,15 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :email
 
 
-  attr_accessor :status_change_comment
+  attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 
   after_update :log_user_events
   after_commit :add_to_mailchimp, on: :create
-  # Be careful not to update user in this callback, as it might start an infinite loop
-  after_save :update_on_mailchimp, if: 'mailchimp_related_fields_updated? && (created_at != updated_at)'
+  after_update do
+    self.mailchimp_fields_updated = mailchimp_related_fields_updated?
+    self.status_updated = status_changed?
+  end
+  after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
   after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events
@@ -133,7 +136,7 @@ class User < ActiveRecord::Base
   end
 
   def mailchimp_related_fields_updated?
-    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed? || status_changed?
+    email_changed? || first_name_changed? || last_name_changed? || company_changed? || rating_changed?
   end
 
   def unread(convs)
