@@ -156,7 +156,7 @@ describe User do
 
     it { should callback(:add_to_mailchimp).after(:commit).on(:create) }
     it { should callback(:log_user_events).after(:update) }
-    it { should callback(:update_on_mailchimp).after(:save).if('mailchimp_related_fields_updated? && (created_at != updated_at)') }
+    it { should callback(:update_on_mailchimp).after(:commit).on(:update).if('self.mailchimp_fields_updated || self.status_updated') }
     it { should callback(:delete_from_mailchimp).after(:commit).on(:destroy) }
   end
 

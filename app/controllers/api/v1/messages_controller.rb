@@ -6,7 +6,7 @@ module Api
 
       respond_to :json
 
-      api :GET, 'messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
+      api :GET, 'conversations/:conversation_id/messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
       param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
@@ -20,7 +20,7 @@ module Api
         end
       end
 
-      api :POST, '/api/v1/conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
+      api :POST, 'conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
       param :conversation_id, String, desc: 'Id of the conversation.', required: false
       param :message, String, desc: "Chat Message encapsulted in chat object like chat: {message: 'Test Message'}", required: false
       def create
