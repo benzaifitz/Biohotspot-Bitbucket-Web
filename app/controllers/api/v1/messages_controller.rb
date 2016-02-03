@@ -20,9 +20,8 @@ module Api
         end
       end
 
-      api :POST, 'conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
+      api :POST, 'conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID. chat: {message: <message>}'
       param :conversation_id, String, desc: 'Id of the conversation.', required: false
-      param :message, String, desc: "Chat Message encapsulted in chat object like chat: {message: 'Test Message'}", required: false
       def create
         conversation = Conversation.find(params[:conversation_id])
         if conversation.has_participant?(current_user.id)
