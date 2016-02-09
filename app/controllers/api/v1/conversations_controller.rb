@@ -14,9 +14,9 @@ module Api
 
       api :POST, '/conversations.json', 'Create a new conversation. Accepts from_user_id, user_id, name and conversation_type{direct: 0, community: 1}'
       def create
-        @conversation = Conversation.new(conversation_params.merge(from_user_id: current_user.id))
+        @conversation = Conversation.users_direct_chat(current_user.id, conversation_params[:user_id]) || Conversation.new(conversation_params.merge(from_user_id: current_user.id))
         begin
-          @conversation.save!
+          @conversation.save! if @conversation.new_record?
           render json: @conversation
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @conversation.errors.full_messages[0])

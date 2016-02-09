@@ -72,6 +72,11 @@ describe Conversation do
       create(:conversation_participant, user_id: conversation.from_user_id, conversation_id: conversation.id)
       expect(Conversation.get_all_chats_for_user(conversation.from_user_id).size).to eq 3
     end
+
+    it 'should get a conversation between two users' do
+      conversation = create(:conversation)
+      expect(Conversation.users_direct_chat(conversation.from_user_id, conversation.user_id).first).to eq conversation
+    end
   end
 
   describe 'Instance methods' do

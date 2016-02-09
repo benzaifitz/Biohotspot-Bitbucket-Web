@@ -51,6 +51,13 @@ class Conversation < ActiveRecord::Base
             user_id, user_id, conversation_types[:direct], user_id, user_id, conversation_types[:community])
   end
 
+  def self.users_direct_chat(from_user_id, user_id)
+    return nil if from_user_id.nil? || user_id.nil?
+    combinations = ["user_id = #{user_id} AND from_user_id = #{from_user_id}",
+                    "from_user_id = #{user_id} AND user_id = #{from_user_id}"]
+    Conversation.where("#{combinations.join(' OR ')} AND conversation_type = ?", conversation_types[:direct]).first
+  end
+
   private
 
   def users_do_not_have_chat

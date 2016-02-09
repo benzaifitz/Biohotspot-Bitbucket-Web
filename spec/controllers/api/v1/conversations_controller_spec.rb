@@ -36,13 +36,15 @@ describe Api::V1::ConversationsController do
         expect(Conversation.count).to eq(0)
       end
 
-      it 'cannot create a new conversation involving same two users' do
+      it 'cannot returns the already created conversation on create call for two users' do
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
         is_expected.to respond_with :ok
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
-        is_expected.to respond_with 406
+        is_expected.to respond_with 200
         expect(Conversation.count).to eq(1)
       end
+
+
     end
 
     describe 'PUT #add_participants' do
