@@ -75,7 +75,7 @@ describe Conversation do
 
     it 'should get a conversation between two users' do
       conversation = create(:conversation)
-      expect(Conversation.users_direct_chat(conversation.from_user_id, conversation.user_id).first).to eq conversation
+      expect(Conversation.users_direct_chat(conversation.from_user_id, conversation.user_id)).to eq conversation
     end
   end
 
