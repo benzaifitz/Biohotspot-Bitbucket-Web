@@ -3,6 +3,7 @@ module Api
     class MessagesController < ApiController
       before_action :authenticate_user!
       before_action :check_user_eula_and_privacy
+      before_action :set_chat, only: [:update, :destroy]
 
       respond_to :json
 
@@ -85,8 +86,29 @@ module Api
         render json: message
       end
 
+      api :PUT, 'conversations/:conversation_id/messages/:id.json', 'Update a chat message created by signed in user. chat: {message: <message>}'
+      def update
+        if @chat && @chat.update_attributes(chat_params)
+          render json: @chat.to_json
+        else
+          error(E_INTERNAL, 'We were not able to update this message. Please try again.')
+        end
+      end
+
+      api :DELETE, 'conversations/:conversation_id/messages/:id.json', 'Delete a chat message created by signed in user.'
+      def destroy
+        if @chat && @chat.destroy
+          render json: @chat.to_json
+        else
+          error(E_INTERNAL, 'We were not able to delete this message. Please try again.')
+        end
+      end
+
       private
 
+      def set_chat
+        @chat = Chat.where(id: params[:id], from_user_id: current_user.id, conversation_id: params[:conversation_id]).first
+      end
       def chat_params
         params.require(:chat).permit(:message)
       end
