@@ -36,11 +36,11 @@ describe Api::V1::ConversationsController do
         expect(Conversation.count).to eq(0)
       end
 
-      it 'cannot returns the already created conversation on create call for two users' do
+      it 'returns the already created conversation on create call for two users' do
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
         is_expected.to respond_with :ok
         post :create, conversation: attributes_for(:conversation, user_id: send_to_user.id), format: :json
-        is_expected.to respond_with 200
+        is_expected.to respond_with :ok
         expect(Conversation.count).to eq(1)
       end
 
@@ -68,6 +68,50 @@ describe Api::V1::ConversationsController do
         is_expected.to respond_with 406
       end
     end
+
+    describe 'DELETE #destroy' do
+      it 'remove conversation from list of conversations of the deleting user' do
+        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
+        is_expected.to respond_with :ok
+        get :index, format: :json
+        is_expected.to respond_with :ok
+        expect(response.body).to match /Test1/
+        expect(response.body).to match /Test2/
+
+        delete :destroy, id: Conversation.last.id
+        expect(DeletedConversation.count).to eq(1)
+        expect(Conversation.count).to eq(2)
+        expect(Conversation.last.is_abandoned).to eq true
+        is_expected.to respond_with :ok
+        get :index, format: :json
+        is_expected.to respond_with :ok
+        expect(response.body).to match /Test1/
+        expect(response.body).to_not match /Test2/
+      end
+
+      it 'does not remove conversation from list of non deleting user' do
+        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
+        is_expected.to respond_with :ok
+        get :index, format: :json
+        is_expected.to respond_with :ok
+        expect(response.body).to match /Test1/
+        expect(response.body).to match /Test2/
+
+        DeletedConversation.create(user_id: Conversation.last.user_id, conversation_id: Conversation.last.id)
+        expect(DeletedConversation.count).to eq(1)
+        expect(Conversation.count).to eq(2)
+        expect(Conversation.last.is_abandoned).to eq true
+        is_expected.to respond_with :ok
+        get :index, format: :json
+        is_expected.to respond_with :ok
+        expect(response.body).to match /Test1/
+        expect(response.body).to match /Test2/
+      end
+    end
+
+
   end
 
   describe 'when user is not logged in' do

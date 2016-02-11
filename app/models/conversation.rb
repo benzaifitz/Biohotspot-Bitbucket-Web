@@ -21,6 +21,7 @@ class Conversation < ActiveRecord::Base
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"
   belongs_to :recipient, class_name: "User", foreign_key: "user_id"
   has_many :participants, through: :conversation_participants
+  has_many :deleted_conversation, dependent: :destroy
 
   enum conversation_type: [:direct, :community]
 
@@ -41,21 +42,22 @@ class Conversation < ActiveRecord::Base
   end
 
   def has_participant?(user_id)
-    Conversation.get_all_chats_for_user(user_id).exists?
+    return false if user_id.blank?
+    self.from_user_id == user_id || self.user_id == user_id || self.conversation_participants.map(&:user_id).include?(user_id)
   end
 
   def self.get_all_chats_for_user(user_id)
-    Conversation.joins("LEFT JOIN #{ConversationParticipant.table_name} ON #{ConversationParticipant.table_name}.conversation_id = #{Conversation.table_name}.id")
+    Conversation.includes(:deleted_conversation).joins("LEFT JOIN #{ConversationParticipant.table_name} ON #{ConversationParticipant.table_name}.conversation_id = #{Conversation.table_name}.id")
             .where("((#{Conversation.table_name}.user_id = ? OR #{Conversation.table_name}.from_user_id = ?) AND conversation_type = ?)
             OR ((#{Conversation.table_name}.from_user_id = ? OR #{ConversationParticipant.table_name}.user_id = ?) AND conversation_type = ?)",
-            user_id, user_id, conversation_types[:direct], user_id, user_id, conversation_types[:community])
+            user_id, user_id, conversation_types[:direct], user_id, user_id, conversation_types[:community]).where("#{Conversation.table_name}.id NOT IN(SELECT conversation_id FROM deleted_conversations where user_id = ?)", user_id).uniq
   end
 
   def self.users_direct_chat(from_user_id, user_id)
     return nil if from_user_id.nil? || user_id.nil?
     combinations = ["user_id = #{user_id} AND from_user_id = #{from_user_id}",
                     "from_user_id = #{user_id} AND user_id = #{from_user_id}"]
-    Conversation.where("#{combinations.join(' OR ')} AND conversation_type = ?", conversation_types[:direct]).first
+    Conversation.where("#{combinations.join(' OR ')} AND is_abandoned = ? AND conversation_type = ?", false, conversation_types[:direct]).last
   end
 
   private
@@ -63,7 +65,7 @@ class Conversation < ActiveRecord::Base
   def users_do_not_have_chat
     combinations = ["user_id = #{self.user_id} AND from_user_id = #{self.from_user_id}",
                     "from_user_id = #{self.user_id} AND user_id = #{self.from_user_id}"]
-    if Conversation.where(combinations.join(' OR ')).exists?
+    if Conversation.where("#{combinations.join(' OR ')} AND is_abandoned = ?", false).exists?
       self.errors.add(:user_id, 'Chat already exists!')
     end
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160127060046) do
+ActiveRecord::Schema.define(version: 20160211070521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,17 +65,29 @@ ActiveRecord::Schema.define(version: 20160127060046) do
   create_table "conversations", force: :cascade do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.integer  "from_user_id",                  null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.integer  "from_user_id",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.text     "last_message"
     t.integer  "last_user_id"
-    t.integer  "conversation_type", default: 0, null: false
+    t.integer  "conversation_type", default: 0,     null: false
     t.string   "topic"
+    t.boolean  "is_abandoned",      default: false
   end
 
   add_index "conversations", ["conversation_type"], name: "index_conversations_on_conversation_type", using: :btree
+  add_index "conversations", ["is_abandoned"], name: "index_conversations_on_is_abandoned", using: :btree
   add_index "conversations", ["user_id"], name: "index_conversations_on_user_id", using: :btree
+
+  create_table "deleted_conversations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "conversation_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "deleted_conversations", ["conversation_id"], name: "index_deleted_conversations_on_conversation_id", using: :btree
+  add_index "deleted_conversations", ["user_id"], name: "index_deleted_conversations_on_user_id", using: :btree
 
   create_table "eulas", force: :cascade do |t|
     t.text     "eula_text"
@@ -257,6 +269,8 @@ ActiveRecord::Schema.define(version: 20160127060046) do
   add_foreign_key "blocked_users", "users"
   add_foreign_key "chats", "conversations"
   add_foreign_key "conversations", "users"
+  add_foreign_key "deleted_conversations", "conversations"
+  add_foreign_key "deleted_conversations", "users"
   add_foreign_key "jobs", "users"
   add_foreign_key "ratings", "users"
   add_foreign_key "reported_chats", "chats"

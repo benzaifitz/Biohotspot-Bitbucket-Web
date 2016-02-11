@@ -40,6 +40,21 @@ module Api
         respond_with @conversation.conversation_participants
       end
 
+      api :DELETE, '/conversations/:id.json', 'Delete a conversation that you are participant of(Does not delete conversation. It just wont appear in your listing. Other participant will be able to see it.)'
+      def destroy
+        @conversation = Conversation.find(params[:id])
+        if @conversation.has_participant?(current_user.id)
+          deleted_conversation = DeletedConversation.new(user_id: current_user.id, conversation_id: @conversation.id)
+          begin
+            deleted_conversation.save!
+            render json: {success: 'Conversation has been deleted successfully.'}
+          rescue *RecoverableExceptions => e
+            error(E_INTERNAL, deleted_conversation.errors.full_messages[0])
+          end
+        else
+          error(E_INTERNAL, "You are not a participant of this conversation.")
+        end
+      end
       private
 
       def conversation_params

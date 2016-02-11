@@ -18,6 +18,7 @@ class Chat < ActiveRecord::Base
   enum status: [:active, :reported, :censored, :allowed]
 
   validates_presence_of :from_user_id, :conversation_id, :status
+  validate :conversation_is_not_abandoned
 
   delegate :ban_with_comment, :enable_with_comment, :bannable, to: :from_user
   delegate :recipient, to: :conversation
@@ -29,6 +30,12 @@ class Chat < ActiveRecord::Base
   def mark_read
     self.is_read = true
     save
+  end
+
+  def conversation_is_not_abandoned
+    if self.conversation && self.conversation.is_abandoned
+      self.errors.add(:message, 'could not be sent as this conversation was abandoned.')
+    end
   end
   
 end

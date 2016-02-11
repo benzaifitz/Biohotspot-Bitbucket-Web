@@ -1,5 +1,5 @@
 json.array!(@conversations) do |conversation|
-  json.extract! conversation, :id, :name, :conversation_type, :last_message, :created_at, :updated_at
+  json.extract! conversation, :id, :name, :conversation_type, :last_message, :is_abandoned, :created_at, :updated_at
   json.conversation_type_num conversation[:conversation_type]
   if conversation.recipient.present?
     json.set! 'recipient' do

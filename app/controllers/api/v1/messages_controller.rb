@@ -26,7 +26,7 @@ module Api
       def create
         conversation = Conversation.find(params[:conversation_id])
         if conversation.has_participant?(current_user.id)
-          message = conversation.chats.create(chat_params.merge(from_user_id: current_user.id))
+          message = conversation.chats.create!(chat_params.merge(from_user_id: current_user.id))
           # conversation.last_message = message[:body]
           # conversation.last_user_id = message[:user_id]
           #
