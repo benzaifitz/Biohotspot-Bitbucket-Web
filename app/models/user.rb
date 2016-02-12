@@ -152,6 +152,10 @@ class User < ActiveRecord::Base
     count
   end
 
+  def is_logged_out?
+    self.current_sign_in_at.nil? || (self.current_sign_in_at + DeviseTokenAuth.token_lifespan.to_i) < Time.now
+  end
+
   def push_notification(msg)
     return if self.device_token.nil?
     unread_conversations = unread(conversations) + unread(user_conversations)

@@ -23,6 +23,7 @@ class Job < ActiveRecord::Base
   validate :offered_by_user_is_customer, :offered_to_user_is_staff
 
   before_create :is_created_by_customer?
+  after_create :send_push_notification_to_staff
   before_update :is_user_allowed_to_set_job_status
   after_update :send_push_notification_to_customer, :send_email_notification_to_customer, if: :status_of_customers_interest_has_changed?
   after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
