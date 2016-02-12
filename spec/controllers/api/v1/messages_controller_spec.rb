@@ -7,6 +7,7 @@ describe Api::V1::MessagesController do
     let(:conversation) {create(:conversation, from_user_id: user.id)}
     before do
       auth_request user
+      add_rpush_app
     end
 
     describe 'GET #index' do

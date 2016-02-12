@@ -38,7 +38,7 @@ describe User do
   let(:user_types_order) { %w{staff administrator customer} }
   let(:statuses_order) { %w{active banned} }
   let(:device_types_order) { %w{ios android} }
-
+  add_rpush_app
   describe '#staff' do
     it 'has a valid factory' do
       expect(build(:staff)).to be_valid
@@ -130,7 +130,7 @@ describe User do
   describe '#device types' do
     it 'has the right index' do
       device_types_order.each_with_index do |item, index|
-        expect(described_class.device_types[item]).to eq index
+        expect(described_class.device_types[item].to_i).to eq index
       end
     end
   end
@@ -191,6 +191,7 @@ describe User do
     end
 
     it 'should delete coversation that this staff is recipient of and chat messages sent by this staff(direct chat)' do
+      add_rpush_app
       staff.recipient_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], from_user_id: create(:user, user_type: User.user_types[:customer]).id))
       staff.chats.create!(attributes_for(:chat).merge(conversation_id: staff.recipient_conversations.first.id))
       expect(staff.recipient_conversations.count).to eq 1
@@ -201,6 +202,7 @@ describe User do
     end
 
     it 'should delete coversation participations and chat messages of this staff staff(community chat)' do
+      add_rpush_app
       conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: create(:user, user_type: User.user_types[:customer]).id))
       staff.conversation_participants.create(conversation_id: conversation.id)
       staff.chats.create(message: 'test', conversation_id: conversation.id)
@@ -247,6 +249,7 @@ describe User do
     end
 
     it 'should delete coversation that this customer is from_user of and chat messages of this conv(direct chat)' do
+      add_rpush_app
       customer.user_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], user_id: create(:user, user_type: User.user_types[:staff]).id))
       customer.chats.create!(attributes_for(:chat).merge(conversation_id: customer.user_conversations.first.id))
       expect(customer.user_conversations.count).to eq 1
@@ -257,6 +260,7 @@ describe User do
     end
 
     it 'should delete conversation, coversation participations and chat messages of this customer(community chat)' do
+      add_rpush_app
       conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: customer.id))
       customer.conversation_participants.create!(conversation_id: conversation.id)
       customer.chats.create!(message: 'test', conversation_id: conversation.id)

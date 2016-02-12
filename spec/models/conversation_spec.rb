@@ -113,6 +113,7 @@ describe Conversation do
 
   describe 'dependent destroy for conversation' do
     it 'should delete chats of a conversation' do
+      add_rpush_app
       conversation = create(:conversation)
       conversation.chats.create(attributes_for(:chat).merge(from_user: create(:user)))
       expect(conversation.chats.count).to eq 1

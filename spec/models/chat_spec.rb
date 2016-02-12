@@ -43,20 +43,25 @@ describe Chat do
   end
 
   describe 'instance methods' do
+
     it 'should mark the chat as read' do
+      add_rpush_app
       chat = create(:chat)
       chat.mark_read
       expect(chat.is_read).to eq true
     end
 
     it 'should return sender' do
+      add_rpush_app
       chat = create(:chat)
       expect(chat.sender).to eq chat.from_user
     end
   end
 
   describe 'dependent destroy for rating' do
+
     it 'should delete reported chats of a chat' do
+      add_rpush_app
       chat = create(:chat)
       chat.reported_chats.create(reported_by: create(:user))
       expect(chat.reported_chats.count).to eq 1
