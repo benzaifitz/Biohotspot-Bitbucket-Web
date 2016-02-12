@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   mount_uploader :profile_picture, ProfilePictureUploader
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-  enum device_type: [:ios, :android]
+  enum device_type: {:ios => "0", :android => "1"}
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version

@@ -19,7 +19,7 @@ module Api
       param :eula_id, Integer, desc: 'id of accepted terms and conditions(EULA)'
       param :privacy_id, Integer, desc: 'id of accepted privacy policy'
       param :device_token, Integer, desc: 'device token'
-      param :device_type, Integer, desc: 'iOS/Android'
+      param :device_type, Integer, desc: 'ios/android'
       def register
         #Dummy stub to provide API docs
       end
@@ -52,7 +52,7 @@ module Api
       param :privacy_id, Integer, desc: 'Privacy policy ID which has been accepted by the Staff', required: false
       param :password, String, desc: 'Password of the Staff', required: false
       param :device_token, String, desc: 'Device Token', required: false
-      param :device_type, String, desc: 'Device Type (iOS,Android)', required: false
+      param :device_type, String, desc: 'Device Type (ios,android)', required: false
       param :image_data, String, desc: 'Base64 encoded profile picture image data', required: false
       param :image_type, String, desc: 'Image content type of profile picture e.g image/jpeg', required: false
       def update
