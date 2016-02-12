@@ -102,7 +102,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
       if attrs[:alert].present?
         RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_user.id}))
         redirect_to admin_notifications_path,
-                  notice: 'Your message(s) has been enqueued for sending! Its status will be changes to Sent or Failed once it has been processed.'
+                  notice: 'Your message(s) has been enqueued for sending! Its Delivered or Failed field will be set to true once it has been processed.'
       else
         flash[:error] = "Message is mandatory."
         redirect_to "#{new_admin_notification_path(@rpush_notification)}?notification_type=#{attrs[:notification_type]}"
