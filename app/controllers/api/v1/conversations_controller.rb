@@ -7,6 +7,10 @@ module Api
       respond_to :json
 
       api :GET, '/conversations.json', 'Returns all conversations that they are the to/from user or user has participated in(community).'
+      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction', required: false
+      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned', required: false
+      param :order_by_attr, String, 'Attribute by which to order by. Default is updated_at', required: false
+      param :order_by_direction, String, 'Direction of sorting. ASC for ascending and DESC for descending. Default is DESC', required: false
       def index
         @conversations = Conversation.includes(:recipient, :from_user).get_all_chats_for_user(current_user.id)
                              .paginate_with_timestamp(params[:timestamp], params[:direction])

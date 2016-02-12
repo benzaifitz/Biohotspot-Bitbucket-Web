@@ -13,7 +13,9 @@ module TimestampPagination
         elsif direction.to_i == Api::V1::DIRECTION[:down]
           records = records.updated_before(timestamp).limit(Api::V1::LIMIT)
         end
-        records.order('updated_at DESC')
+        order_by_attr = params[:order_by_attr] || 'updated_at'
+        order_by_direction = params[:order_by_direction] || 'DESC'
+        records.order("#{order_by_attr} #{order_by_direction}")
       end
     end
   end
