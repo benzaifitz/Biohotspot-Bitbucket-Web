@@ -17,3 +17,11 @@ if Rpush::Apns::App.find_by_name("framework").nil?
   app.connections = 1
   app.save!
 end
+
+if Rpush::Gcm::App.find_by_name("framework").nil?
+  app = Rpush::Gcm::App.new
+  app.name = "framework"
+  app.auth_key = Rails.application.secrets.gcm_api_key
+  app.connections = 1
+  app.save!
+end
