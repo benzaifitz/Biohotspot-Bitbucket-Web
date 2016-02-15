@@ -10,13 +10,14 @@ module Api
       api :GET, 'conversations/:conversation_id/messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction', required: false
       param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned', required: false
-      param :order_by_attr, String, 'Attribute by which to order by. Default is updated_at', required: false
+      param :timestamp_type, String, desc: 'Timestamp type to be used. 0 for updated_at and 1 for created at', required: false
+      param :order_by_attr, String, 'Attribute to use for sorting. Default is updated_at', required: false
       param :order_by_direction, String, 'Direction of sorting. ASC for ascending and DESC for descending. Default is DESC', required: false
       def index
         conversation = Conversation.find(params[:conversation_id])
         if conversation.has_participant?(current_user.id)
           @chats = Chat.where(conversation_id: params[:conversation_id])
-                               .paginate_with_timestamp(params[:timestamp], params[:direction])
+                               .paginate_with_timestamp(params[:timestamp], params[:direction], params[:timestamp_type], params[:order_by_attr], params[:order_by_direction])
           respond_with @chats
         else
           error(E_INTERNAL, 'The logged in user is not participant of this chat.')
