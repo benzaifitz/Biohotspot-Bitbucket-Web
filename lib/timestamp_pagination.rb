@@ -3,8 +3,8 @@ module TimestampPagination
     base.class_eval do
       scope :updated_after, -> (timestamp){ where("#{self.table_name}.updated_at > ?", timestamp) }
       scope :updated_before, -> (timestamp){ where("#{self.table_name}.updated_at < ?", timestamp) }
-      scope :created_after, -> (timestamp){ where("#{self.table_name}.updated_at > ?", timestamp) }
-      scope :created_before, -> (timestamp){ where("#{self.table_name}.updated_at < ?", timestamp) }
+      scope :created_after, -> (timestamp){ where("#{self.table_name}.created_at > ?", timestamp) }
+      scope :created_before, -> (timestamp){ where("#{self.table_name}.created_at < ?", timestamp) }
 
       def self.paginate_with_timestamp(timestamp, direction, timestamp_type=0 ,order_by_attr='updated_at', order_by_direction='DESC')
         timestamp ||= Time.now

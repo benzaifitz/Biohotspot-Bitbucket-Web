@@ -17,8 +17,8 @@ module Api
         conversation = Conversation.find(params[:conversation_id])
         if conversation.has_participant?(current_user.id)
           @chats = Chat.where(conversation_id: params[:conversation_id])
-                               .paginate_with_timestamp(params[:timestamp], params[:direction], params[:timestamp_type], params[:order_by_attr], params[:order_by_direction])
-          respond_with @chats
+                               .paginate_with_timestamp(params[:timestamp], params[:direction], params[:timestamp_type].to_i, params[:order_by_attr], params[:order_by_direction])
+          respond_with @chats.reverse
         else
           error(E_INTERNAL, 'The logged in user is not participant of this chat.')
         end
