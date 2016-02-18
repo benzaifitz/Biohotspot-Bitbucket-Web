@@ -18,6 +18,7 @@ class RpushNotificationQueueJob < ActiveJob::Base
   end
 
   def create_push_notification(attrs)
+    return if attrs[:user].device_token.nil?
     n = RpushNotification.new
     n.app = attrs[:app]
     n.device_token = attrs[:user].device_token

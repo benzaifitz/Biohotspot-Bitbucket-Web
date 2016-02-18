@@ -58,6 +58,12 @@ module Api
       def update
         @staff = current_user
         begin
+          if params[:staff][:device_token].present?
+            @users = User.where(device_token: params[:staff][:device_token])
+            @users.each do |u|
+              u.update_attributes(device_token: nil, device_type: nil)
+            end
+          end
           @staff.assign_attributes(staff_params)
           @staff.image_data(params[:staff][:image_data], params[:staff][:image_type]) if params[:staff][:image_data].present? && params[:staff][:image_type].present?
           @staff.save!
