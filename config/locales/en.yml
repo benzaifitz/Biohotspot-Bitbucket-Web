@@ -18,6 +18,7 @@
 #
 # To learn more, please read the Rails Internationalization guide
 # available at http://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  devise_token_auth:
+    sessions:
+      disabled_account: "Your account has been disabled. Please contact your Administrator."
