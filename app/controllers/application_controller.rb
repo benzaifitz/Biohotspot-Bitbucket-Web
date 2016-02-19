@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   end
 
   def log_user_sign_out
-    byebug
     # set current_sign_in_at to nil to indicate user is not logged in
     return if current_user.nil?
     current_user.current_sign_in_at = nil
