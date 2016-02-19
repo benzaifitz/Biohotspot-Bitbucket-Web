@@ -50,7 +50,7 @@ module Api
           if params[:customer][:device_token].present?
             @users = User.where(device_token: params[:customer][:device_token])
             @users.each do |u|
-              u.update_attributes(device_token: nil, device_type: nil)
+              u.update_attributes!(device_token: nil, device_type: nil)
             end
           end
           @customer.assign_attributes(customer_params)

@@ -61,7 +61,7 @@ module Api
           if params[:staff][:device_token].present?
             @users = User.where(device_token: params[:staff][:device_token])
             @users.each do |u|
-              u.update_attributes(device_token: nil, device_type: nil)
+              u.update_attributes!(device_token: nil, device_type: nil)
             end
           end
           @staff.assign_attributes(staff_params)
