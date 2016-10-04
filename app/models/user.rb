@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   mount_uploader :profile_picture, ProfilePictureUploader
   enum user_type: [:staff, :administrator, :customer]
   enum status: [:active, :banned]
-  enum device_type: [:ios, :android]
+  enum device_type: {:ios => "0", :android => "1"}
   # manual paper trail initialization
   class_attribute :version_association_name
   self.version_association_name = :version
@@ -55,14 +55,19 @@ class User < ActiveRecord::Base
   attr_accessor self.version_association_name
 
   belongs_to :eula
-  has_many :ratings
-  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id'
-  has_many :blocked_users
-  has_many :jobs
-  has_many :notifications
-  has_many :chats
-  has_many :conversations
-  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id"
+  belongs_to :privacy
+  has_many :ratings, dependent: :destroy
+  has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
+  has_many :blocked_users, dependent: :destroy
+  has_many :blocked_by_blocked_users, class_name: 'BlockedUser', foreign_key: 'blocked_by_id', dependent: :destroy
+  has_many :jobs, dependent: :destroy
+  has_many :offered_by_jobs, class_name: 'Job', foreign_key: 'offered_by_id', dependent: :destroy
+  has_many :chats, foreign_key: 'from_user_id', dependent: :destroy
+  has_many :user_conversations, class_name: 'Conversation', foreign_key: "from_user_id", dependent: :destroy
+  has_many :recipient_conversations, ->{ where conversation_type: Conversation.conversation_types[:direct]}, class_name: 'Conversation', foreign_key: 'user_id', dependent: :destroy
+  has_many :conversation_participants, dependent: :destroy
+  has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
+  has_many :rpush_notifications, dependent: :destroy
 
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
   validates_presence_of :username, :email
@@ -70,12 +75,16 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :username, :email
 
 
-  attr_accessor :status_change_comment
+  attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 
   after_update :log_user_events
-  after_create :add_to_mailchimp
-  after_update :update_on_mailchimp, if: :mailchimp_related_fields_updated?
-  after_destroy :delete_from_mailchimp
+  after_commit :add_to_mailchimp, on: :create
+  after_update do
+    self.mailchimp_fields_updated = mailchimp_related_fields_updated?
+    self.status_updated = status_changed?
+  end
+  after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
+  after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
@@ -93,7 +102,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    first_name.blank? ? username : "#{first_name} #{last_name}"
+    (first_name.blank? && last_name.blank?) ? username : "#{first_name} #{last_name}"
   end
 
   def ban_with_comment(comment)
@@ -143,6 +152,10 @@ class User < ActiveRecord::Base
     count
   end
 
+  def is_logged_out?
+    self.current_sign_in_at.nil? || (self.current_sign_in_at + DeviseTokenAuth.token_lifespan.to_i) < Time.now
+  end
+
   def push_notification(msg)
     return if self.device_token.nil?
     unread_conversations = unread(conversations) + unread(user_conversations)
@@ -158,5 +171,28 @@ class User < ActiveRecord::Base
     # TODO add sent by id
     #n.sent_by_id = offered_by_id
     n.save!
+  end
+
+  def image_data(data, content_type)
+    # decode data and create stream on them
+    io = CarrierStringIO.new(Base64.decode64(data), content_type)
+
+    self.profile_picture = io
+  end
+end
+
+class CarrierStringIO < StringIO
+
+  def initialize(data, content_type)
+    super(data)
+    @content_type = content_type
+  end
+
+  def original_filename
+    "profile_picture.png"
+  end
+
+  def content_type
+    @content_type
   end
 end

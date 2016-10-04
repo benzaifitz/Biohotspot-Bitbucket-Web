@@ -42,5 +42,28 @@ describe BlockedUser do
     it { should belong_to(:blocked_by) }
   end
 
+  describe 'Callbacks' do
+    it "should cancel all jobs of associated users if staff blocks a customer" do
+      add_rpush_app
+      customer = create(:customer)
+      staff = create(:staff)
+      job = create(:job, offered_by_id: customer.id, user_id: staff.id, status: 'offered')
+      blocked_user = create(:blocked_user, blocked_by_id: staff.id, user_id: customer.id)
+      job.reload
+      expect(job.status).to eq 'cancelled'
+    end
+
+    it "should cancel all jobs of associated users if customer blocks a staff" do
+      add_rpush_app
+      customer = create(:customer)
+      staff = create(:staff)
+      job = create(:job, offered_by_id: customer.id, user_id: staff.id, status: 'offered')
+      blocked_user = create(:blocked_user, blocked_by_id: customer.id, user_id: staff.id)
+      job.reload
+      expect(job.status).to eq 'cancelled'
+    end
+  end
+
+
 end
 

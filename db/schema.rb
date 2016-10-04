@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108072625) do
+ActiveRecord::Schema.define(version: 20160211070521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20160108072625) do
   create_table "chats", force: :cascade do |t|
     t.text     "message"
     t.integer  "conversation_id"
-    t.integer  "user_id"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.integer  "status",          default: 0,     null: false
@@ -52,19 +51,43 @@ ActiveRecord::Schema.define(version: 20160108072625) do
   end
 
   add_index "chats", ["conversation_id"], name: "index_chats_on_conversation_id", using: :btree
-  add_index "chats", ["user_id"], name: "index_chats_on_user_id", using: :btree
+
+  create_table "conversation_participants", force: :cascade do |t|
+    t.integer  "conversation_id", null: false
+    t.integer  "user_id",         null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "conversation_participants", ["conversation_id"], name: "index_conversation_participants_on_conversation_id", using: :btree
+  add_index "conversation_participants", ["user_id"], name: "index_conversation_participants_on_user_id", using: :btree
 
   create_table "conversations", force: :cascade do |t|
     t.string   "name"
     t.integer  "user_id"
-    t.integer  "from_user_id", null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "from_user_id",                      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.text     "last_message"
     t.integer  "last_user_id"
+    t.integer  "conversation_type", default: 0,     null: false
+    t.string   "topic"
+    t.boolean  "is_abandoned",      default: false
   end
 
+  add_index "conversations", ["conversation_type"], name: "index_conversations_on_conversation_type", using: :btree
+  add_index "conversations", ["is_abandoned"], name: "index_conversations_on_is_abandoned", using: :btree
   add_index "conversations", ["user_id"], name: "index_conversations_on_user_id", using: :btree
+
+  create_table "deleted_conversations", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "conversation_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "deleted_conversations", ["conversation_id"], name: "index_deleted_conversations_on_conversation_id", using: :btree
+  add_index "deleted_conversations", ["user_id"], name: "index_deleted_conversations_on_user_id", using: :btree
 
   create_table "eulas", force: :cascade do |t|
     t.text     "eula_text"
@@ -85,20 +108,6 @@ ActiveRecord::Schema.define(version: 20160108072625) do
 
   add_index "jobs", ["user_id"], name: "index_jobs_on_user_id", using: :btree
 
-  create_table "notifications", force: :cascade do |t|
-    t.string   "subject"
-    t.text     "message"
-    t.integer  "user_id"
-    t.integer  "sent_by_id",                    null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.integer  "notification_type", default: 0, null: false
-    t.integer  "user_type",         default: 0, null: false
-    t.integer  "status",            default: 0, null: false
-  end
-
-  add_index "notifications", ["user_id"], name: "index_notifications_on_user_id", using: :btree
-
   create_table "privacies", force: :cascade do |t|
     t.text     "privacy_text"
     t.boolean  "is_latest",    default: false
@@ -114,8 +123,10 @@ ActiveRecord::Schema.define(version: 20160108072625) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
     t.integer  "status",      default: 0, null: false
+    t.integer  "job_id"
   end
 
+  add_index "ratings", ["job_id"], name: "index_ratings_on_job_id", using: :btree
   add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "reported_chats", force: :cascade do |t|
@@ -164,38 +175,40 @@ ActiveRecord::Schema.define(version: 20160108072625) do
 
   create_table "rpush_notifications", force: :cascade do |t|
     t.integer  "badge"
-    t.string   "device_token",      limit: 64
-    t.string   "sound",                        default: "default"
+    t.string   "device_token",          limit: 64
+    t.string   "sound",                            default: "default"
     t.string   "alert"
     t.text     "data"
-    t.integer  "expiry",                       default: 86400
-    t.boolean  "delivered",                    default: false,     null: false
+    t.integer  "expiry",                           default: 86400
+    t.boolean  "delivered",                        default: false,     null: false
     t.datetime "delivered_at"
-    t.boolean  "failed",                       default: false,     null: false
+    t.boolean  "failed",                           default: false,     null: false
     t.datetime "failed_at"
     t.integer  "error_code"
     t.text     "error_description"
     t.datetime "deliver_after"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "alert_is_json",                default: false
-    t.string   "type",                                             null: false
+    t.boolean  "alert_is_json",                    default: false
+    t.string   "type",                                                 null: false
     t.string   "collapse_key"
-    t.boolean  "delay_while_idle",             default: false,     null: false
+    t.boolean  "delay_while_idle",                 default: false,     null: false
     t.text     "registration_ids"
-    t.integer  "app_id",                                           null: false
-    t.integer  "retries",                      default: 0
+    t.integer  "app_id",                                               null: false
+    t.integer  "retries",                          default: 0
     t.string   "uri"
     t.datetime "fail_after"
-    t.boolean  "processing",                   default: false,     null: false
+    t.boolean  "processing",                       default: false,     null: false
     t.integer  "priority"
     t.text     "url_args"
     t.string   "category"
     t.integer  "user_id"
     t.integer  "sent_by_id"
+    t.boolean  "is_admin_notification",            default: false
   end
 
   add_index "rpush_notifications", ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
+  add_index "rpush_notifications", ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
   add_index "rpush_notifications", ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
   add_index "rpush_notifications", ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
 
@@ -233,6 +246,7 @@ ActiveRecord::Schema.define(version: 20160108072625) do
     t.string   "username",                                 null: false
     t.string   "device_type"
     t.string   "uuid_iphone"
+    t.integer  "privacy_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -254,10 +268,10 @@ ActiveRecord::Schema.define(version: 20160108072625) do
 
   add_foreign_key "blocked_users", "users"
   add_foreign_key "chats", "conversations"
-  add_foreign_key "chats", "users"
   add_foreign_key "conversations", "users"
+  add_foreign_key "deleted_conversations", "conversations"
+  add_foreign_key "deleted_conversations", "users"
   add_foreign_key "jobs", "users"
-  add_foreign_key "notifications", "users"
   add_foreign_key "ratings", "users"
   add_foreign_key "reported_chats", "chats"
   add_foreign_key "reported_ratings", "ratings"

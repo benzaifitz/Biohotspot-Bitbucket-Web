@@ -1,19 +1,21 @@
 module TimestampPagination
   def self.included(base)
     base.class_eval do
-      scope :updated_after, -> (timestamp){ where("#{self.table_name}.updated_at >= ?", timestamp) }
-      scope :updated_before, -> (timestamp){ where("#{self.table_name}.updated_at <= ?", timestamp) }
+      scope :updated_after, -> (timestamp){ where("#{self.table_name}.updated_at > ?", timestamp) }
+      scope :updated_before, -> (timestamp){ where("#{self.table_name}.updated_at < ?", timestamp) }
+      scope :created_after, -> (timestamp){ where("#{self.table_name}.created_at > ?", timestamp) }
+      scope :created_before, -> (timestamp){ where("#{self.table_name}.created_at < ?", timestamp) }
 
-      def self.paginate_with_timestamp(timestamp, direction)
+      def self.paginate_with_timestamp(timestamp, direction, timestamp_type=0 ,order_by_attr='updated_at', order_by_direction='DESC')
         timestamp ||= Time.now
         direction ||= Api::V1::DIRECTION[:down]
         records = self
         if direction.to_i == Api::V1::DIRECTION[:up]
-          records = records.updated_after(timestamp)
+          records = timestamp_type == Api::V1::TIMESTAMP_TYPE[:updated_at] ? records.updated_after(timestamp) : records.created_after(timestamp)
         elsif direction.to_i == Api::V1::DIRECTION[:down]
-          records = records.updated_before(timestamp).limit(20)
+          records = timestamp_type == Api::V1::TIMESTAMP_TYPE[:updated_at] ? records.updated_before(timestamp).limit(Api::V1::LIMIT) : records.created_before(timestamp).limit(Api::V1::LIMIT)
         end
-        records.order('updated_at DESC')
+        records.order("#{order_by_attr} #{order_by_direction}")
       end
     end
   end

@@ -61,4 +61,19 @@ end
 def auth_request(user)
   sign_in user
   request.headers.merge!(user.create_new_auth_token)
+  eula = create(:eula)
+  privacy = create(:privacy)
+  user.update_attributes(eula_id: eula.id, privacy_id: privacy.id)
+end
+
+def add_rpush_app
+  if Rpush::Apns::App.find_by_name("framework").nil?
+    app = Rpush::Apns::App.new
+    app.name = 'framework'
+    app.certificate = File.read("#{Rails.root}/config/certs/fram-apns-dev.pem")
+    app.environment = 'sandbox' # APNs environment.
+    app.password = nil
+    app.connections = 1
+    app.save!
+  end
 end

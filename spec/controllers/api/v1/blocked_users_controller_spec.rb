@@ -26,7 +26,7 @@ describe Api::V1::BlockedUsersController do
       it 'cannot get blocked user record created by another user' do
         blocked_user = create(:blocked_user, blocked_by: create(:user))
         get :show, id: blocked_user.id , format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(response.body).to match /undefined method `user_id' for nil:NilClass/
       end
     end
@@ -40,7 +40,7 @@ describe Api::V1::BlockedUsersController do
 
       it 'cannot creates a new blocked user record without Id of user to be blocked' do
         post :create, blocked_user: attributes_for(:blocked_user), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(response.body).to match /param is missing or the value is empty: blocked_user/
         expect(BlockedUser.count).to eq(0)
       end
@@ -61,7 +61,7 @@ describe Api::V1::BlockedUsersController do
         create(:blocked_user, user_id: user_to_be_blocked.id, blocked_by_id: user.id)
         expect(BlockedUser.count).to eq(1)
         delete :destroy, blocked_user: attributes_for(:blocked_user), format: :json
-        is_expected.to respond_with 500
+        is_expected.to respond_with 406
         expect(response.body).to match /param is missing or the value is empty: blocked_user/
         expect(BlockedUser.count).to eq(1)
       end

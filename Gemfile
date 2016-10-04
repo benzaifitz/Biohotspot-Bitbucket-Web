@@ -49,6 +49,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
   gem 'capistrano-sidekiq'
+  gem 'rest-client'
 end
 group :development, :test do
   gem 'factory_girl_rails'

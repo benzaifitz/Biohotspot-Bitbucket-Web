@@ -2,6 +2,7 @@ module Api
   module V1
     class RatingsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
       before_action :set_rating, only: [:show, :update]
 
       # GET /api/v1/ratings/1.json
@@ -15,6 +16,7 @@ module Api
       # param :rating, String, desc: 'Rating value between 0.0 and 5.0', required: false
       param :comment, String, desc: 'Comment.', required: false
       param :rated_on_id, Integer, desc: 'Id of user for which rating is provided. An additional param rating is also to be sent in range 0.0 to 5.0', required: false
+      param :job_id, Integer, desc: 'Id of job for which a staff is rating the customer for. Required if rated on user is a customer and rating is added by staff', required: false
       def create
         @rating = Rating.new(rating_params.merge(user_id: current_user.id))
         begin
@@ -55,7 +57,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def rating_params
-        permitted_params = [:rating, :comment, :rated_on_id, :status]
+        permitted_params = [:rating, :comment, :rated_on_id, :status, :job_id]
         params.require(:rating).permit(permitted_params)
       end
     end

@@ -23,6 +23,7 @@ class Job < ActiveRecord::Base
   validate :offered_by_user_is_customer, :offered_to_user_is_staff
 
   before_create :is_created_by_customer?
+  after_create :send_push_notification_to_staff
   before_update :is_user_allowed_to_set_job_status
   after_update :send_push_notification_to_customer, :send_email_notification_to_customer, if: :status_of_customers_interest_has_changed?
   after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
@@ -52,7 +53,7 @@ class Job < ActiveRecord::Base
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
-    n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
+    n.data = { type: Job.to_s, data: { job_id: id, status: status, user_id: user_id, detail: detail, sender_thumbnail_url: self.user.profile_picture.url, sender_name: self.user.full_name} }
     n.user_id = offered_by_id
     n.sent_by_id = user_id
     n.save!
@@ -65,6 +66,8 @@ class Job < ActiveRecord::Base
     n.category = "Job status changed to #{status}"
     n.alert = "Job Detail: #{detail} <br> Status of job changed to #{status} by #{self.user.full_name}"
     n.data = { job_id: id, status: status, user_id: user_id, detail: detail }
+    n.user_id = user_id
+    n.sent_by_id = offered_by_id
     n.save(validate: false)
   end
 
@@ -74,7 +77,7 @@ class Job < ActiveRecord::Base
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.user.device_token
     n.alert = "Status of job changed to #{status} by #{self.offered_by.full_name}"
-    n.data = { job_id: id, status: status, offered_by_id: offered_by_id, detail: detail }
+    n.data = { type: Job.to_s, data: {job_id: id, status: status, offered_by_id: offered_by_id, detail: detail, sender_thumbnail_url: self.offered_by.profile_picture.url, sender_name: self.offered_by.full_name} }
     n.user_id = user_id
     n.sent_by_id = offered_by_id
     n.save!

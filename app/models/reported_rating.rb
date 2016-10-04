@@ -23,4 +23,6 @@ class ReportedRating < ActiveRecord::Base
   def update_rating_status_to_reported
     Rating.find(self.rating_id).reported!
   end
+
+
 end

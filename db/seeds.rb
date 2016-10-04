@@ -11,7 +11,7 @@ puts 'CREATED ADMIN USER: ' << user.email
 if Rpush::Apns::App.find_by_name("framework").nil?
   app = Rpush::Apns::App.new
   app.name = 'framework'
-  app.certificate = File.read("#{Rails.root}/config/certs/fram-apns-dev.pem")
+  app.certificate = File.read("#{Rails.root}/config/certs/development_au.com.dapperapps.framework.pem")
   app.environment = 'sandbox' # APNs environment.
   app.password = nil
   app.connections = 1

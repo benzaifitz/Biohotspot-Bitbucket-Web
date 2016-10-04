@@ -8,8 +8,12 @@ ActiveAdmin.register Rating do
 
   filter :rating
   filter :comment
-  filter :rated_on
-  filter :user, label: 'Rated By'
+  filter :rated_on_username_cont, label: 'Rating For(Username)'
+  filter :rated_on_first_name_cont, label: 'Rating For(First Name)'
+  filter :rated_on_last_name_cont, label: 'Rating For(Last Name)'
+  filter :user_username_cont, label: 'Rating By(Username)'
+  filter :user_first_name_cont, label: 'Rating By(Username)'
+  filter :user_last_name_cont, label: 'Rating By(Username)'
   filter :status, as: :select, collection: -> { Rating.statuses }
   filter :created_at
 
@@ -52,5 +56,11 @@ ActiveAdmin.register Rating do
   member_action :allow, method: :put do
     resource.allowed!
     redirect_to admin_ratings_path, notice: 'Rating Allowed!'
+  end
+
+  controller do
+    def scoped_collection
+      super.includes(:rated_on, :user)
+    end
   end
 end

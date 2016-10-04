@@ -42,7 +42,8 @@ FactoryGirl.define do
     company "Test Company"
     sequence(:email) {|n| "test#{n}@dapperapps.com.au"}
     password "please123"
-
+    eula_id 1
+    privacy_id 1
     factory :staff do
       user_type 'staff'
     end

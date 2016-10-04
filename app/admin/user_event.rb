@@ -23,12 +23,12 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
 
   controller do
     def scoped_collection
-      PaperTrail::Version.where(item_type: 'User').order('id asc')
+      PaperTrail::Version.where(item_type: 'User').order('id asc').includes(:item)
     end
   end
 
   filter :event, as: :select, collection: -> { PaperTrail::Version.where(item_type: 'User').distinct.pluck :event }
-  filter :item_id, label: 'User Name', as: :select, collection: -> {
+  filter :item_id, label: 'Username', as: :select, collection: -> {
                    User.where(id: PaperTrail::Version.where(item_type: 'User').distinct.pluck(:item_id)).map do |u|
                      u.first_name.nil? ? [u.email, u.id] : ["#{u.first_name} #{u.last_name}", u.id]
                    end

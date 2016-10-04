@@ -2,27 +2,34 @@ module Api
   module V1
     class MessagesController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
+      before_action :set_chat, only: [:update, :destroy]
 
       respond_to :json
 
-      api :GET, 'messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
-      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
-      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
+      api :GET, 'conversations/:conversation_id/messages.json', 'Returns all messages in the given conversation ID and that belong to currently logged in user'
+      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction', required: false
+      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned', required: false
+      param :timestamp_type, String, desc: 'Timestamp type to be used. 0 for updated_at and 1 for created at', required: false
+      param :order_by_attr, String, 'Attribute to use for sorting. Default is updated_at', required: false
+      param :order_by_direction, String, 'Direction of sorting. ASC for ascending and DESC for descending. Default is DESC', required: false
       def index
-        @chats = Chat.where(user_id: current_user.id, conversation_id: params[:conversation_id])
-                             .paginate_with_timestamp(params[:timestamp], params[:direction])
-        respond_with @chats
+        conversation = Conversation.find(params[:conversation_id])
+        if conversation.has_participant?(current_user.id)
+          @chats = Chat.where(conversation_id: params[:conversation_id])
+                               .paginate_with_timestamp(params[:timestamp], params[:direction], params[:timestamp_type].to_i, params[:order_by_attr], params[:order_by_direction])
+          respond_with @chats.reverse
+        else
+          error(E_INTERNAL, 'The logged in user is not participant of this chat.')
+        end
       end
 
-      api :POST, '/api/v1/conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID'
+      api :POST, 'conversations/:conversation_id/messages.json', 'Create a chat message for provided conversation ID. chat: {message: <message>}'
       param :conversation_id, String, desc: 'Id of the conversation.', required: false
-      param :user_id, String, desc: 'Id of user whom message was send.', required: false
-      param :from_user_id, String, desc: 'Id of user who send the message.', required: false
-      param :message, String, desc: 'Chat Message', required: false
       def create
         conversation = Conversation.find(params[:conversation_id])
-        if conversation
-          message = conversation.chats.create(chat_params)
+        if conversation.has_participant?(current_user.id)
+          message = conversation.chats.create!(chat_params.merge(from_user_id: current_user.id))
           # conversation.last_message = message[:body]
           # conversation.last_user_id = message[:user_id]
           #
@@ -82,10 +89,31 @@ module Api
         render json: message
       end
 
+      api :PUT, 'conversations/:conversation_id/messages/:id.json', 'Update a chat message created by signed in user. chat: {message: <message>}'
+      def update
+        if @chat && @chat.update_attributes(chat_params)
+          render json: @chat.to_json
+        else
+          error(E_INTERNAL, 'We were not able to update this message. Please try again.')
+        end
+      end
+
+      api :DELETE, 'conversations/:conversation_id/messages/:id.json', 'Delete a chat message created by signed in user.'
+      def destroy
+        if @chat && @chat.destroy
+          render json: @chat.to_json
+        else
+          error(E_INTERNAL, 'We were not able to delete this message. Please try again.')
+        end
+      end
+
       private
 
+      def set_chat
+        @chat = Chat.where(id: params[:id], from_user_id: current_user.id, conversation_id: params[:conversation_id]).first
+      end
       def chat_params
-        params.require(:chat).permit(:user_id, :message, :from_user_id)
+        params.require(:chat).permit(:message)
       end
     end
   end

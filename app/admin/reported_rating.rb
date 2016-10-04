@@ -64,7 +64,15 @@ ActiveAdmin.register ReportedRating do
     redirect_to admin_reported_ratings_path, notice: 'Rating Allowed!'
   end
 
-  filter :reported_by
+  filter :reported_by_username_cont, label: 'Reported By(Username)'
+  filter :reported_by_first_name_cont, label: 'Reported By(First Name)'
+  filter :reported_by_last_name_cont, label: 'Reported By(Last Name)'
   filter :rating_rating, label: 'Rating', as: :select, collection: -> {Rating.distinct.pluck :rating}
   filter :created_at
+
+  controller do
+    def scoped_collection
+      super.includes(:reported_by, rating: [:user, :rated_on])
+    end
+  end
 end

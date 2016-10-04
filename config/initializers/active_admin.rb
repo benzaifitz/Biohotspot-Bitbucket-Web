@@ -238,8 +238,8 @@ ActiveAdmin.setup do |config|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
       menu.add label: 'Communicate', priority: 6 do |communicate|
-        communicate.add label: 'Send Email', url: "/admin/email_push_notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
-        communicate.add label: 'Send Push Notification', url: "/admin/email_push_notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
+        communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
+        communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
       menu.add label: 'Settings', priority: 7 do |settings_menu|
         settings_menu.add label: 'Logout', url: '/users/sign_out', html_options: { method: 'delete' }, priority: 3

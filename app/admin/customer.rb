@@ -23,8 +23,13 @@ ActiveAdmin.register User, as: 'Customer' do
       f.input :first_name
       f.input :last_name
       f.inputs "Profile Picture", :multipart => true do
-        f.input :profile_picture, :as => :file, :hint => image_tag(f.object.profile_picture.url)
+        f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
+        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+            insert_tag(Arbre::HTML::Img, id: 'profile_picture_preview', height: '48px', width: '48px', src: "#{f.object.profile_picture.url}?#{Random.rand(100)}")
+          end
+        end
       end
     end
     f.actions do
@@ -42,7 +47,10 @@ ActiveAdmin.register User, as: 'Customer' do
 
     def create
       super do |format|
-        redirect_to admin_users_path, :notice => 'Customer created successfully.' and return if resource.valid?
+        if resource.valid?
+          resource.send_confirmation_instructions
+          redirect_to admin_users_path, :notice => 'Customer created successfully.' and return
+        end
       end
     end
   end

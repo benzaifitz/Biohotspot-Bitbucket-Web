@@ -38,6 +38,10 @@ describe Rating do
       expect(build(:rating, status: nil)).to_not be_valid
     end
 
+    it 'is invalid without a job if staff rates customer' do
+      expect(build(:rating, user: create(:staff), rated_on: create(:customer))).to_not be_valid
+    end
+
   end
 
   describe 'ActiveModel validations' do
@@ -49,12 +53,31 @@ describe Rating do
     it { should allow_value(2.5).for(:rating) }
     it { should_not allow_value(5.5).for(:rating) }
     # Basic validations
-    it { expect(create(:rating)).to validate_uniqueness_of(:rated_on_id).scoped_to(:user_id) }
     it { should validate_presence_of(:rating).with_message(/can't be blank/) }
     it { should validate_presence_of(:user_id).with_message(/can't be blank/) }
     it { should validate_presence_of(:rated_on_id).with_message(/can't be blank/) }
     it { should validate_presence_of(:status).with_message(/can't be blank/) }
     it {expect(Rating.statuses.keys.length).to eq(statuses_order.length)}
+  end
+
+  describe 'Custom validations' do
+    it "should not allow two ratings to be added by customer for a staff within 24hrs" do
+      rating = create(:rating, attributes_for(:rating).merge(user: create(:customer), rated_on: create(:staff)))
+      expect(rating).to be_valid
+      rating_2 = Rating.create(attributes_for(:rating).merge(user_id: rating.user_id, rated_on_id: rating.rated_on_id))
+      expect(rating_2).to_not be_valid
+      expect(rating_2.errors.full_messages[0]).to match /does not allow more than 1 comment in 24 hours./
+    end
+
+    it "should not allow two ratings to be added by a staff for a customer for the same job" do
+      job = create(:job)
+      expect(job).to be_valid
+      rating = create(:rating, attributes_for(:rating).merge(user: job.user, rated_on: job.offered_by, job: job))
+      expect(rating).to be_valid
+      rating_2 = Rating.create(attributes_for(:rating).merge(user: job.user, rated_on: job.offered_by, job: job))
+      expect(rating_2).to_not be_valid
+      expect(rating_2.errors.full_messages[0]).to match /user already has a rating provided by you for this job./
+    end
   end
 
   describe '#status' do
@@ -80,9 +103,9 @@ describe Rating do
 
   describe 'callbacks calculate value correctly' do
     it '.calculated avg rating for rated on person correctly' do
-      rated_on = create(:customer)
-      rated_by_1 = create(:staff)
-      rated_by_2 = create(:staff)
+      rated_on = create(:staff)
+      rated_by_1 = create(:customer)
+      rated_by_2 = create(:customer)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rated_on.reload
@@ -90,9 +113,9 @@ describe Rating do
     end
 
     it '.recalculated avg rating for rated on person correctly after rating status is changed to censored' do
-      rated_on = create(:customer)
-      rated_by_1 = create(:staff)
-      rated_by_2 = create(:staff)
+      rated_on = create(:staff)
+      rated_by_1 = create(:customer)
+      rated_by_2 = create(:customer)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       rating_2 = create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rating_2.update({status: 2})
@@ -102,5 +125,14 @@ describe Rating do
 
   end
 
+  describe 'dependent destroy for rating' do
+    it 'should delete chats of a conversation' do
+      rating = create(:rating)
+      rating.reported_ratings.create(reported_by: create(:user))
+      expect(rating.reported_ratings.count).to eq 1
+      rating.destroy!
+      expect(rating.reported_ratings.count).to eq 0
+    end
+  end
 end
 

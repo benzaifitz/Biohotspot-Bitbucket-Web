@@ -1,6 +1,6 @@
 ActiveAdmin.register Chat do
   include SharedAdmin
-  menu label: 'Chat Messages', parent: 'Chat', priority: 0
+  menu label: 'Chat', parent: 'Communicate', priority: 1
 
   actions :index
 
@@ -8,24 +8,38 @@ ActiveAdmin.register Chat do
     column :id
     column :created_at
     column :conversation_id
-    column 'From' do |c|
-      link_to c.from_user.full_name , admin_user_path(c.from_user) if c.from_user
+    column 'Conversation Type' do |c|
+      c.conversation.conversation_type
     end
-    column 'From Company' do |c|
+    column 'Sender' do |c|
+      link_to c.from_user.username , admin_user_path(c.from_user) if c.from_user
+    end
+    column 'Sender\'s Company' do |c|
       c.from_user.company if c.from_user
     end
-    column 'From User Type' do |c|
+    column 'Sender\'s User Type' do |c|
       c.from_user.user_type if c.from_user
     end
-
-    column 'To' do |c|
-      link_to c.user.full_name , admin_user_path(c.user)
+    column 'Recipient' do |c|
+      if c.from_user_id == c.conversation.from_user_id
+        link_to c.recipient.username , admin_user_path(c.recipient) if c.recipient
+      elsif c.from_user_id == c.conversation.user_id
+        link_to c.conversation.from_user.username , admin_user_path(c.conversation.from_user) if c.conversation.from_user
+      end
     end
-    column 'To Company' do |c|
-      c.user.company
+    column 'Recipient\'s Company' do |c|
+      if c.from_user_id == c.conversation.from_user_id
+        c.recipient.company if c.recipient
+      elsif c.from_user_id == c.conversation.user_id
+        c.conversation.from_user.company if c.conversation.from_user
+      end
     end
-    column 'To User Type' do |c|
-      c.user.user_type
+    column 'Recipient\'s User Type' do |c|
+      if c.from_user_id == c.conversation.from_user_id
+        c.recipient.user_type if c.recipient
+      elsif c.from_user_id == c.conversation.user_id
+        c.conversation.from_user.user_type if c.recipient
+      end
     end
     column :message
     column :status
@@ -37,9 +51,11 @@ ActiveAdmin.register Chat do
     end
   end
 
-  filter :conversation_id, as: :select, collection: -> {Conversation.all.map{|c| c.id}}
-  filter :user
-  filter :conversation_from_user
+  filter :conversation_id, label: 'Conversation Id'
+  filter :conversation_name_cont, label: 'Conversation Topic'
+  filter :from_user_username_cont, label: 'Sender(Username)'
+  filter :from_user_first_name_cont, label: 'Sender(First Name)'
+  filter :from_user_last_name_cont, label: 'Sender(Last Name)'
   filter :status, as: :select, collection: Chat.statuses
   filter :message
   filter :created_at
@@ -52,6 +68,12 @@ ActiveAdmin.register Chat do
   member_action :allow, method: :put do
     resource.allowed!
     redirect_to admin_chats_path, notice: 'Rating Allowed!'
+  end
+
+  controller do
+    def scoped_collection
+      super.includes(conversation: [:recipient, :from_user])
+    end
   end
 
 end
