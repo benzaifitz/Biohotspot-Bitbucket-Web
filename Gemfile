@@ -24,7 +24,7 @@ group :development do
   gem 'spring'
   gem 'letter_opener'
 end
-#gem 'apipie-rails'
+gem 'apipie-rails'
 gem 'devise'
 gem 'high_voltage'
 gem 'simple_form','>= 3.3.1'

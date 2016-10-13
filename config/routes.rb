@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   require 'sidekiq/web'
   mount Sidekiq::Web => '/sidekiq'
-  #apipie
+  apipie
   devise_for :users, ActiveAdmin::Devise.config
   namespace :api, defaults: {format: 'json'} do
      namespace :v1 do
@@ -27,7 +27,6 @@ Rails.application.routes.draw do
      end
    end
   ActiveAdmin.routes(self)   
-  #root 'admin/dashboard#index'
-  root 'users#index'
+  root 'admin/dashboard#index'
   resources :users
 end
