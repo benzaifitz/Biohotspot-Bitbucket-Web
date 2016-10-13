@@ -2,7 +2,7 @@ module Api
   module V1
     module Users
       class RegistrationsController < DeviseTokenAuth::RegistrationsController
-        before_filter :configure_permitted_parameters
+        before_action :configure_permitted_parameters
 
         protected
 

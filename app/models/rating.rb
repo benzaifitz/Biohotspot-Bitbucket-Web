@@ -12,7 +12,7 @@
 #  status      :integer          default(0), not null
 #
 
-class Rating < ActiveRecord::Base
+class Rating < ApplicationRecord
 
   enum status: [:active, :reported, :censored, :allowed]
   belongs_to :user # rated by

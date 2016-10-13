@@ -7,7 +7,7 @@
 #  conversation_id   :integer          not null
 #
 
-class DeletedConversation < ActiveRecord::Base
+class DeletedConversation < ApplicationRecord
   belongs_to :conversation
   belongs_to :user
 

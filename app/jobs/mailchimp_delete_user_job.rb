@@ -1,4 +1,4 @@
-class MailchimpDeleteUserJob < ActiveJob::Base
+class MailchimpDeleteUserJob < ApplicationJob
   queue_as :mailchimp
 
   def perform(email)

@@ -14,7 +14,7 @@
 #  topic             :string
 #
 
-class Conversation < ActiveRecord::Base
+class Conversation < ApplicationRecord
   include TimestampPagination
   has_many :chats, dependent: :destroy
   has_many :conversation_participants, dependent: :destroy

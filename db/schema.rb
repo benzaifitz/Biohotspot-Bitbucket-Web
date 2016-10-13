@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -25,20 +24,18 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.string   "author_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
+    t.index ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
+    t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
   end
-
-  add_index "active_admin_comments", ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
-  add_index "active_admin_comments", ["namespace"], name: "index_active_admin_comments_on_namespace", using: :btree
-  add_index "active_admin_comments", ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id", using: :btree
 
   create_table "blocked_users", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "blocked_by_id", null: false
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+    t.index ["user_id"], name: "index_blocked_users_on_user_id", using: :btree
   end
-
-  add_index "blocked_users", ["user_id"], name: "index_blocked_users_on_user_id", using: :btree
 
   create_table "chats", force: :cascade do |t|
     t.text     "message"
@@ -48,19 +45,17 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.integer  "status",          default: 0,     null: false
     t.integer  "from_user_id",    default: 0,     null: false
     t.boolean  "is_read",         default: false
+    t.index ["conversation_id"], name: "index_chats_on_conversation_id", using: :btree
   end
-
-  add_index "chats", ["conversation_id"], name: "index_chats_on_conversation_id", using: :btree
 
   create_table "conversation_participants", force: :cascade do |t|
     t.integer  "conversation_id", null: false
     t.integer  "user_id",         null: false
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["conversation_id"], name: "index_conversation_participants_on_conversation_id", using: :btree
+    t.index ["user_id"], name: "index_conversation_participants_on_user_id", using: :btree
   end
-
-  add_index "conversation_participants", ["conversation_id"], name: "index_conversation_participants_on_conversation_id", using: :btree
-  add_index "conversation_participants", ["user_id"], name: "index_conversation_participants_on_user_id", using: :btree
 
   create_table "conversations", force: :cascade do |t|
     t.string   "name"
@@ -71,23 +66,20 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.text     "last_message"
     t.integer  "last_user_id"
     t.integer  "conversation_type", default: 0,     null: false
-    t.string   "topic"
     t.boolean  "is_abandoned",      default: false
+    t.index ["conversation_type"], name: "index_conversations_on_conversation_type", using: :btree
+    t.index ["is_abandoned"], name: "index_conversations_on_is_abandoned", using: :btree
+    t.index ["user_id"], name: "index_conversations_on_user_id", using: :btree
   end
-
-  add_index "conversations", ["conversation_type"], name: "index_conversations_on_conversation_type", using: :btree
-  add_index "conversations", ["is_abandoned"], name: "index_conversations_on_is_abandoned", using: :btree
-  add_index "conversations", ["user_id"], name: "index_conversations_on_user_id", using: :btree
 
   create_table "deleted_conversations", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "conversation_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.index ["conversation_id"], name: "index_deleted_conversations_on_conversation_id", using: :btree
+    t.index ["user_id"], name: "index_deleted_conversations_on_user_id", using: :btree
   end
-
-  add_index "deleted_conversations", ["conversation_id"], name: "index_deleted_conversations_on_conversation_id", using: :btree
-  add_index "deleted_conversations", ["user_id"], name: "index_deleted_conversations_on_user_id", using: :btree
 
   create_table "eulas", force: :cascade do |t|
     t.text     "eula_text"
@@ -104,9 +96,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.integer  "status",        default: 0
     t.string   "detail"
     t.string   "comment"
+    t.index ["user_id"], name: "index_jobs_on_user_id", using: :btree
   end
-
-  add_index "jobs", ["user_id"], name: "index_jobs_on_user_id", using: :btree
 
   create_table "privacies", force: :cascade do |t|
     t.text     "privacy_text"
@@ -124,28 +115,25 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.datetime "updated_at",              null: false
     t.integer  "status",      default: 0, null: false
     t.integer  "job_id"
+    t.index ["job_id"], name: "index_ratings_on_job_id", using: :btree
+    t.index ["user_id"], name: "index_ratings_on_user_id", using: :btree
   end
-
-  add_index "ratings", ["job_id"], name: "index_ratings_on_job_id", using: :btree
-  add_index "ratings", ["user_id"], name: "index_ratings_on_user_id", using: :btree
 
   create_table "reported_chats", force: :cascade do |t|
     t.integer  "chat_id"
     t.integer  "reported_by_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["chat_id"], name: "index_reported_chats_on_chat_id", using: :btree
   end
-
-  add_index "reported_chats", ["chat_id"], name: "index_reported_chats_on_chat_id", using: :btree
 
   create_table "reported_ratings", force: :cascade do |t|
     t.integer  "rating_id"
     t.integer  "reported_by_id", null: false
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.index ["rating_id"], name: "index_reported_ratings_on_rating_id", using: :btree
   end
-
-  add_index "reported_ratings", ["rating_id"], name: "index_reported_ratings_on_rating_id", using: :btree
 
   create_table "rpush_apps", force: :cascade do |t|
     t.string   "name",                                null: false
@@ -169,9 +157,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "app_id"
+    t.index ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
   end
-
-  add_index "rpush_feedback", ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
 
   create_table "rpush_notifications", force: :cascade do |t|
     t.integer  "badge"
@@ -205,12 +192,11 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.integer  "user_id"
     t.integer  "sent_by_id"
     t.boolean  "is_admin_notification",            default: false
+    t.index ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
+    t.index ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
+    t.index ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
+    t.index ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
   end
-
-  add_index "rpush_notifications", ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
-  add_index "rpush_notifications", ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
-  add_index "rpush_notifications", ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
-  add_index "rpush_notifications", ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",      null: false
@@ -234,7 +220,7 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "company"
-    t.decimal  "rating",                 default: 0.0
+    t.decimal  "rating",                 default: "0.0"
     t.integer  "status",                 default: 0,       null: false
     t.integer  "user_type",              default: 0,       null: false
     t.string   "provider",               default: "email", null: false
@@ -242,16 +228,15 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
     t.string   "profile_picture"
+    t.string   "username",               default: "",      null: false
     t.string   "device_token"
-    t.string   "username",                                 null: false
     t.string   "device_type"
     t.string   "uuid_iphone"
     t.integer  "privacy_id"
+    t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
-
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
   create_table "versions", force: :cascade do |t|
     t.string   "item_type",      null: false
@@ -262,9 +247,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.datetime "created_at"
     t.json     "object_changes"
     t.string   "comment"
+    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   end
-
-  add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
 
   add_foreign_key "blocked_users", "users"
   add_foreign_key "chats", "conversations"

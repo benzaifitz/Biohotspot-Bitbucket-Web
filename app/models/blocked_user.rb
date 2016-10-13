@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 
-class BlockedUser < ActiveRecord::Base
+class BlockedUser < ApplicationRecord
   belongs_to :user
   belongs_to :blocked_by, class_name: "User", foreign_key: "blocked_by_id"
   validates_presence_of :user_id, :blocked_by_id

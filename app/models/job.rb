@@ -10,7 +10,7 @@
 #  status        :integer          default(0)
 #
 
-class Job < ActiveRecord::Base
+class Job < ApplicationRecord
   include TimestampPagination
 
   has_paper_trail :on => [:update, :destroy]

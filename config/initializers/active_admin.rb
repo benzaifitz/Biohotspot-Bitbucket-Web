@@ -226,7 +226,7 @@ ActiveAdmin.setup do |config|
   #     end
   #   end
 
-  config.show_comments_in_menu = false
+  #config.show_comments_in_menu = false
 
   config.namespace :admin do |admin|
     admin.build_menu do |menu|

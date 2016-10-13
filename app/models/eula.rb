@@ -9,7 +9,7 @@
 #  updated_at :datetime         not null
 #
 
-class Eula < ActiveRecord::Base
+class Eula < ApplicationRecord
   has_many :users
 
   after_create :set_is_latest_for_old_records

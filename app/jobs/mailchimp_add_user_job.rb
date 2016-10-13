@@ -1,4 +1,4 @@
-class MailchimpAddUserJob < ActiveJob::Base
+class MailchimpAddUserJob < ApplicationJob
   queue_as :mailchimp
 
   def perform(id)

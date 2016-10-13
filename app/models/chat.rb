@@ -10,7 +10,7 @@
 #  status          :integer          default(0), not null
 #  from_user_id    :integer
 
-class Chat < ActiveRecord::Base
+class Chat < ApplicationRecord
   include TimestampPagination
   belongs_to :conversation
   belongs_to :from_user, class_name: "User", foreign_key: "from_user_id"

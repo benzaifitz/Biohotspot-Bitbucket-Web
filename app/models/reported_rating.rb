@@ -9,7 +9,7 @@
 #  updated_at     :datetime         not null
 #
 
-class ReportedRating < ActiveRecord::Base
+class ReportedRating < ApplicationRecord
   belongs_to :rating
   belongs_to :reported_by, class_name: "User", foreign_key: "reported_by_id"
 

@@ -7,7 +7,7 @@
 #  conversation_id   :integer          not null
 #
 
-class ConversationParticipant < ActiveRecord::Base
+class ConversationParticipant < ApplicationRecord
   belongs_to :community_conversation, -> { where conversation_type: Conversation.conversation_types[:community] },class_name: 'Conversation', foreign_key: 'conversation_id'
   belongs_to :participant, class_name: 'User', foreign_key: 'user_id'
 

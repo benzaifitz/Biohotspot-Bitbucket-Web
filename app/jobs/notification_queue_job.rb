@@ -1,4 +1,4 @@
-class NotificationQueueJob < ActiveJob::Base
+class NotificationQueueJob < ApplicationJob
   queue_as :notifications
 
   def perform(attrs = {})

@@ -1,4 +1,4 @@
-class MailchimpUpdateUserJob < ActiveJob::Base
+class MailchimpUpdateUserJob < ApplicationJob
   queue_as :mailchimp
 
   def perform(id, old_email)

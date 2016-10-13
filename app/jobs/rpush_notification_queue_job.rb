@@ -1,4 +1,4 @@
-class RpushNotificationQueueJob < ActiveJob::Base
+class RpushNotificationQueueJob < ApplicationJob
   queue_as :rpush_notifications
 
   def perform(attrs = {})

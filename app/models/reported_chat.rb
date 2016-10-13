@@ -9,7 +9,7 @@
 #  updated_at     :datetime         not null
 #
 
-class ReportedChat < ActiveRecord::Base
+class ReportedChat < ApplicationRecord
   belongs_to :chat
   belongs_to :reported_by, class_name: "User", foreign_key: "reported_by_id"
 
