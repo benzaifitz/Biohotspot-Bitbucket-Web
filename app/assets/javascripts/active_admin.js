@@ -1,5 +1,6 @@
 //= require active_admin/base
 //= require fancybox
+//= require jquery-ui
 
 $(document).ready(function() {
     $("a.fancybox").fancybox();
