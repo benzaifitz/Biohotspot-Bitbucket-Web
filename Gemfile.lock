@@ -562,7 +562,6 @@ DEPENDENCIES
   inherited_resources!
   jbuilder (>= 2.6.0)
   jquery-rails (>= 4.2.1)
-  jquery-ui-rails
   launchy
   letter_opener
   mini_magick (~> 4.3, >= 4.3.6)
