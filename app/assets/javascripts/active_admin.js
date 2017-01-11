@@ -1,6 +1,7 @@
 //= require active_admin/base
 //= require fancybox
 //= require jquery-ui
+//= require jquery-ui/widgets/datepicker
 
 $(document).ready(function() {
     $("a.fancybox").fancybox();
