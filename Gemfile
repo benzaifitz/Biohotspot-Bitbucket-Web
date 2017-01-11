@@ -12,6 +12,7 @@ gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', '~> 1.0.0.pre4' #github: 'activeadmin'
 gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails', '>= 2.1.1'
+gem 'jquery-ui-rails', '~> 5.0.5'
 # MailChimp integration
 gem 'gibbon'
 # The push notification service.
@@ -26,7 +27,7 @@ group :development do
 end
 gem 'apipie-rails'
 gem 'devise'
-gem 'high_voltage'
+gem 'high_voltage', github: 'thoughtbot/high_voltage'
 gem 'simple_form','>= 3.3.1'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'omniauth', '>= 1.3.1'
@@ -47,7 +48,7 @@ group :development do
   #gem 'quiet_assets','>= 1.1.0' # No compatible version
   gem 'rails_layout'
   gem 'spring-commands-rspec'
-  gem 'capistrano', '~> 3.1.0'
+  gem 'capistrano', '~> 3.7.0'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
@@ -59,7 +60,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   #gem 'rspec'
-  gem 'fakeredis'
+  # gem 'fakeredis'
   gem 'rspec-rails', '~> 3.5.2'
   gem 'shoulda-matchers', '~> 3.0'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
