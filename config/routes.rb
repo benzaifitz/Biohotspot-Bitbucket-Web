@@ -24,6 +24,7 @@ Rails.application.routes.draw do
        resources :reported_chats, only: [:show, :create]
        resources :jobs
        resources :notifications, only: [:index, :destroy]
+       resources :shared_tracks, only: [:index, :create]
      end
    end
   ActiveAdmin.routes(self)   
