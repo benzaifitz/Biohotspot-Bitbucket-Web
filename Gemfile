@@ -47,7 +47,7 @@ group :development do
   #gem 'quiet_assets','>= 1.1.0' # No compatible version
   gem 'rails_layout'
   gem 'spring-commands-rspec'
-  gem 'capistrano', '~> 3.1.0'
+  gem 'capistrano', '~> 3.7.0'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
@@ -59,7 +59,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'faker'
   #gem 'rspec'
-  gem 'fakeredis'
+  # gem 'fakeredis'
   gem 'rspec-rails', '~> 3.5.2'
   gem 'shoulda-matchers', '~> 3.0'
   gem 'shoulda-callback-matchers', '~> 1.1.1'
