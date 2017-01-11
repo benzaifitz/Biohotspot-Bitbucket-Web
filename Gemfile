@@ -26,7 +26,7 @@ group :development do
 end
 gem 'apipie-rails'
 gem 'devise'
-gem 'high_voltage'
+gem 'high_voltage', '~> 2.4.0'
 gem 'simple_form','>= 3.3.1'
 gem 'rack-cors', :require => 'rack/cors'
 gem 'omniauth', '>= 1.3.1'

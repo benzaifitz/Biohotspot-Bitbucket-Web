@@ -524,7 +524,7 @@ DEPENDENCIES
   fancybox-rails (~> 0.3.0)
   fog (~> 1.36)
   gibbon
-  high_voltage
+  high_voltage (~> 2.4.0)
   houston
   inherited_resources!
   jbuilder (>= 2.6.0)
