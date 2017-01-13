@@ -41,7 +41,7 @@ gem 'fancybox-rails', '~> 0.3.0'
 gem 'mini_magick', '~> 4.3', '>= 4.3.6'
 gem 'carrierwave', '~> 0.10.0'
 gem 'fog', '~> 1.36'
-
+gem 'rest-client'
 #gem 'responders'
 group :development do
   gem 'better_errors'
@@ -53,7 +53,6 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
   gem 'capistrano-sidekiq'
-  gem 'rest-client'
   gem 'puma'
 end
 group :development, :test do

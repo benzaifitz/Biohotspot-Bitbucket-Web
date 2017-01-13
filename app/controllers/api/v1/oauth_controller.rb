@@ -1,9 +1,6 @@
 module Api
   module V1
     class OauthController < ApiController
-
-
-
       api :GET, '/oauth/authorize.json'
       param :platform, String, desc: 'ios or android'
       def authorize

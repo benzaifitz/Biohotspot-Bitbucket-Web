@@ -1,7 +1,7 @@
 # config valid only for Capistrano 3.1
 lock '3.7.1'
 load 'config/deploy/recipes/redis.rb'
-# load 'config/deploy/recipes/rpush.rb'
+load 'config/deploy/recipes/rpush.rb'
 # load 'config/deploy/recipes/run_tests.rb'
 set :application, 'framework'
 set :repo_url, 'git@bitbucket.org:applabsservice/framework-web.git'
