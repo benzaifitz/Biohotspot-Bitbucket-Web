@@ -25,9 +25,13 @@ Rails.application.routes.draw do
        resources :jobs
        resources :notifications, only: [:index, :destroy]
        resources :shared_tracks, only: [:index, :create]
+       get '/oauth/callback', to: 'oauth#callback'
+       get '/oauth/authorize', to: 'oauth#authorize'
+       get 'omniauth/spotify/callback', to: 'oauth#callback'
      end
    end
   ActiveAdmin.routes(self)   
   root 'admin/dashboard#index'
   resources :users
+
 end
