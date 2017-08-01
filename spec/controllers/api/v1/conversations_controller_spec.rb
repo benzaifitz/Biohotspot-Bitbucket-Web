@@ -71,8 +71,8 @@ describe Api::V1::ConversationsController do
 
     describe 'DELETE #destroy' do
       it 'remove conversation from list of conversations of the deleting user' do
-        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
-        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:land_manager).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:land_manager).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
         is_expected.to respond_with :ok
         get :index, format: :json
         is_expected.to respond_with :ok
@@ -91,8 +91,8 @@ describe Api::V1::ConversationsController do
       end
 
       it 'does not remove conversation from list of non deleting user' do
-        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
-        post :create, conversation: attributes_for(:conversation, user_id: create(:customer).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:land_manager).id, conversation_type: Conversation.conversation_types[:direct], name: "Test1"), format: :json
+        post :create, conversation: attributes_for(:conversation, user_id: create(:land_manager).id, conversation_type: Conversation.conversation_types[:direct], name: "Test2"), format: :json
         is_expected.to respond_with :ok
         get :index, format: :json
         is_expected.to respond_with :ok

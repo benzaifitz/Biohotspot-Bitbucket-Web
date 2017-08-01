@@ -7,15 +7,15 @@ ActiveAdmin.register Job, as: 'Job Events' do
   index do
     id_column
     column :created_at
-    column 'Customer Id', :offered_by_id
-    column 'Customer' do |je|
+    column 'Land Manager Id', :offered_by_id
+    column 'Land Manager' do |je|
       link_to je.offered_by.username, admin_user_path(je.offered_by)
     end
-    column 'Customer Company' do |j|
+    column 'Land Manager Company' do |j|
       label j.offered_by.company
     end
-    column 'Staff Id', :user_id
-    column 'Staff' do |je|
+    column 'Project Manager Id', :user_id
+    column 'Project Manager' do |je|
       link_to je.user.username, admin_user_path(je.user)
     end
     column :status
@@ -31,12 +31,12 @@ ActiveAdmin.register Job, as: 'Job Events' do
   end
 
 
-  filter :offered_by_username_cont, label: 'Customer(Username)'
-  filter :offered_by_first_name_cont, label: 'Customer(First Name)'
-  filter :offered_by_last_name_cont, label: 'Customer(Last Name)'
-  filter :user_username_cont, label: 'Staff(Username)'
-  filter :user_first_name_cont, label: 'Staff(First Name)'
-  filter :user_last_name_cont, label: 'Staff(Last Name)'
+  filter :offered_by_username_cont, label: 'Land Manager(Username)'
+  filter :offered_by_first_name_cont, label: 'Land Manager(First Name)'
+  filter :offered_by_last_name_cont, label: 'Land Manager(Last Name)'
+  filter :user_username_cont, label: 'Project Manager(Username)'
+  filter :user_first_name_cont, label: 'Project Manager(First Name)'
+  filter :user_last_name_cont, label: 'Project Manager(Last Name)'
   filter :status, as: :select, collection: -> { Job.statuses }
   filter :created_at
 

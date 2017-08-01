@@ -19,14 +19,14 @@ class BlockedUser < ApplicationRecord
 
   def cancel_associated_jobs
     jobs = []
-    if self.user.customer?
+    if self.user.land_manager?
       jobs = Job.where(offered_by_id: self.user.id, user_id: self.blocked_by_id)
-    elsif self.user.staff?
+    elsif self.user.project_manager?
       jobs = Job.where(offered_by_id: self.blocked_by_id, user_id: self.user_id)
     end
     jobs.each do |j|
       j.status = 'cancelled'
-      j.current_user_type = 'staff'
+      j.current_user_type = 'project_manager'
       j.save!
     end
   end

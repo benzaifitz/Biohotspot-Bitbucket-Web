@@ -29,18 +29,18 @@ class Job < ApplicationRecord
   after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
 
   def is_created_by_customer?
-     if self.offered_by.customer?
+     if self.offered_by.land_manager?
        true
      else
-       self.errors.add(:offered_by_id, 'Must be a customer!') && false
+       self.errors.add(:offered_by_id, 'Must be a land_manager!') && false
      end
   end
 
   def is_user_allowed_to_set_job_status
     return true if !['cancelled', 'withdrawn'].include?(status)
-    if status == 'cancelled' && current_user_type == 'staff'
+    if status == 'cancelled' && current_user_type == 'project_manager'
       true
-    elsif status == 'withdrawn' && current_user_type == 'customer'
+    elsif status == 'withdrawn' && current_user_type == 'land_manager'
       true
     else
       self.errors.add(:status, 'Not allowed to be changed by this user type!') && false
@@ -92,10 +92,10 @@ class Job < ApplicationRecord
   end
 
   def offered_by_user_is_customer
-    errors.add(:offering, "user must be a customer." ) unless offered_by.nil? || offered_by.customer?
+    errors.add(:offering, "user must be a land_manager." ) unless offered_by.nil? || offered_by.land_manager?
   end
 
   def offered_to_user_is_staff
-    errors.add(:offered, "user must be staff." ) unless user.nil? || user.staff?
+    errors.add(:offered, "user must be project_manager." ) unless user.nil? || user.project_manager?
   end
 end

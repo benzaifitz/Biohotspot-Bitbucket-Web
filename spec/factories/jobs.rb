@@ -13,7 +13,7 @@
 FactoryGirl.define do
   factory :job do
     user
-    association :offered_by, factory: :customer
+    association :offered_by, factory: :land_manager
     status 0
     detail 'Some random string from Dapper Apps'
   end

@@ -43,22 +43,22 @@ describe BlockedUser do
   end
 
   describe 'Callbacks' do
-    it "should cancel all jobs of associated users if staff blocks a customer" do
+    it "should cancel all jobs of associated users if project_manager blocks a land_manager" do
       add_rpush_app
-      customer = create(:customer)
-      staff = create(:staff)
-      job = create(:job, offered_by_id: customer.id, user_id: staff.id, status: 'offered')
-      blocked_user = create(:blocked_user, blocked_by_id: staff.id, user_id: customer.id)
+      land_manager = create(:land_manager)
+      project_manager = create(:project_manager)
+      job = create(:job, offered_by_id: land_manager.id, user_id: project_manager.id, status: 'offered')
+      blocked_user = create(:blocked_user, blocked_by_id: project_manager.id, user_id: land_manager.id)
       job.reload
       expect(job.status).to eq 'cancelled'
     end
 
-    it "should cancel all jobs of associated users if customer blocks a staff" do
+    it "should cancel all jobs of associated users if land_manager blocks a project_manager" do
       add_rpush_app
-      customer = create(:customer)
-      staff = create(:staff)
-      job = create(:job, offered_by_id: customer.id, user_id: staff.id, status: 'offered')
-      blocked_user = create(:blocked_user, blocked_by_id: customer.id, user_id: staff.id)
+      land_manager = create(:land_manager)
+      project_manager = create(:project_manager)
+      job = create(:job, offered_by_id: land_manager.id, user_id: project_manager.id, status: 'offered')
+      blocked_user = create(:blocked_user, blocked_by_id: land_manager.id, user_id: project_manager.id)
       job.reload
       expect(job.status).to eq 'cancelled'
     end

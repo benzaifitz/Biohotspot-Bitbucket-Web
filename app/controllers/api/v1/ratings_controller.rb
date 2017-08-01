@@ -16,7 +16,7 @@ module Api
       # param :rating, String, desc: 'Rating value between 0.0 and 5.0', required: false
       param :comment, String, desc: 'Comment.', required: false
       param :rated_on_id, Integer, desc: 'Id of user for which rating is provided. An additional param rating is also to be sent in range 0.0 to 5.0', required: false
-      param :job_id, Integer, desc: 'Id of job for which a staff is rating the customer for. Required if rated on user is a customer and rating is added by staff', required: false
+      param :job_id, Integer, desc: 'Id of job for which a project_manager is rating the land_manager for. Required if rated on user is a land_manager and rating is added by project_manager', required: false
       def create
         @rating = Rating.new(rating_params.merge(user_id: current_user.id))
         begin

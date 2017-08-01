@@ -6,14 +6,14 @@ module Api
       before_action :set_job, only: [:show, :update, :destroy]
 
       # GET /api/v1/jobs.json
-      api :GET, '/jobs.json', 'If customer is logged in that it returns all the jobs offered by the customer or if staff is logged in than all jobs accepted by staff will be returned.'
+      api :GET, '/jobs.json', 'If land_manager is logged in that it returns all the jobs offered by the land_manager or if project_manager is logged in than all jobs accepted by project_manager will be returned.'
       param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
       param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
       def index
         @jobs = []
-        if current_user.customer?
+        if current_user.land_manager?
           @jobs = Job.includes(:user, :offered_by).where(offered_by: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
-        elsif current_user.staff?
+        elsif current_user.project_manager?
           @jobs = Job.includes(:user, :offered_by).where(user: current_user).paginate_with_timestamp(params[:timestamp], params[:direction])
         end
       end
@@ -29,7 +29,7 @@ module Api
       param :user_id, Integer, desc: 'Id of the user whom job is offered.', required: false
       param :detail, String, desc: 'Description of job', required: false
       def create
-        # return render json: {error: 'User Must be a customer to create a job.'} if !current_user.customer?
+        # return render json: {error: 'User Must be a land_manager to create a job.'} if !current_user.land_manager?
         @job = Job.new(job_params.merge(offered_by: current_user))
         begin
           @job.save!
@@ -72,9 +72,9 @@ module Api
       private
       # Use callbacks to share common setup or constraints between actions.
       def set_job
-        if current_user.customer?
+        if current_user.land_manager?
           @job = Job.where(id: params[:id], offered_by: current_user).first
-        elsif current_user.staff?
+        elsif current_user.project_manager?
           @job = Job.where(id: params[:id], user: current_user).first
         end
       end

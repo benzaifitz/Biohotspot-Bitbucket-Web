@@ -38,8 +38,8 @@ describe Rating do
       expect(build(:rating, status: nil)).to_not be_valid
     end
 
-    it 'is invalid without a job if staff rates customer' do
-      expect(build(:rating, user: create(:staff), rated_on: create(:customer))).to_not be_valid
+    it 'is invalid without a job if project_manager rates land_manager' do
+      expect(build(:rating, user: create(:project_manager), rated_on: create(:land_manager))).to_not be_valid
     end
 
   end
@@ -61,15 +61,15 @@ describe Rating do
   end
 
   describe 'Custom validations' do
-    it "should not allow two ratings to be added by customer for a staff within 24hrs" do
-      rating = create(:rating, attributes_for(:rating).merge(user: create(:customer), rated_on: create(:staff)))
+    it "should not allow two ratings to be added by land_manager for a project_manager within 24hrs" do
+      rating = create(:rating, attributes_for(:rating).merge(user: create(:land_manager), rated_on: create(:project_manager)))
       expect(rating).to be_valid
       rating_2 = Rating.create(attributes_for(:rating).merge(user_id: rating.user_id, rated_on_id: rating.rated_on_id))
       expect(rating_2).to_not be_valid
       expect(rating_2.errors.full_messages[0]).to match /does not allow more than 1 comment in 24 hours./
     end
 
-    it "should not allow two ratings to be added by a staff for a customer for the same job" do
+    it "should not allow two ratings to be added by a project_manager for a land_manager for the same job" do
       job = create(:job)
       expect(job).to be_valid
       rating = create(:rating, attributes_for(:rating).merge(user: job.user, rated_on: job.offered_by, job: job))
@@ -103,9 +103,9 @@ describe Rating do
 
   describe 'callbacks calculate value correctly' do
     it '.calculated avg rating for rated on person correctly' do
-      rated_on = create(:staff)
-      rated_by_1 = create(:customer)
-      rated_by_2 = create(:customer)
+      rated_on = create(:project_manager)
+      rated_by_1 = create(:land_manager)
+      rated_by_2 = create(:land_manager)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rated_on.reload
@@ -113,9 +113,9 @@ describe Rating do
     end
 
     it '.recalculated avg rating for rated on person correctly after rating status is changed to censored' do
-      rated_on = create(:staff)
-      rated_by_1 = create(:customer)
-      rated_by_2 = create(:customer)
+      rated_on = create(:project_manager)
+      rated_by_1 = create(:land_manager)
+      rated_by_2 = create(:land_manager)
       create(:rating, rated_on: rated_on, user: rated_by_1, rating: 5)
       rating_2 = create(:rating, rated_on: rated_on, user: rated_by_2, rating: 3)
       rating_2.update({status: 2})

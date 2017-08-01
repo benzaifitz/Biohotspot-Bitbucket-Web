@@ -70,7 +70,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
       semantic_errors
       input :user_id, label: 'User Id'
       input :user_type, label: 'Group Type', as: :select, collection: User.user_types,
-            selected: User.user_types[:staff], include_blank: false
+            selected: User.user_types[:project_manager], include_blank: false
       input :notification_type, as: :hidden, input_html: { value: params[:notification_type] }
       if params[:notification_type] == RpushNotification::NOTIFICATION_TYPE[:email]
         input :category, label: 'Subject'

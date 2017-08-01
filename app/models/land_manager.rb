@@ -1,5 +1,5 @@
-class Customer < User
-  default_scope -> { where(user_type: User.user_types['customer']) }
+class LandManager < User
+  default_scope -> { where(user_type: User.user_types['land_manager']) }
   before_update :check_duplicate_email
 
   def check_duplicate_email

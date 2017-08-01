@@ -19,7 +19,7 @@ describe Api::V1::RatingsController do
 
     describe 'POST #create' do
       it 'can create a new rating record' do
-        post :create, rating: attributes_for(:rating, rated_on_id: create(:staff).id, rating: 3.5), format: :json
+        post :create, rating: attributes_for(:rating, rated_on_id: create(:project_manager).id, rating: 3.5), format: :json
         is_expected.to respond_with :ok
         expect(Rating.last.rating).to eq(3.5)
       end

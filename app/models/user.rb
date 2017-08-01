@@ -35,6 +35,7 @@
 #  uuid_iphone            :string
 #  device_token           :string
 #  device_type            :string
+#  mobile_number          :string          default(0)
 
 class User < ApplicationRecord
   # Include default devise modules.
@@ -44,7 +45,8 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   mount_uploader :profile_picture, ProfilePictureUploader
-  enum user_type: [:staff, :administrator, :customer]
+  # enum user_type: [:staff, :administrator, :land_manager]
+  enum user_type: [:project_manager, :administrator, :land_manager]
   enum status: [:active, :banned]
   enum device_type: {:ios => "0", :android => "1"}
   # manual paper trail initialization
@@ -71,7 +73,7 @@ class User < ApplicationRecord
 
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
   validates_presence_of :username, :email
-  validates_presence_of :company, if: Proc.new { |user| user.staff? }
+  # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
   validates_uniqueness_of :username, :email
 
 

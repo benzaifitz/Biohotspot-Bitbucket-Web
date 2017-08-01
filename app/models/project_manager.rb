@@ -1,6 +1,6 @@
-class Staff < User
-  default_scope -> { where(user_type: User.user_types['staff']) }
-  scope :without_blocked_users, -> (blocked_by_id) { where("#{Staff.table_name}.id NOT IN(SELECT user_id FROM blocked_users where blocked_by_id = ?)", blocked_by_id) }
+class ProjectManager < User
+  default_scope -> { where(user_type: User.user_types['project_manager']) }
+  scope :without_blocked_users, -> (blocked_by_id) { where("#{Project Manager.table_name}.id NOT IN(SELECT user_id FROM blocked_users where blocked_by_id = ?)", blocked_by_id) }
 
   before_update :check_duplicate_email
 

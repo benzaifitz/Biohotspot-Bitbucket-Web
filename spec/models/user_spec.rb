@@ -35,43 +35,43 @@
 #  uuid_iphone            :string
 #
 describe User do
-  let(:user_types_order) { %w{staff administrator customer} }
+  let(:user_types_order) { %w{project_manager administrator land_manager} }
   let(:statuses_order) { %w{active banned} }
   let(:device_types_order) { %w{ios android} }
   add_rpush_app
-  describe '#staff' do
+  describe '#project_manager' do
     it 'has a valid factory' do
-      expect(build(:staff)).to be_valid
+      expect(build(:project_manager)).to be_valid
     end
 
     it 'is invalid without a email' do
-      expect(build(:staff, email: nil)).to_not be_valid
+      expect(build(:project_manager, email: nil)).to_not be_valid
     end
 
     it 'is invalid without a username' do
-      expect(build(:staff, username: nil)).to_not be_valid
+      expect(build(:project_manager, username: nil)).to_not be_valid
     end
 
     it 'is invalid without a company' do
-      expect(build(:staff, company: nil)).to_not be_valid
+      expect(build(:project_manager, company: nil)).to_not be_valid
     end
   end
 
-  describe '#customer' do
+  describe '#land_manager' do
     it 'has a valid factory' do
-      expect(build(:customer)).to be_valid
+      expect(build(:land_manager)).to be_valid
     end
 
     it 'is invalid without a email' do
-      expect(build(:customer, email: nil)).to_not be_valid
+      expect(build(:land_manager, email: nil)).to_not be_valid
     end
 
     it 'is invalid without a username' do
-      expect(build(:customer, username: nil)).to_not be_valid
+      expect(build(:land_manager, username: nil)).to_not be_valid
     end
 
     it 'is valid without a company' do
-      expect(build(:customer, company: nil)).to be_valid
+      expect(build(:land_manager, company: nil)).to be_valid
     end
   end
 
@@ -160,55 +160,55 @@ describe User do
     it { should callback(:delete_from_mailchimp).after(:commit).on(:destroy) }
   end
 
-  context 'dependent destroy for staff' do
-    let(:staff) {create(:user, user_type: User.user_types[:staff])}
-    it 'should delete rated_on_ratings for this staff' do
-      staff.rated_on_ratings.create(attributes_for(:rating).merge(comment: 'Test', user_id: create(:user, user_type: User.user_types[:customer]).id))
+  context 'dependent destroy for project_manager' do
+    let(:project_manager) {create(:user, user_type: User.user_types[:project_manager])}
+    it 'should delete rated_on_ratings for this project_manager' do
+      project_manager.rated_on_ratings.create(attributes_for(:rating).merge(comment: 'Test', user_id: create(:user, user_type: User.user_types[:land_manager]).id))
       expect(Rating.count).to eq 1
-      staff.destroy!
+      project_manager.destroy!
       expect(Rating.count).to eq 0
     end
 
-    it 'should delete blocked_users records of this staff' do
-      staff.blocked_users.create(attributes_for(:blocked_user).merge(blocked_by_id: create(:user, user_type: User.user_types[:customer]).id))
+    it 'should delete blocked_users records of this project_manager' do
+      project_manager.blocked_users.create(attributes_for(:blocked_user).merge(blocked_by_id: create(:user, user_type: User.user_types[:land_manager]).id))
       expect(BlockedUser.count).to eq 1
-      staff.destroy!
+      project_manager.destroy!
       expect(BlockedUser.count).to eq 0
     end
 
-    it 'should delete blocked_users records blocked by this staff' do
-      staff.blocked_by_blocked_users.create(attributes_for(:blocked_user).merge(user_id: create(:user, user_type: User.user_types[:customer]).id))
+    it 'should delete blocked_users records blocked by this project_manager' do
+      project_manager.blocked_by_blocked_users.create(attributes_for(:blocked_user).merge(user_id: create(:user, user_type: User.user_types[:land_manager]).id))
       expect(BlockedUser.count).to eq 1
-      staff.destroy!
+      project_manager.destroy!
       expect(BlockedUser.count).to eq 0
     end
 
-    it 'should delete jobs offered to this staff' do
-      staff.jobs.create(attributes_for(:job).merge(offered_by_id: create(:user, user_type: User.user_types[:customer]).id))
+    it 'should delete jobs offered to this project_manager' do
+      project_manager.jobs.create(attributes_for(:job).merge(offered_by_id: create(:user, user_type: User.user_types[:land_manager]).id))
       expect(Job.count).to eq 1
-      staff.destroy!
+      project_manager.destroy!
       expect(Job.count).to eq 0
     end
 
-    it 'should delete coversation that this staff is recipient of and chat messages sent by this staff(direct chat)' do
+    it 'should delete coversation that this project_manager is recipient of and chat messages sent by this project_manager(direct chat)' do
       add_rpush_app
-      staff.recipient_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], from_user_id: create(:user, user_type: User.user_types[:customer]).id))
-      staff.chats.create!(attributes_for(:chat).merge(conversation_id: staff.recipient_conversations.first.id))
-      expect(staff.recipient_conversations.count).to eq 1
-      expect(staff.chats.count).to eq 1
-      staff.destroy!
+      project_manager.recipient_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], from_user_id: create(:user, user_type: User.user_types[:land_manager]).id))
+      project_manager.chats.create!(attributes_for(:chat).merge(conversation_id: project_manager.recipient_conversations.first.id))
+      expect(project_manager.recipient_conversations.count).to eq 1
+      expect(project_manager.chats.count).to eq 1
+      project_manager.destroy!
       expect(Conversation.count).to eq 0
       expect(Chat.count).to eq 0
     end
 
-    it 'should delete coversation participations and chat messages of this staff staff(community chat)' do
+    it 'should delete coversation participations and chat messages of this project_manager project_manager(community chat)' do
       add_rpush_app
-      conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: create(:user, user_type: User.user_types[:customer]).id))
-      staff.conversation_participants.create(conversation_id: conversation.id)
-      staff.chats.create(message: 'test', conversation_id: conversation.id)
-      expect(staff.conversation_participants.count).to eq 1
-      expect(staff.chats.count).to eq 1
-      staff.destroy!
+      conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: create(:user, user_type: User.user_types[:land_manager]).id))
+      project_manager.conversation_participants.create(conversation_id: conversation.id)
+      project_manager.chats.create(message: 'test', conversation_id: conversation.id)
+      expect(project_manager.conversation_participants.count).to eq 1
+      expect(project_manager.chats.count).to eq 1
+      project_manager.destroy!
       expect(Chat.count).to eq 0
       expect(ConversationParticipant.count).to eq 0
       expect(Conversation.count).to eq 1 # Donot delete community conversation with user
@@ -218,56 +218,56 @@ describe User do
 
 
 
-  context 'dependent destroy for customer' do
-    let(:customer) {create(:user, user_type: User.user_types[:customer])}
-    it 'should delete ratings for this customer' do
-      customer.ratings.create!(attributes_for(:rating).merge(comment: 'Test', rated_on_id: create(:user, user_type: User.user_types[:staff]).id))
+  context 'dependent destroy for land_manager' do
+    let(:land_manager) {create(:user, user_type: User.user_types[:land_manager])}
+    it 'should delete ratings for this land_manager' do
+      land_manager.ratings.create!(attributes_for(:rating).merge(comment: 'Test', rated_on_id: create(:user, user_type: User.user_types[:project_manager]).id))
       expect(Rating.count).to eq 1
-      customer.destroy!
+      land_manager.destroy!
       expect(Rating.count).to eq 0
     end
 
-    it 'should delete blocked_users records of this customer' do
-      customer.blocked_users.create!(attributes_for(:blocked_user).merge(blocked_by_id: create(:user, user_type: User.user_types[:staff]).id))
+    it 'should delete blocked_users records of this land_manager' do
+      land_manager.blocked_users.create!(attributes_for(:blocked_user).merge(blocked_by_id: create(:user, user_type: User.user_types[:project_manager]).id))
       expect(BlockedUser.count).to eq 1
-      customer.destroy!
+      land_manager.destroy!
       expect(BlockedUser.count).to eq 0
     end
 
-    it 'should delete blocked_users records blocked by this customer' do
-      customer.blocked_by_blocked_users.create!(attributes_for(:blocked_user).merge(user_id: create(:user, user_type: User.user_types[:staff]).id))
+    it 'should delete blocked_users records blocked by this land_manager' do
+      land_manager.blocked_by_blocked_users.create!(attributes_for(:blocked_user).merge(user_id: create(:user, user_type: User.user_types[:project_manager]).id))
       expect(BlockedUser.count).to eq 1
-      customer.destroy!
+      land_manager.destroy!
       expect(BlockedUser.count).to eq 0
     end
 
-    it 'should delete jobs offered by this customer' do
-      customer.offered_by_jobs.create!(attributes_for(:job).merge(user_id: create(:user, user_type: User.user_types[:staff]).id))
+    it 'should delete jobs offered by this land_manager' do
+      land_manager.offered_by_jobs.create!(attributes_for(:job).merge(user_id: create(:user, user_type: User.user_types[:project_manager]).id))
       expect(Job.count).to eq 1
-      customer.destroy!
+      land_manager.destroy!
       expect(Job.count).to eq 0
     end
 
-    it 'should delete coversation that this customer is from_user of and chat messages of this conv(direct chat)' do
+    it 'should delete coversation that this land_manager is from_user of and chat messages of this conv(direct chat)' do
       add_rpush_app
-      customer.user_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], user_id: create(:user, user_type: User.user_types[:staff]).id))
-      customer.chats.create!(attributes_for(:chat).merge(conversation_id: customer.user_conversations.first.id))
-      expect(customer.user_conversations.count).to eq 1
-      expect(customer.chats.count).to eq 1
-      customer.destroy!
+      land_manager.user_conversations.create!(attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:direct], user_id: create(:user, user_type: User.user_types[:project_manager]).id))
+      land_manager.chats.create!(attributes_for(:chat).merge(conversation_id: land_manager.user_conversations.first.id))
+      expect(land_manager.user_conversations.count).to eq 1
+      expect(land_manager.chats.count).to eq 1
+      land_manager.destroy!
       expect(Conversation.count).to eq 0
       expect(Chat.count).to eq 0
     end
 
-    it 'should delete conversation, coversation participations and chat messages of this customer(community chat)' do
+    it 'should delete conversation, coversation participations and chat messages of this land_manager(community chat)' do
       add_rpush_app
-      conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: customer.id))
-      customer.conversation_participants.create!(conversation_id: conversation.id)
-      customer.chats.create!(message: 'test', conversation_id: conversation.id)
-      expect(customer.conversation_participants.count).to eq 1
-      expect(customer.chats.count).to eq 1
-      expect(customer.user_conversations.count).to eq 1
-      customer.destroy!
+      conversation = create(:conversation, attributes_for(:conversation).merge(conversation_type: Conversation.conversation_types[:community], from_user_id: land_manager.id))
+      land_manager.conversation_participants.create!(conversation_id: conversation.id)
+      land_manager.chats.create!(message: 'test', conversation_id: conversation.id)
+      expect(land_manager.conversation_participants.count).to eq 1
+      expect(land_manager.chats.count).to eq 1
+      expect(land_manager.user_conversations.count).to eq 1
+      land_manager.destroy!
       expect(Chat.count).to eq 0
       expect(ConversationParticipant.count).to eq 0
       expect(Conversation.count).to eq 0

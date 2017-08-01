@@ -44,16 +44,16 @@ FactoryGirl.define do
     password "please123"
     eula_id 1
     privacy_id 1
-    factory :staff do
-      user_type 'staff'
+    factory :project_manager do
+      user_type 'project_manager'
     end
 
     factory :admin do
       user_type 'administrator'
     end
 
-    factory :customer do
-      user_type 'customer'
+    factory :land_manager do
+      user_type 'land_manager'
     end
 
   end

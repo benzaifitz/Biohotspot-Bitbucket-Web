@@ -6,10 +6,10 @@ ActiveAdmin.register User do
   actions :index, :show, :destroy
 
   action_item :view, only: :index do
-    link_to 'New Customer', new_admin_customer_path
+    link_to 'New Land Manager', new_admin_land_manager_path
   end
   action_item :view, only: :index do
-    link_to 'New Staff', new_admin_staff_path
+    link_to 'New Project Manager', new_admin_project_manager_path
   end
 
   action_item :view, only: :index do
@@ -19,16 +19,22 @@ ActiveAdmin.register User do
   index do
     selectable_column
     id_column
-    column :email
     column :username do |user|
       link_to user.username, admin_user_path(user)
     end
-    column :company
+    column :email
+    column :mobile do |c|
+      c.mobile_number
+    end
     column :first_name
     column :last_name
     column :user_type
-    column :last_sign_in_at
     column :status
+    column :last_sign_in_at
+    # TODO This will be implemented after adding categories model to system.
+    column :assigned_sub_categories do |c|
+      "--"
+    end
     actions do |user|
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
       (item 'Ban', confirm_status_change_admin_user_path(user, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.active?

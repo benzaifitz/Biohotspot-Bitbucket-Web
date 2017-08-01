@@ -24,42 +24,42 @@ describe Api::V1::JobsController do
     end
 
     describe 'POST #create' do
-      it 'customer can create a new job record' do
-        auth_request create(:customer)
-        post :create, job: attributes_for(:job, user_id: create(:staff).id, detail: 'Job description'), format: :json
+      it 'land_manager can create a new job record' do
+        auth_request create(:land_manager)
+        post :create, job: attributes_for(:job, user_id: create(:project_manager).id, detail: 'Job description'), format: :json
         is_expected.to respond_with :ok
         expect(Job.count).to eq(1)
       end
 
-      it 'staff cannot create a new job record' do
-        auth_request create(:staff)
+      it 'project_manager cannot create a new job record' do
+        auth_request create(:project_manager)
         post :create, job: attributes_for(:job, user_id: create(:user).id, detail: 'Job description'), format: :json
         is_expected.to respond_with 406
         expect(Job.count).to eq(0)
-        expect(response.body).to match /Offering user must be a customer./
+        expect(response.body).to match /Offering user must be a land_manager./
       end
 
-      it 'customer cannot offer a job to another customer or themselves' do
-        auth_request create(:customer)
-        post :create, job: attributes_for(:job, user_id: create(:customer).id, detail: 'Job description'), format: :json
+      it 'land_manager cannot offer a job to another land_manager or themselves' do
+        auth_request create(:land_manager)
+        post :create, job: attributes_for(:job, user_id: create(:land_manager).id, detail: 'Job description'), format: :json
         is_expected.to respond_with 406
         expect(Job.count).to eq(0)
-        expect(response.body).to match /Offered user must be staff./
+        expect(response.body).to match /Offered user must be project_manager./
       end
     end
 
     describe 'POST #update' do
-      it 'customer can update a job record created by himself' do
-        customer = create(:customer)
-        job = create(:job, offered_by: customer)
-        auth_request customer
+      it 'land_manager can update a job record created by himself' do
+        land_manager = create(:land_manager)
+        job = create(:job, offered_by: land_manager)
+        auth_request land_manager
         put :update, id: job.id, job: attributes_for(:job, detail: 'New Job description.'), format: :json
         is_expected.to respond_with :ok
       end
 
-      it 'customer cannot update a job record not created by himself' do
+      it 'land_manager cannot update a job record not created by himself' do
         job = create(:job)
-        auth_request create(:customer)
+        auth_request create(:land_manager)
         put :update, id: job.id, job: attributes_for(:job, detail: ' New Job description'), format: :json
         is_expected.to respond_with(422)
         expect(response.body).to match /Job not found/
@@ -68,18 +68,18 @@ describe Api::V1::JobsController do
     end
 
     describe 'DELETE #destroy' do
-      it 'customer can delete a job created by himself' do
-        customer = create(:customer)
-        job = create(:job, offered_by: customer)
-        auth_request customer
+      it 'land_manager can delete a job created by himself' do
+        land_manager = create(:land_manager)
+        job = create(:job, offered_by: land_manager)
+        auth_request land_manager
         delete :destroy, id: job.id, format: :json
         is_expected.to respond_with :ok
         expect(Job.count).to eq(0)
       end
-      it 'customer can delete a job created by himself.' do
-        customer = create(:customer)
+      it 'land_manager can delete a job created by himself.' do
+        land_manager = create(:land_manager)
         job = create(:job)
-        auth_request customer
+        auth_request land_manager
         delete :destroy, id: job.id, format: :json
         is_expected.to respond_with(422)
         expect(response.body).to match /Job cannot be deleted/

@@ -15,8 +15,8 @@
 FactoryGirl.define do
   factory :rating do
     rating 5.00
-    association :user, factory: :customer
-    association :rated_on, factory: :staff
+    association :user, factory: :land_manager
+    association :rated_on, factory: :project_manager
     status 0
   end
 

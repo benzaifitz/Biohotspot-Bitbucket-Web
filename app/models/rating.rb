@@ -21,11 +21,11 @@ class Rating < ApplicationRecord
   has_many :reported_ratings, dependent: :destroy
 
   validates_presence_of :rating, :user_id, :rated_on_id, :status
-  validates_presence_of :job_id, if: "user_id.present? && rated_on_id.present? && user.staff? && rated_on.customer?"
+  validates_presence_of :job_id, if: "user_id.present? && rated_on_id.present? && user.project_manager? && rated_on.land_manager?"
   validates :rating, inclusion: { in: 0..5 }
   validate :check_24_hr_throttle, on: :create, if: "user_id.present? && rated_on_id.present?"
   validates_uniqueness_of :rated_on_id, :scope => [:user_id, :job_id],
-                          if: "user_id.present? && rated_on_id.present? && user.staff? && rated_on.customer?",
+                          if: "user_id.present? && rated_on_id.present? && user.project_manager? && rated_on.land_manager?",
                           message: "user already has a rating provided by you for this job."
 
   delegate :ban_with_comment, :enable_with_comment, :bannable, to: :user
@@ -53,7 +53,7 @@ class Rating < ApplicationRecord
   end
 
   def check_24_hr_throttle
-    if self.user.customer? && self.rated_on.staff? &&
+    if self.user.land_manager? && self.rated_on.project_manager? &&
         Rating.where("user_id = ? AND rated_on_id = ? AND created_at > ?", self.user_id, self.rated_on_id, Time.now.utc - 1.day).exists?
       self.errors.add(:one_day_throttle_limit, "does not allow more than 1 comment in 24 hours.")
     end
