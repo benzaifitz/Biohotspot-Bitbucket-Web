@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.text     "body"
     t.string   "resource_id",   null: false
     t.string   "resource_type", null: false
-    t.integer  "author_id"
     t.string   "author_type"
+    t.integer  "author_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["author_type", "author_id"], name: "index_active_admin_comments_on_author_type_and_author_id", using: :btree
@@ -141,8 +141,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.text     "certificate"
     t.string   "password"
     t.integer  "connections",             default: 1, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.string   "type",                                null: false
     t.string   "auth_key"
     t.string   "client_id"
@@ -154,8 +154,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
   create_table "rpush_feedback", force: :cascade do |t|
     t.string   "device_token", limit: 64, null: false
     t.datetime "failed_at",               null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "app_id"
     t.index ["device_token"], name: "index_rpush_feedback_on_device_token", using: :btree
   end
@@ -174,8 +174,8 @@ ActiveRecord::Schema.define(version: 20160211070521) do
     t.integer  "error_code"
     t.text     "error_description"
     t.datetime "deliver_after"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                           null: false
+    t.datetime "updated_at",                                           null: false
     t.boolean  "alert_is_json",                    default: false
     t.string   "type",                                                 null: false
     t.string   "collapse_key"
