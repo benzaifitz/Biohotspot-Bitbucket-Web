@@ -37,7 +37,7 @@ ActiveAdmin.register User do
     end
     actions do |user|
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'
-      (item 'Ban', confirm_status_change_admin_user_path(user, status_change_action: 'ban'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.active?
+      (item 'Disable', confirm_status_change_admin_user_path(user, status_change_action: 'disable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.active?
       (item 'Enable', confirm_status_change_admin_user_path(user, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.banned?
       item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end

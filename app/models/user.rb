@@ -112,6 +112,11 @@ class User < ApplicationRecord
     self.banned!
   end
 
+  def disable_with_comment(comment)
+    self.status_change_comment = comment
+    self.banned!
+  end
+
   def enable_with_comment(comment)
     self.status_change_comment = comment
     self.active!
