@@ -13,7 +13,7 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
     column :email do |v|
       label v.item.email
     end
-    column :event
+    column :event, label: 'Event Type'
     column 'Admin' do |v|
       user = v.whodunnit.nil? ? nil : User.find(v.whodunnit)
       label user.nil? ? '' : link_to(user.username, admin_user_path(user))
