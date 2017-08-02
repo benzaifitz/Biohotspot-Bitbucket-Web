@@ -41,6 +41,7 @@ ActiveAdmin.register User do
       (item 'Enable', confirm_status_change_admin_user_path(user, status_change_action: 'enable'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.banned?
       (item 'Approve', confirm_status_change_admin_user_path(user, status_change_action: 'approve'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) unless user.approved
       (item 'Reject', confirm_status_change_admin_user_path(user, status_change_action: 'reject'), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if user.approved
+      (item 'Promote', promote_to_project_manager_admin_land_manager_path(user), method: :put, class: 'member_link') if user.land_manager?
       item 'Events', "#{admin_user_events_path}?q[item_id_eq]=#{user.id}"
     end
   end
