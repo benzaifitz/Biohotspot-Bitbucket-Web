@@ -9,11 +9,23 @@ module SharedAdmin
       render template: 'admin/users/confirm_status_change', layout: false
     end
 
-    [:disable, :enable].each do |status_change_action|
+    [:disable, :enable, :approve, :reject].each do |status_change_action|
       base.send(:member_action, status_change_action, method: :put) do
         resource.send("#{status_change_action.to_s}_with_comment" , params[:user][:status_change_comment])
-        redirect_to send("admin_#{resource.class.name.pluralize.underscore}_path"), notice: status_change_action == :ban ? "User Banned!" : "User Enabled!"
+        status_change_notice =
+            case status_change_action
+              when :ban
+                "User Banned!"
+              when :enable
+                "User Disabled!"
+              when :approve
+                "User Approved!"
+              when :reject
+                "User Rejected!"
+            end
+        redirect_to send("admin_#{resource.class.name.pluralize.underscore}_path"), notice: status_change_notice
       end
     end
   end
+
 end

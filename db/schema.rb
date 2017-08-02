@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170801095758) do
+ActiveRecord::Schema.define(version: 20170802124240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,15 @@ ActiveRecord::Schema.define(version: 20170801095758) do
     t.boolean  "is_latest",    default: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string   "title"
+    t.text     "summary"
+    t.text     "tags"
+    t.string   "client_name"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "ratings", force: :cascade do |t|
@@ -234,7 +243,10 @@ ActiveRecord::Schema.define(version: 20170801095758) do
     t.string   "uuid_iphone"
     t.integer  "privacy_id"
     t.string   "mobile_number"
+    t.boolean  "approved",               default: false
+    t.integer  "project_id"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["project_id"], name: "index_users_on_project_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end

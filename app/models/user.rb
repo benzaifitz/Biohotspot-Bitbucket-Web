@@ -45,7 +45,6 @@ class User < ApplicationRecord
   include DeviseTokenAuth::Concerns::User
 
   mount_uploader :profile_picture, ProfilePictureUploader
-  # enum user_type: [:staff, :administrator, :land_manager]
   enum user_type: [:project_manager, :administrator, :land_manager]
   enum status: [:active, :banned]
   enum device_type: {:ios => "0", :android => "1"}
@@ -58,6 +57,7 @@ class User < ApplicationRecord
 
   belongs_to :eula
   belongs_to :privacy
+  belongs_to :project
   has_many :ratings, dependent: :destroy
   has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
   has_many :blocked_users, dependent: :destroy
@@ -74,6 +74,7 @@ class User < ApplicationRecord
   validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
   validates_presence_of :username, :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
+  validates_presence_of :project_id, if: Proc.new { |user| user.land_manager? }
   validates_uniqueness_of :username, :email
 
 
@@ -110,6 +111,16 @@ class User < ApplicationRecord
   def ban_with_comment(comment)
     self.status_change_comment = comment
     self.banned!
+  end
+
+  def approve_with_comment(comment)
+    self.status_change_comment = comment
+    update_attributes!(approved: !approved)
+  end
+
+  def reject_with_comment(comment)
+    self.status_change_comment = comment
+    update_attributes!(approved: !approved)
   end
 
   def disable_with_comment(comment)
@@ -171,7 +182,7 @@ class User < ApplicationRecord
     n = Rpush::Apns::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.device_token
-    n.alert = msg
+    n.alert = msgst
     n.data = { key: 'MSG', unread_conversations: unread_conversations }
     n.user_id = self.id
     n.badge = badge_counter

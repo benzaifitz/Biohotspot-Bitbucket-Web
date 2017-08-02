@@ -8,7 +8,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username]
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username, :project_id]
     allowed.uniq
   end
 
@@ -22,6 +22,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
       # f.input :company
       f.input :first_name
       f.input :last_name
+      f.input :project
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
