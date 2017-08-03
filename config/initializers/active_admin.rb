@@ -232,17 +232,18 @@ ActiveAdmin.setup do |config|
     admin.build_menu do |menu|
       menu.add label: 'Users', priority: 1
       menu.add label: 'Projects', priority: 2
-      menu.add label: 'License', priority: 3
-      menu.add label: 'Jobs', priority: 4
-      menu.add label: 'Notifications', priority: 5
-      menu.add label: 'User Content', priority: 6 do |user_content|
+      menu.add label: 'Sites', priority: 3
+      menu.add label: 'License', priority: 4
+      menu.add label: 'Jobs', priority: 5
+      menu.add label: 'Notifications', priority: 6
+      menu.add label: 'User Content', priority: 7 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
-      menu.add label: 'Communicate', priority: 7 do |communicate|
+      menu.add label: 'Communicate', priority: 8 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
-      menu.add label: 'Settings', priority: 8 do |settings_menu|
+      menu.add label: 'Settings', priority: 9 do |settings_menu|
         settings_menu.add label: 'Logout', url: '/users/sign_out', html_options: { method: 'delete' }, priority: 3
       end
     end
