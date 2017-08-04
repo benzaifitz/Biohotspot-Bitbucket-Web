@@ -1,11 +1,11 @@
-ActiveAdmin.register User, as: 'Project Manager' do
+ActiveAdmin.register ProjectManager, as: 'Project Manager' do
 
   menu false
   
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username]
+    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username, :managed_project, managed_project: [:project_manager_id]]
     allowed.uniq
   end
 
@@ -19,6 +19,17 @@ ActiveAdmin.register User, as: 'Project Manager' do
       # f.input :company
       f.input :first_name
       f.input :last_name
+
+      #TODO use managed_project association
+      # f.input :project
+      # f.input :managed_project
+      f.inputs :managed_project do |proj|
+        unless proj.blank?
+          link_to proj.managed_project.name, admin_project_path(proj.managed_project)
+        else
+          ""
+        end
+      end
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
@@ -52,9 +63,9 @@ ActiveAdmin.register User, as: 'Project Manager' do
     end
   end
 
-  controller do
-    def scoped_collection
-      User.where(user_type: User.user_types[:project_manager])
-    end
-  end
+  # controller do
+  #   def scoped_collection
+  #     User.where(user_type: User.user_types[:project_manager])
+  #   end
+  # end
 end

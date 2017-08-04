@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170803100929) do
+ActiveRecord::Schema.define(version: 20170804104308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,20 @@ ActiveRecord::Schema.define(version: 20170803100929) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["user_id"], name: "index_blocked_users_on_user_id", using: :btree
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.text     "tags"
+    t.string   "class_name"
+    t.string   "family"
+    t.string   "location"
+    t.string   "url"
+    t.integer  "site_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["site_id"], name: "index_categories_on_site_id", using: :btree
   end
 
   create_table "chats", force: :cascade do |t|
@@ -99,6 +113,15 @@ ActiveRecord::Schema.define(version: 20170803100929) do
     t.index ["user_id"], name: "index_jobs_on_user_id", using: :btree
   end
 
+  create_table "photos", force: :cascade do |t|
+    t.integer  "category_id"
+    t.string   "file"
+    t.string   "url"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["category_id"], name: "index_photos_on_category_id", using: :btree
+  end
+
   create_table "privacies", force: :cascade do |t|
     t.text     "privacy_text"
     t.boolean  "is_latest",    default: false
@@ -111,8 +134,10 @@ ActiveRecord::Schema.define(version: 20170803100929) do
     t.text     "summary"
     t.text     "tags"
     t.string   "client_name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "project_manager_id"
+    t.index ["project_manager_id"], name: "index_projects_on_project_manager_id", using: :btree
   end
 
   create_table "ratings", force: :cascade do |t|

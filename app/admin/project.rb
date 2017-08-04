@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects List', parent: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name]
+    allowed = [:title, :summary, :tags, :client_name, :project_manager_id]
     allowed.uniq
   end
 
