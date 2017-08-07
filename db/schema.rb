@@ -134,10 +134,8 @@ ActiveRecord::Schema.define(version: 20170804104308) do
     t.text     "summary"
     t.text     "tags"
     t.string   "client_name"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.integer  "project_manager_id"
-    t.index ["project_manager_id"], name: "index_projects_on_project_manager_id", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "ratings", force: :cascade do |t|
@@ -280,7 +278,9 @@ ActiveRecord::Schema.define(version: 20170804104308) do
     t.string   "mobile_number"
     t.boolean  "approved",               default: false
     t.integer  "project_id"
+    t.integer  "managed_project_id"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["managed_project_id"], name: "index_users_on_managed_project_id", using: :btree
     t.index ["project_id"], name: "index_users_on_project_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
