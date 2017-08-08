@@ -20,4 +20,10 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  devise_token_auth:
+      sessions:
+        unapproved_account: "Your account has not been approved. Please contact your Administrator."
+        disabled_account: "Your account has been disabled. Please contact your Administrator."
+        bad_credentials: "The current password you have entered is incorrect"
+        user_not_found: "User with provided email not found."
   hello: "Hello world"
