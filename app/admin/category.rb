@@ -1,6 +1,6 @@
 ActiveAdmin.register Category do
 
-  menu label: 'Categories List', parent: 'Category', priority: 1
+  menu label: 'Categories List', parent: 'Categories', priority: 1
 
   permit_params do
     allowed = [:name, :description, :tags, :class_name, :family, :location, :url, :site_id]
