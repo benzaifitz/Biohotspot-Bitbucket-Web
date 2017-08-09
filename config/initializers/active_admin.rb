@@ -235,7 +235,7 @@ ActiveAdmin.setup do |config|
       menu.add label: 'Sites', priority: 3
       menu.add label: 'Categories', priority: 4
       menu.add label: 'License', priority: 5
-      menu.add label: 'Jobs', priority: 6
+      menu.add label: 'Submissions', priority: 6
       menu.add label: 'Notifications', priority: 7
       menu.add label: 'User Content', priority: 8 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
