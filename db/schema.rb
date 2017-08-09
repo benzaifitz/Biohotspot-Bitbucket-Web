@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170808110946) do
+ActiveRecord::Schema.define(version: 20170809112123) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -248,6 +248,25 @@ ActiveRecord::Schema.define(version: 20170808110946) do
     t.index ["category_id"], name: "index_sub_categories_on_category_id", using: :btree
   end
 
+  create_table "submissions", force: :cascade do |t|
+    t.string   "survey_number"
+    t.integer  "submitted_by"
+    t.boolean  "lat"
+    t.boolean  "long"
+    t.integer  "sub_category_id"
+    t.string   "rainfall"
+    t.string   "humidity"
+    t.string   "temperature"
+    t.float    "health_score"
+    t.string   "live_leaf_cover"
+    t.string   "live_branch_stem"
+    t.float    "stem_diameter"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
+    t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",      null: false
     t.string   "encrypted_password",     default: "",      null: false
@@ -316,4 +335,5 @@ ActiveRecord::Schema.define(version: 20170808110946) do
   add_foreign_key "reported_chats", "chats"
   add_foreign_key "reported_ratings", "ratings"
   add_foreign_key "sub_categories", "categories"
+  add_foreign_key "submissions", "sub_categories"
 end
