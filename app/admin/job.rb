@@ -1,6 +1,7 @@
 ActiveAdmin.register Job do
 
-  menu label: 'Job List', parent: 'Jobs', priority: 0
+  menu false
+  # menu label: 'Job List', parent: 'Jobs', priority: 0
 
   actions :index
 

@@ -3,8 +3,8 @@ class CreateSubmissions < ActiveRecord::Migration[5.0]
     create_table :submissions do |t|
       t.string :survey_number
       t.integer :submitted_by, index: true
-      t.boolean :lat, default: nil
-      t.boolean :long, default: nil
+      t.decimal :lat, default: nil, :precision => 13, :scale => 9
+      t.decimal :long, default: nil, :precision => 13, :scale => 9
       t.references :sub_category, foreign_key: true
       t.string :rainfall, default: nil
       t.string :humidity, default: nil

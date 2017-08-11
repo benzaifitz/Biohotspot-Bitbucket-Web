@@ -251,8 +251,8 @@ ActiveRecord::Schema.define(version: 20170809112123) do
   create_table "submissions", force: :cascade do |t|
     t.string   "survey_number"
     t.integer  "submitted_by"
-    t.boolean  "lat"
-    t.boolean  "long"
+    t.decimal  "lat",              precision: 13, scale: 9
+    t.decimal  "long",             precision: 13, scale: 9
     t.integer  "sub_category_id"
     t.string   "rainfall"
     t.string   "humidity"
@@ -261,8 +261,8 @@ ActiveRecord::Schema.define(version: 20170809112123) do
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end
