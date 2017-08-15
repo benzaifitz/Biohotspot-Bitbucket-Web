@@ -1,3 +1,4 @@
 class Photo < ApplicationRecord
-  belongs_to :category
+  belongs_to :imageable, polymorphic: true
+  # belongs_to :category
 end

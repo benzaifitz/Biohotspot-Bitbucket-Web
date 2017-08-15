@@ -14,6 +14,8 @@ gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails', '>= 2.1.1'
 gem 'jquery-ui-rails', '~> 5.0.5'
 gem "paranoia", "~> 2.2"
+# gem for google maps
+gem 'gmaps4rails'
 # MailChimp integration
 gem 'gibbon'
 # The push notification service.

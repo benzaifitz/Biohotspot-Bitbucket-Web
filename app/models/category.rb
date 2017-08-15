@@ -5,7 +5,7 @@ class Category < ApplicationRecord
   belongs_to :site
 
   has_many :sub_categories
-  has_many :photos
+  has_many :photos, as: :imageable
   serialize :tags
   LIMIT = 5
 
