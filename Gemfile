@@ -13,6 +13,7 @@ gem 'activeadmin', '~> 1.0.0.pre4' #github: 'activeadmin'
 gem 'paper_trail', '~> 4.0.0'
 gem 'dotenv-rails', '>= 2.1.1'
 gem 'jquery-ui-rails', '~> 5.0.5'
+gem "paranoia", "~> 2.2"
 # MailChimp integration
 gem 'gibbon'
 # The push notification service.

@@ -1,4 +1,7 @@
 class Category < ApplicationRecord
+  # TO access all categories by default use without_default_scope: true
+  # Or to get all client use Category.unscoped
+  acts_as_paranoid
   belongs_to :site
 
   has_many :sub_categories
