@@ -3,14 +3,14 @@ lock '3.7.1'
 load 'config/deploy/recipes/redis.rb'
 # load 'config/deploy/recipes/rpush.rb'
 # load 'config/deploy/recipes/run_tests.rb'
-set :application, 'framework'
-set :repo_url, 'git@bitbucket.org:applabsservice/framework-web.git'
+set :application, 'pilbara-weed-management-web'
+set :repo_url, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
 
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
-# Default deploy_to directory is /var/www/my_app
-set :deploy_to, '/home/ubuntu/framework'
+
+set :stages, %w(staging production)
 
 # Default value for :scm is :git
 set :scm, :git
@@ -28,9 +28,13 @@ set :pty, true
 set :linked_files, %w{config/database.yml .env}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/stock_content}
 
 set :sidekiq_config, 'config/sidekiq.yml'
+
+set :passenger_restart_with_touch, true
+set :user, "ubuntu"
+set :use_sudo, true
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
@@ -39,9 +43,10 @@ set :sidekiq_config, 'config/sidekiq.yml'
 # set up sidekiq_role
 set :sidekiq_role, :app
 # set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
-set :sidekiq_env, 'production'
 # sed :sidekiq_queue
-set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
+# set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
+set :sidekiq_queue, ['default', 'mailchimp']
+set :sidekiq_pid, File.join(shared_path, 'tmp', 'sidekiq.pid')
 namespace :deploy do
 
   desc 'Restart application'

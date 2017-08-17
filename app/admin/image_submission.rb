@@ -1,6 +1,6 @@
-ActiveAdmin.register Submission do
+ActiveAdmin.register Submission, as: "Image Submission" do
 
-  menu label: 'Submissions List', parent: 'Submissions', priority: 1
+  menu label: 'Image Submissions List', parent: 'Submissions', priority: 2
 
   permit_params do
     allowed = [:sub_category_id, :survey_number, :submitted_by, :lat, :long, :sub_category, :rainfall, :humidity, :temperature,
