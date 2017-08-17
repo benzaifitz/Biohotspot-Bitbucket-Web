@@ -13,7 +13,7 @@ class Users::SessionsController < Devise::SessionsController
   end
   # POST /resource/sign_in
   def create
-    user = User.find_by(email: params[:email]||params[:username])
+    user = User.find_by(email: params[:user][:email]||params[:username]) rescue nil
     (user && user.approved) ? super : render_error_unapproved_user
   end
 

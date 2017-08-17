@@ -1,10 +1,10 @@
 module Api
   module V1
-    class CustomersController < ApiController
+    class LandManagersController < ApiController
       before_action :authenticate_user!
       before_action :check_user_eula_and_privacy, except: [:update]
-      before_action :verify_customer, only: [:update]
-      before_action :set_customer, only: [:show]
+      before_action :verify_land_manager, only: [:update]
+      before_action :set_land_manager, only: [:show]
 
       #POST /
       api :POST, '/auth/', 'Create a new user(project_manager or land_manager). No encapsulation needed'
@@ -24,14 +24,14 @@ module Api
         #Dummy stub to provide API docs
       end
 
-      # GET /api/v1/customers/1.json
-      api :GET, '/customers/:id.json', 'Show single land_manager resource.'
+      # GET /api/v1/land_managers/1.json
+      api :GET, '/land_managers/:id.json', 'Show single land_manager resource.'
       # param :id, Integer, desc: 'ID of land_manager to be shown.', required: true
       def show
       end
 
-      # PATCH/PUT /api/v1/customers/1.json
-      api :PUT, '/customers/:id.json', 'Update single land_manager resource.'
+      # PATCH/PUT /api/v1/land_managers/1.json
+      api :PUT, '/land_managers/:id.json', 'Update single land_manager resource.'
       # param :id, Integer, desc: 'ID of land_manager to be updated', required: true
       param :first_name, String, desc: 'First Name of the land_manager', required: false
       param :last_name, String, desc: 'Last Name of the land_manager', required: false
@@ -53,14 +53,14 @@ module Api
               u.update_attributes!(device_token: nil, device_type: nil)
             end
           end
-          @land_manager.assign_attributes(customer_params)
+          @land_manager.assign_attributes(land_manager_params)
           @land_manager.image_data(params[:land_manager][:image_data], params[:land_manager][:image_type]) if params[:land_manager][:image_data].present? && params[:land_manager][:image_type].present?
           @land_manager.save!
           render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @land_manager.errors.full_messages[0])
         end
-        # if @land_manager.update(customer_params)
+        # if @land_manager.update(land_manager_params)
         #   render :show
         # else
         #   render json: @land_manager.errors, status: :unprocessable_entity
@@ -69,7 +69,7 @@ module Api
 
       private
       # Use callbacks to share common setup or constraints between actions.
-      def set_customer
+      def set_land_manager
         if current_user.project_manager?
           @land_manager = Land Manager.includes(:rated_on_ratings).find(params[:id])
         elsif current_user.land_manager?
@@ -77,12 +77,12 @@ module Api
         end
       end
 
-      def verify_customer
+      def verify_land_manager
         error(E_INTERNAL, 'Update not allowed.') if params[:id].to_i != current_user.id
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
-      def customer_params
+      def land_manager_params
         permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :privacy_id, :device_token, :device_type]
         permitted_params += [:password] if params[:land_manager] && !params[:land_manager][:password].blank?
         params.require(:land_manager).permit(permitted_params)

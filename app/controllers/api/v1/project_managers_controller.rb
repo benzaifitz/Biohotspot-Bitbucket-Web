@@ -1,10 +1,10 @@
 module Api
   module V1
-    class StaffsController < ApiController
+    class ProjectManagersController < ApiController
       before_action :authenticate_user!
       before_action :check_user_eula_and_privacy, except: [:update]
-      before_action :verify_staff, only: [:update]
-      before_action :set_staff, only: [:show, :update]
+      before_action :verify_project_manager, only: [:update]
+      before_action :set_project_manager, only: [:show, :update]
 
       #POST /
       api :POST, '/auth/', 'Create a new user(project_manager or land_manager). No encapsulation needed'
@@ -24,25 +24,25 @@ module Api
         #Dummy stub to provide API docs
       end
 
-      #GET /api/v1/staffs.json
-      api :GET, '/staffs.json', 'Return a list of project_manager with or without a search query'
+      #GET /api/v1/project_managers.json
+      api :GET, '/project_managers.json', 'Return a list of project_manager with or without a search query'
       param :query, String, desc: 'Search project_manager resources with name. If not provided will return a list of all project_manager 20 records at a time'
       param :offset, String, desc: 'Offset of the records to be fetched. e.g offset=22'
       def index
         query = params[:query] || ""
         first_name, last_name = query.split(' ')
-        @staffers = Project Manager.without_blocked_users(current_user.id).search({first_name: first_name,
+        @project_managerers = Project Manager.without_blocked_users(current_user.id).search({first_name: first_name,
                       last_name: last_name}).offset(params[:offset].to_i || 0).order('id DESC').limit(Api::V1::LIMIT)
       end
 
-      # GET /api/v1/staffs/1.json
-      api :GET, '/staffs/:id.json', 'Show single project_manager resource.'
+      # GET /api/v1/project_managers/1.json
+      api :GET, '/project_managers/:id.json', 'Show single project_manager resource.'
       # param :id, Integer, desc: 'ID of Project Manager to be shown.', required: true
       def show
       end
 
-      # PATCH/PUT /api/v1/staffs/1.json
-      api :PUT, '/staffs/:id.json', 'Update single project_manager resource.'
+      # PATCH/PUT /api/v1/project_managers/1.json
+      api :PUT, '/project_managers/:id.json', 'Update single project_manager resource.'
       # param :id, Integer, desc: 'ID of Project Manager to be updated', required: true
       param :first_name, String, desc: 'First Name of the Project Manager', required: false
       param :last_name, String, desc: 'Last Name of the Project Manager', required: false
@@ -64,7 +64,7 @@ module Api
               u.update_attributes!(device_token: nil, device_type: nil)
             end
           end
-          @project_manager.assign_attributes(staff_params)
+          @project_manager.assign_attributes(project_manager_params)
           @project_manager.image_data(params[:project_manager][:image_data], params[:project_manager][:image_type]) if params[:project_manager][:image_data].present? && params[:project_manager][:image_type].present?
           @project_manager.save!
           render :show
@@ -75,7 +75,7 @@ module Api
 
       private
       # Use callbacks to share common setup or constraints between actions.
-      def set_staff
+      def set_project_manager
         if current_user.project_manager?
           @project_manager = current_user
         elsif current_user.land_manager?
@@ -83,12 +83,12 @@ module Api
         end
       end
 
-      def verify_staff
+      def verify_project_manager
         error(E_INTERNAL, 'Update not allowed.') if params[:id].to_i != current_user.id
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
-      def staff_params
+      def project_manager_params
         permitted_params = [:first_name, :last_name, :email, :company, :eula_id, :privacy_id, :device_token, :device_type]
         permitted_params += [:password] if params[:project_manager] && !params[:project_manager][:password].blank?
         params.require(:project_manager).permit(permitted_params)
