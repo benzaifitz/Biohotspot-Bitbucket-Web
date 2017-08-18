@@ -5,6 +5,10 @@ load 'config/deploy/recipes/redis.rb'
 # load 'config/deploy/recipes/run_tests.rb'
 set :application, 'pilbara-weed-management-web'
 set :repo_url, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
+# set :repo_url, 'https://AdnanAliArshad:d@pp3r@pp5@bitbucket.org/applabsservice/pilbara-weed-management-web.git'
+
+# Default deploy_to directory is /var/www/my_app
+set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }

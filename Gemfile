@@ -56,6 +56,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
   gem 'capistrano-sidekiq'
+  gem 'capistrano-passenger'
   gem 'rest-client'
   gem 'puma'
 end
