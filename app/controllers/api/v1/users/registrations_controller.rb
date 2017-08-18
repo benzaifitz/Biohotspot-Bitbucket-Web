@@ -1,14 +1,30 @@
 module Api
   module V1
     module Users
-      class RegistrationsController < DeviseTokenAuth::RegistrationsController
-        before_action :configure_permitted_parameters
+      class Users::RegistrationsController < Devise::RegistrationsController
 
-        protected
-
-        def configure_permitted_parameters
-          devise_parameter_sanitizer.for(:sign_up).push(:username, :first_name, :last_name, :company, :eula_id, :privacy_id, :user_type, :device_token, :device_type)
+        def create
+          @user = User.new(user_params)
+          respond_to do |format|
+            if @user.save!
+              format.json { render json:
+                            {
+                              success: 'User added successfully.',
+                              term_and_conditions: Eula.where(is_latest: true).all.map{|a| {eula_id: a.id, text: a.eula_text}}.first
+                            }, status: :ok
+                          }
+            else
+              format.json { render json: {errors: @user.errors, status: :unprocessable_entity } }
+            end
+          end
         end
+
+        private
+
+        def user_params
+          params.require(:user).permit(:email, :password, :password_confirmation, :user_type, :mobile_number, :project_id, :username)
+        end
+
       end
     end
   end
