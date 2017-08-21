@@ -7,14 +7,14 @@ Rails.application.routes.draw do
   devise_for :users, {
       path: ActiveAdmin.application.default_namespace || "/",
       controllers: {
-          sessions: "users/sessions"
+        sessions: "users/sessions"
       },
       path_names: {sign_in: 'login', sign_out: "logout"},
       sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
   }
   namespace :api, defaults: {format: 'json'} do
      namespace :v1 do
-       mount_devise_token_auth_for 'User', at: 'auth', :controllers => { :registrations => "api/v1/users/registrations",
+       mount_devise_token_auth_for 'User', at: 'auth', :controllers => { registrations: "api/v1/users/registrations",
                                                                          sessions: "api/v1/users/sessions"}
        resources :conversations, only: [:index, :create, :destroy] do
          resources :messages, only: [:index, :create, :update, :destroy]
@@ -32,6 +32,11 @@ Rails.application.routes.draw do
        resources :reported_chats, only: [:show, :create]
        resources :jobs
        resources :notifications, only: [:index, :destroy]
+       resources :users do
+         member do
+           put :accept_term_and_conditions
+         end
+       end
      end
    end
   ActiveAdmin.routes(self)   
