@@ -13,7 +13,7 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
   #TODO change this to a valid email once we have a domain
-  config.mailer_sender = 'no-reply@framework.com'
+  config.mailer_sender = 'no-reply@pwm.com'
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
