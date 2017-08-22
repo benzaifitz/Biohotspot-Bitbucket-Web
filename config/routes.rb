@@ -32,6 +32,11 @@ Rails.application.routes.draw do
        resources :reported_chats, only: [:show, :create]
        resources :jobs
        resources :notifications, only: [:index, :destroy]
+       resources :tutorials do
+         collection do
+           get :help
+         end
+       end
        resources :users do
          member do
            put :accept_term_and_conditions
