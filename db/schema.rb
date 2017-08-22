@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170815124941) do
+ActiveRecord::Schema.define(version: 20170821090334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -268,6 +268,13 @@ ActiveRecord::Schema.define(version: 20170815124941) do
     t.datetime "updated_at",                                null: false
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
+  end
+
+  create_table "tutorials", force: :cascade do |t|
+    t.string   "avatar"
+    t.text     "avatar_text"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "users", force: :cascade do |t|

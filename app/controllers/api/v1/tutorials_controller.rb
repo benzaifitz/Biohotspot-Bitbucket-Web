@@ -3,14 +3,15 @@ module Api
     class TutorialsController < ApiController
       before_action :authenticate_user!
 
-      def help
-        @tutorials = show_tutorial
-      end
-
-      #if user is sign in for the first time, tutorial will be shown to the user
+      api :GET, '/tutorials.json', 'Return 5 images with text'
+      param :help, String, desc:"set to true", required: false
       def index
         if current_user.sign_in_count == 1
           @tutorials = show_tutorial
+        elsif params[:help].present? && params[:help]== 'true'
+          @tutorials = show_tutorial
+        else
+          ''
         end
       end
 
@@ -28,7 +29,7 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
 
       def show_tutorial
-        Tutorial.first(5).map{|a|{ id: a.id, avatar_url: "#{request.host_with_port}#{a.avatar.url}", avatar_text: a.avatar_text}}
+        Tutorial.all.order("id asc").limit(5).map{|a|{ id: a.id, avatar_url: "#{request.host_with_port}#{a.avatar.url}", avatar_text: a.avatar_text}}
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
