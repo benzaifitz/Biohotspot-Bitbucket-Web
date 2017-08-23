@@ -2,7 +2,7 @@ module Api
   module V1
     class LandManagersController < ApiController
       before_action :authenticate_user!
-      before_action :check_user_eula_and_privacy, except: [:update]
+      before_action :check_user_eula_and_privacy, except: [:update, :about]
       before_action :verify_land_manager, only: [:update]
       before_action :set_land_manager, only: [:show]
 
@@ -66,6 +66,15 @@ module Api
         #   render json: @land_manager.errors, status: :unprocessable_entity
         # end
       end
+
+      # GET /api/v1/land_managers/about.json
+      api :GET, '/land_managers/about.json', 'Show about page.'
+      # param :id, Integer, desc: 'ID of land_manager to be shown.', required: true
+      def about
+        @documents = Document.all.map{|a| {id: a.id, name: a.name, document: "#{request.host_with_port}#{a.document.url}", project: a.try(:project).try(:title), document_category: a.try(:category_document).try(:name)}}
+        @category_documents = CategoryDocument.all
+      end
+
 
       private
       # Use callbacks to share common setup or constraints between actions.
