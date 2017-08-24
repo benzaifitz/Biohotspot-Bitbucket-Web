@@ -38,6 +38,7 @@ Rails.application.routes.draw do
            get :about
          end
        end
+       resources :documents
      end
    end
   ActiveAdmin.routes(self)   
