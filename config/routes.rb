@@ -21,11 +21,7 @@ Rails.application.routes.draw do
          get :participants
          put :add_participants
        end
-       resources :land_managers, only: [:show, :update, :index] do
-         collection do
-           get :about
-         end
-       end
+       resources :land_managers, only: [:show, :update, :index]
        resources :project_managers, only: [:show, :update]
        resources :blocked_users, only: [:index, :create, :show]
        delete 'un_blocked_user' => 'blocked_users#destroy'
@@ -37,6 +33,11 @@ Rails.application.routes.draw do
        resources :jobs
        resources :notifications, only: [:index, :destroy]
        resources :tutorials
+       resources :pages do
+         collection do
+           get :about
+         end
+       end
        resources :documents
      end
    end
