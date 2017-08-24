@@ -15,6 +15,17 @@ ActiveAdmin.register Site do
     column :title, label: "Project Title"
     column :summary, label: "Project Summary"
     column :tags
+    column :categories do |s|
+      table(:style => 'margin-bottom: 0') do
+        s.categories.each do |sc|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(sc.name.titleize, admin_category_path(sc))
+            end
+          end
+        end
+      end
+    end
     #TODO needs to implement this column after establishing surveys association.
     column :surveys do |p|
       "--"
