@@ -37,6 +37,7 @@ Rails.application.routes.draw do
        resources :jobs
        resources :notifications, only: [:index, :destroy]
        resources :tutorials
+       resources :documents
      end
    end
   ActiveAdmin.routes(self)   
