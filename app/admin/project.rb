@@ -30,12 +30,16 @@ ActiveAdmin.register Project do
 
   form do |f|
     # f.inputs 'Project Details', for: [:project_manager, f.object.project_manager || ProjectManager.new] do |f|
+    if params[:project_manager_blank] == ''
+      f.object.errors[:project_manager_id] = 'field is required'
+    end
+    f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
       f.input :title
       f.input :summary
       f.input :tags
       f.input :client_name
-      f.input :project_manager_id, as: :select, collection: ProjectManager.all.map{|pm| [pm.email, pm.id]}
+      f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
       # if params[:action] != "neaw"
       #   f.inputs do
       #     f.has_many :project_manager, heading: 'Project Manager', new_record: true do |pm|
@@ -58,10 +62,15 @@ ActiveAdmin.register Project do
   controller do
     def update(options={}, &block)
       # You can put your send email code over here
-      resource.project_manager = ProjectManager.find(params[:project].delete(:project_manager_attributes)[:id]) if params[:project] && params[:project][:project_manager_attributes][:id]
-      resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags])
-      resource.save!
-      redirect_to admin_projects_path
+      begin
+        raise 'pm' if params[:project][:project_manager_id].blank?
+        resource.project_manager = ProjectManager.find(params[:project].delete(:project_manager_id)) if params[:project] && params[:project][:project_manager_id]
+        resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags], client: params[:project][:client])
+        resource.save!
+        redirect_to admin_projects_path
+      rescue => e
+        redirect_to edit_admin_project_path(project_manager_blank: (e.to_s == 'pm' ? '': 'no pm issue'))
+      end
     end
     def new
       @project = Project.new
@@ -70,7 +79,7 @@ ActiveAdmin.register Project do
     def create
       begin
         @project = Project.new(permitted_params[:project])
-        raise "You must select a project manager" if params[:project][:project_manager_id].blank?
+        raise 'pm' if params[:project][:project_manager_id].blank?
         @project_manager = ProjectManager.find(params[:project][:project_manager_id])
         Project.transaction do
           @project.save!
@@ -79,8 +88,7 @@ ActiveAdmin.register Project do
           redirect_to admin_projects_path
         end
       rescue => e
-        flash[:notice] = e
-        redirect_to new_admin_project_path
+        redirect_to new_admin_project_path(project_manager_blank: (e.to_s == 'pm' ? '': 'no pm issue'))
       end
     end
   end
