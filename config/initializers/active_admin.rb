@@ -98,10 +98,6 @@ ActiveAdmin.setup do |config|
   # will call the method to return the path.
   #
   # Default:
-  config.authentication_method = :authenticate_active_admin_user!
-  config.current_user_method   = :current_user
-  config.logout_link_path      = :destroy_user_session_path
-  config.logout_link_method    = :delete
   # config.logout_link_path = :destroy_admin_user_session_path
 
   # This setting changes the http method used when rendering the
@@ -227,8 +223,14 @@ ActiveAdmin.setup do |config|
   #   end
 
   #config.show_comments_in_menu = false
+  config.load_paths = [File.expand_path('app/admin', Rails.root), File.expand_path('app/pm', Rails.root)]
 
   config.namespace :admin do |admin|
+    admin.authentication_method = :authenticate_active_admin_user!
+    admin.current_user_method   = :current_user
+    admin.logout_link_path      = :destroy_user_session_path
+    admin.logout_link_method    = :delete
+    admin.root_to = 'users#index'
     admin.build_menu do |menu|
       menu.add label: 'Users', priority: 1
       menu.add label: 'Projects', priority: 2
@@ -249,6 +251,23 @@ ActiveAdmin.setup do |config|
       end
     end
   end
+  config.namespace :pm do |pm|
+    pm.authentication_method = :authenticate_active_admin_pm!
+    pm.current_user_method   = :current_project_manager
+    pm.logout_link_path      = :destroy_project_manager_session_path
+    pm.logout_link_method    = :delete
+    pm.root_to               = 'sites#index'
+
+
+    pm.build_menu do |p_menu|
+      p_menu.add label: 'Sites', priority: 1
+    end
+
+  end
+
+  config.current_user_method   = :current_user
+  config.logout_link_path      = :destroy_user_session_path
+  config.logout_link_method    = :delete
 
 
   # == Download Links
