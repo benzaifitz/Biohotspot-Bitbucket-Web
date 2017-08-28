@@ -5,7 +5,8 @@ class Category < ApplicationRecord
   belongs_to :site
 
   has_many :sub_categories
-  has_many :photos, as: :imageable
+  has_many :photos, as: :imageable, dependent: :destroy
+  accepts_nested_attributes_for :photos, allow_destroy: true
   serialize :tags
   LIMIT = 5
 
@@ -14,9 +15,11 @@ class Category < ApplicationRecord
   end
 
   def validate_photo_quota
-    return unless site
-    if photos(:reload).count >= LIMIT
-      errors.add(:base, :exceeded_quota)
+    message = I18n.t("exceeded_quota")
+    groups_length = 0
+    if photos.present?
+      groups_length = photos.reject(&:marked_for_destruction?).length
     end
+    errors.add(:base, message) if groups_length > LIMIT
   end
 end

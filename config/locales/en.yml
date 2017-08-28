@@ -27,3 +27,4 @@ en:
         bad_credentials: "The current password you have entered is incorrect"
         user_not_found: "User with provided email not found."
   hello: "Hello world"
+  exceeded_quota: 'You can attach upto 5 photos'
