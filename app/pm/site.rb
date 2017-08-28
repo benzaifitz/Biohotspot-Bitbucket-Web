@@ -6,7 +6,7 @@ ActiveAdmin.register Site, namespace: :pm do
     allowed.uniq
   end
 
-  actions :all, :except => [:destroy]
+  actions :all
 
   index do
     selectable_column
