@@ -12,6 +12,14 @@ Rails.application.routes.draw do
       path_names: {sign_in: 'login', sign_out: "logout"},
       sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
   }
+  devise_for :project_managers , {
+      path: :pm,
+      controllers: {
+          sessions: "active_admin/devise/sessions"
+      },
+      path_names: { sign_in: 'login', sign_out: "logout"},
+      sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq
+  }
   namespace :api, defaults: {format: 'json'} do
      namespace :v1 do
        mount_devise_token_auth_for 'User', at: 'auth', :controllers => { :registrations => "api/v1/users/registrations",
