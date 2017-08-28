@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects List', parent: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name, :project_manager_id, project_manager_attributes: [:id]]
+    allowed = [:title, :summary, :tags, :client_name, :project_manager_id]
     allowed.uniq
   end
 
@@ -35,12 +35,15 @@ ActiveAdmin.register Project do
       f.input :summary
       f.input :tags
       f.input :client_name
-      f.inputs do
-        f.has_many :project_manager, heading: 'Project Manager', new_record: true do |pm|
-          # pm.select ProjectManager.all
-          pm.input :id, as: :select, collection: ProjectManager.all.map{|pm| [pm.email, pm.id]}
-        end
-      end
+      f.input :project_manager_id, as: :select, collection: ProjectManager.all.map{|pm| [pm.email, pm.id]}
+      # if params[:action] != "neaw"
+      #   f.inputs do
+      #     f.has_many :project_manager, heading: 'Project Manager', new_record: true do |pm|
+      #       # pm.select ProjectManager.all
+      #       pm.input :id, as: :select, collection: ProjectManager.all.map{|pm| [pm.email, pm.id]}
+      #     end
+      # end
+      # end
       # f.has_one :project_manager
       # f.input :project_manager
       # f.inputs do
@@ -59,6 +62,26 @@ ActiveAdmin.register Project do
       resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags])
       resource.save!
       redirect_to admin_projects_path
+    end
+    def new
+      @project = Project.new
+      @project.build_project_manager
+    end
+    def create
+      begin
+        @project = Project.new(permitted_params[:project])
+        raise "You must select a project manager" if params[:project][:project_manager_id].blank?
+        @project_manager = ProjectManager.find(params[:project][:project_manager_id])
+        Project.transaction do
+          @project.save!
+          @project_manager.managed_project = @project
+          @project_manager.save!
+          redirect_to admin_projects_path
+        end
+      rescue => e
+        flash[:notice] = e
+        redirect_to new_admin_project_path
+      end
     end
   end
 
