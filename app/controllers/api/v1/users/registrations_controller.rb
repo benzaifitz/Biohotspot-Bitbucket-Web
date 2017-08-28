@@ -7,8 +7,9 @@ module Api
         protected
 
         def configure_permitted_parameters
-          devise_parameter_sanitizer.for(:sign_up).push(:username, :first_name, :last_name, :company, :eula_id, :privacy_id, :user_type, :device_token, :device_type)
+          devise_parameter_sanitizer.permit(:sign_up, keys:[:mobile_number, :project_id, :username, :first_name, :last_name, :company, :eula_id, :privacy_id, :user_type, :device_token, :device_type])
         end
+
       end
     end
   end

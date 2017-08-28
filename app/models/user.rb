@@ -71,12 +71,11 @@ class User < ApplicationRecord
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
   has_many :rpush_notifications, dependent: :destroy
 
-  validates :username, format: { with: /\A[a-zA-Z0-9_]+\Z/ }
-  validates_presence_of :username, :email
+  validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
   validates_presence_of :project_id, if: Proc.new { |user| user.land_manager? }
-  validates_uniqueness_of :username, :email
-
+  validates_presence_of :mobile_number, if: lambda { |user| user.land_manager? }
+  validates_uniqueness_of :email
 
   attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 

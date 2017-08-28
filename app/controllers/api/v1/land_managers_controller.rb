@@ -2,7 +2,7 @@ module Api
   module V1
     class LandManagersController < ApiController
       before_action :authenticate_user!
-      before_action :check_user_eula_and_privacy, except: [:update]
+      before_action :check_user_eula_and_privacy, except: [:update, :about]
       before_action :verify_land_manager, only: [:update]
       before_action :set_land_manager, only: [:show]
 
