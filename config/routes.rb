@@ -48,6 +48,7 @@ Rails.application.routes.draw do
        end
        resources :documents
        resources :categories
+
      end
    end
   ActiveAdmin.routes(self)   
