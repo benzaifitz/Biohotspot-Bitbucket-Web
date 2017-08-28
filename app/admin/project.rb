@@ -21,7 +21,15 @@ ActiveAdmin.register Project do
     column :client_name
     #TODO needs to implement this column after establishing sites association.
     column :sites do |p|
-      "--"
+      table(:style => 'margin-bottom: 0') do
+        p.sites.each do |ps|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(ps.title.titleize, admin_site_path(ps))
+            end
+          end
+        end
+      end
     end
     column :created_at
     column :updated_at
