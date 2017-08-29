@@ -30,6 +30,7 @@ ActiveAdmin.register ProjectManager, as: 'Project Manager' do
       #     ""
       #   end
       # end
+=begin
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
@@ -39,6 +40,7 @@ ActiveAdmin.register ProjectManager, as: 'Project Manager' do
           end
         end
       end
+=end
     end
     f.actions do
       f.action(:submit)

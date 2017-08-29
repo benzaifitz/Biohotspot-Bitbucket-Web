@@ -48,9 +48,11 @@ ActiveAdmin.register User do
 
   show do
     attributes_table do
+=begin
       row :profile_picture do |u|
         image_tag "#{u.profile_picture.url}?#{Random.rand(100)}"
       end
+=end
       row :email
       row :username
       row :company

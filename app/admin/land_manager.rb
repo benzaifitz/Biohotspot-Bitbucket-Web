@@ -24,6 +24,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
       f.input :first_name
       f.input :last_name
       f.input :project
+=begin
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
@@ -33,6 +34,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
           end
         end
       end
+=end
     end
     f.actions do
       f.action(:submit)

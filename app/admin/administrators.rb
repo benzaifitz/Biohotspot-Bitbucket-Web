@@ -17,6 +17,7 @@ ActiveAdmin.register User, as: 'Administrator' do
       f.input :company
       f.input :first_name
       f.input :last_name
+=begin
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
@@ -26,6 +27,7 @@ ActiveAdmin.register User, as: 'Administrator' do
           end
         end
       end
+=end
     end
     f.actions do
       f.action(:submit)
