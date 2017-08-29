@@ -10,7 +10,7 @@ ActiveAdmin.register Submission do
   index do
     selectable_column
     id_column
-    column :surver_number
+    column :survey_number
     column :submitted_by
     column :lat
     column :long
@@ -55,7 +55,7 @@ ActiveAdmin.register Submission do
   show do |submission|
     attributes_table do
       row :id
-      row :surver_number
+      row :survey_number
       row :submitted_by
       row :lat
       row :long
