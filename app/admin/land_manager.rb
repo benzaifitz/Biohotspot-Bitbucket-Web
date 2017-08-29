@@ -8,7 +8,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :company, :profile_picture, :profile_picture_cache, :username, :project_id]
+    allowed += [:first_name, :last_name, :email, :mobile_number, :company, :profile_picture, :profile_picture_cache, :username, :project_id]
     allowed.uniq
   end
 
@@ -17,6 +17,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
   form do |f|
     f.inputs 'Land Manager Details' do
       f.input :email
+      f.input :mobile_number
       f.input :password
       f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       # f.input :company
