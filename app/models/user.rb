@@ -80,13 +80,13 @@ class User < ApplicationRecord
   attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 
   after_update :log_user_events
-  after_commit :add_to_mailchimp, on: :create
+  #after_commit :add_to_mailchimp, on: :create
   after_update do
-    self.mailchimp_fields_updated = mailchimp_related_fields_updated?
+    #self.mailchimp_fields_updated = mailchimp_related_fields_updated?
     self.status_updated = status_changed?
   end
-  after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
-  after_commit :delete_from_mailchimp, on: :destroy
+  #after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
+  #after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}
