@@ -2,7 +2,7 @@ ActiveAdmin.register Category do
 
   menu label: 'Categories List', parent: 'Categories', priority: 1
 
-    permit_params :name, :description, :tags, :class_name, :family, :location, :url, :site_id,
+    permit_params :name, :description, :tags, :class_name, :family_scientific, :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :distribution, :location, :url, :site_id,
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
@@ -15,7 +15,15 @@ ActiveAdmin.register Category do
       f.input :description
       f.input :tags
       f.input :class_name
-      f.input :family
+      f.input :family_scientific
+      f.input :family_common
+      f.input :species_scientific
+      f.input :species_common
+      f.input :status
+      f.input :growth
+      f.input :habit
+      f.input :impact
+      f.input :distribution
       f.input :location
       f.input :url
       f.input :deleted_at,:as => :string, :input_html => {:class => 'datepicker hasDatePicker'}
@@ -39,7 +47,15 @@ ActiveAdmin.register Category do
       row :description
       row :tags
       row :class_name
-      row :family
+      row :family_scientific
+      row :family_common
+      row :species_scientific
+      row :species_common
+      row :status
+      row :growth
+      row :habit
+      row :impact
+      row :distribution
       row :location
       row :url
       row :site_id
