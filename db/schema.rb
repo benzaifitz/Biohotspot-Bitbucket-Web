@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170823052023) do
+ActiveRecord::Schema.define(version: 20170829074725) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -324,7 +324,7 @@ ActiveRecord::Schema.define(version: 20170823052023) do
     t.json     "tokens"
     t.integer  "number_of_ratings",      default: 0
     t.string   "profile_picture"
-    t.string   "username",               default: "",      null: false
+    t.string   "username",               default: ""
     t.string   "device_token"
     t.string   "device_type"
     t.string   "uuid_iphone"
@@ -337,7 +337,6 @@ ActiveRecord::Schema.define(version: 20170823052023) do
     t.index ["managed_project_id"], name: "index_users_on_managed_project_id", using: :btree
     t.index ["project_id"], name: "index_users_on_project_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
   create_table "versions", force: :cascade do |t|
