@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829074725) do
+ActiveRecord::Schema.define(version: 20170829092256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -281,8 +281,16 @@ ActiveRecord::Schema.define(version: 20170829074725) do
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.string   "sample_photo"
+    t.string   "monitoring_photo"
+    t.string   "dieback"
+    t.boolean  "leaf_tie_month",                            default: false
+    t.boolean  "seed_borer",                                default: false
+    t.boolean  "loopers",                                   default: false
+    t.boolean  "grazing",                                   default: false
+    t.text     "field_notes"
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end
