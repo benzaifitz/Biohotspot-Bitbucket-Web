@@ -26,5 +26,10 @@ en:
         disabled_account: "Your account requires activation by the software administrator"
         bad_credentials: "The current password you have entered is incorrect"
         user_not_found: "User with provided email not found."
+  errors:
+      messages:
+        wrong_size: "is the wrong size (should be %{file_size})"
+        size_too_small: "is too small (should be at least %{file_size})"
+        size_too_big: "is too big (should be at most %{file_size})"
   hello: "Hello world"
   exceeded_quota: 'You can attach upto 5 photos'
