@@ -57,13 +57,15 @@ module Api
             end
           end
 =end
+          if params[:land_manager][:email] && (params[:land_manager][:email] != existing_email)
+            params[:land_manager][:unconfirmed_email] = params[:land_manager][:email]
+            params[:land_manager].delete :email
+          end
           @land_manager.assign_attributes(land_manager_params)
           @land_manager.image_data(params[:land_manager][:image_data], params[:land_manager][:image_type]) if params[:land_manager][:image_data].present? && params[:land_manager][:image_type].present?
           @land_manager.save!
-          if params[:land_manager][:email] && (params[:land_manager][:email] != existing_email)
-            @land_manager.send_confirmation_instructions
-            @land_manager.confirmed_at = ''
-            @land_manager.save!
+          if params[:land_manager][:unconfirmed_email]
+            @land_manager.send_reconfirmation_instructions if @land_manager.pending_reconfirmation?
           end
           render json: @land_manager
         rescue *RecoverableExceptions => e
@@ -92,7 +94,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def land_manager_params
-        permitted_params = [:first_name, :last_name, :email, :mobile_number, :company, :eula_id, :privacy_id, :device_token, :device_type]
+        permitted_params = [:first_name, :last_name, :email, :unconfirmed_email, :mobile_number, :company, :eula_id, :privacy_id, :device_token, :device_type]
         permitted_params += [:password] if params[:land_manager] && !params[:land_manager][:password].blank?
         params.require(:land_manager).permit(permitted_params)
       end
