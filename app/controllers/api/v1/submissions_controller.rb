@@ -30,6 +30,7 @@ module Api
         @submission = Submission.new(submission_params)
         begin
           @submission.save!
+          photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @submission.errors.full_messages[0])
@@ -50,10 +51,11 @@ module Api
       param :live_branch_stem, String, desc:'', required: false
       param :stem_diameter, Float, desc:'', required: false
       def update
-        if !@submission.blank? && @submission.update(submission_params)
+        if !@submission.blank? && @submission.update!(submission_params)
+          photos_for_submission(params, @submission)
           render :show
         else
-          render json: {error: 'Submission not found.'}, status: :unprocessable_entity
+          render json: {error: @submission.errors.messages}, status: :unprocessable_entity
         end
       end
 
@@ -65,13 +67,22 @@ module Api
 
       private
 
+      def photos_for_submission params, submission
+        if params[:submission][:photos].present?
+          submission.photos.destroy_all
+          params[:submission][:photos].each do |photo|
+            Photo.create(file: photo['file'], url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
+          end
+        end
+      end
+
       def set_submission
         @submission = Submission.find(params[:id])
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
-        params.require(:submission).permit([:survey_number, :submitted_by, :lat, :long, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter])
+        params.require(:submission).permit([:survey_number, :submitted_by, :lat, :long, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
       end
     end
   end

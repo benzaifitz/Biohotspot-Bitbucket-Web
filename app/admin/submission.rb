@@ -38,11 +38,9 @@ ActiveAdmin.register Submission do
     f.inputs do
       f.input :sample_photo, as: :file
       f.input :monitoring_photo, as: :file
-      f.inputs "Additional Photo"  do
-        f.has_many :photos, allow_destroy: true do |pm|
-          pm.input :file, as: :file
-          pm.input :url
-        end
+      f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
+        pm.input :file, as: :file
+        pm.input :url
       end
       f.input :stem_diameter, label: 'Stem diameter (trunk)'
       f.input :health_score
@@ -59,8 +57,7 @@ ActiveAdmin.register Submission do
         f.input :grazing, as: :boolean
       end
       f.input :field_notes
-
-      # f.input :sub_category
+      f.input :sub_category
       # f.input :survey_number
       # f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
       # # f.input :submitted_by
