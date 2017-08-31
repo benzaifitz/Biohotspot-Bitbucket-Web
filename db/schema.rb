@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829104048) do
+
+ActiveRecord::Schema.define(version: 20170831093027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,7 +286,7 @@ ActiveRecord::Schema.define(version: 20170829104048) do
     t.string   "rainfall"
     t.string   "humidity"
     t.string   "temperature"
-    t.float    "health_score"
+    t.string   "health_score"
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"

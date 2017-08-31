@@ -20,5 +20,12 @@ $(document).ready(function() {
     $("#user_profile_picture").on('change', function(){
         readURL(this);
     });
+
+    $( "form" ).on( "submit", function() {
+        if($('#submission_sub_category_id').val() == ''){
+            alert('Sub category can not blank');
+            return false;
+        }
+    });
 });
 
