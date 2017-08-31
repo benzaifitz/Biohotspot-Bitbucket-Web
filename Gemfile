@@ -19,7 +19,7 @@ gem 'gmaps4rails'
 # MailChimp integration
 gem 'gibbon'
 # The push notification service.
-gem 'rpush'
+gem 'rpush', github: 'rpush/rpush'
 group :development, :test do
   gem 'byebug'
 end
@@ -44,6 +44,7 @@ gem 'fancybox-rails', '~> 0.3.0'
 gem 'mini_magick', '~> 4.3', '>= 4.3.6'
 gem 'carrierwave', '~> 0.10.0'
 gem 'fog', '~> 1.36'
+gem 'whenever', :require => false
 
 #gem 'responders'
 group :development do
