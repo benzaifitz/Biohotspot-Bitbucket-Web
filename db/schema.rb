@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829092256) do
+ActiveRecord::Schema.define(version: 20170831093027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,13 +42,21 @@ ActiveRecord::Schema.define(version: 20170829092256) do
     t.text     "description"
     t.text     "tags"
     t.string   "class_name"
-    t.string   "family"
+    t.string   "family_common"
     t.string   "location"
     t.string   "url"
     t.integer  "site_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.datetime "deleted_at"
+    t.string   "family_scientific"
+    t.string   "species_scientific"
+    t.string   "species_common"
+    t.string   "status"
+    t.string   "growth"
+    t.string   "habit"
+    t.string   "impact"
+    t.string   "distribution"
     t.index ["deleted_at"], name: "index_categories_on_deleted_at", using: :btree
     t.index ["site_id"], name: "index_categories_on_site_id", using: :btree
   end
@@ -277,7 +285,7 @@ ActiveRecord::Schema.define(version: 20170829092256) do
     t.string   "rainfall"
     t.string   "humidity"
     t.string   "temperature"
-    t.float    "health_score"
+    t.string   "health_score"
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
