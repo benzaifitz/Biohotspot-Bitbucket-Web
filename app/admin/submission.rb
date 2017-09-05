@@ -79,7 +79,7 @@ ActiveAdmin.register Submission do
         ul do
           submission.photos.each do |photo|
             li do
-              image_tag photo.try(:file).try(:url), class: 'image_width'
+              image_tag photo.try(:file).try(:url), class: 'image_width' if photo.file.url.present?
             end
           end
         end
