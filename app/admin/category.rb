@@ -66,8 +66,7 @@ ActiveAdmin.register Category do
         ul do
           category.photos.each_with_index do |photo,index|
             li do
-              link_to "photo_#{index+1}", "#{request.host_with_port}#{photo.try(:file).try(:url)}"
-              # image_tag(photo.file.url)
+              link_to "photo_#{index+1}", "#{request.host_with_port}#{photo.try(:file).try(:url)}" if photo.file.file.exists?
             end
           end
         end
