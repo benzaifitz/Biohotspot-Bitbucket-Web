@@ -52,11 +52,11 @@ group :development do
   #gem 'quiet_assets','>= 1.1.0' # No compatible version
   gem 'rails_layout'
   gem 'spring-commands-rspec'
-  gem 'capistrano', '~> 3.7.0'
+  gem 'capistrano', '~> 3.9.0'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1.1'
   gem 'capistrano-rvm', github: "capistrano/rvm"
-  gem 'capistrano-sidekiq'
+  gem 'capistrano-sidekiq', github: 'seuros/capistrano-sidekiq'
   gem 'capistrano-passenger'
   gem 'rest-client'
   gem 'puma'
