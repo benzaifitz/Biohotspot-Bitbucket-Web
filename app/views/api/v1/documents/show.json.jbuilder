@@ -1,8 +1,8 @@
 if @document.present?
-  json.extract! @document, :id,:name, :document, :project, :document_category
+  json.partial! "api/v1/documents/document", document: @document
   json.set! 'projects' do
     json.array!(@document.projects) do |project|
-      json.extract! project, :id, :title, :created_at
+      json.partial! "api/v1/documents/project", project: project
     end
   end
 end
