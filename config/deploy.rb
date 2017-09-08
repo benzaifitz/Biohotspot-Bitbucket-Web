@@ -33,7 +33,7 @@ set :linked_files, %w{config/database.yml .env}
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/stock_content}
 
-set :sidekiq_config, 'config/sidekiq.yml'
+# set :sidekiq_config, 'config/sidekiq.yml'
 
 set :passenger_restart_with_touch, true
 set :user, "ubuntu"
