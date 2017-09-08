@@ -84,13 +84,11 @@ ActiveAdmin.register Category do
       row :created_at
       row :updated_at
       row "Images" do
-        ul do
-          category.photos.each_with_index do |photo,index|
-            li do
-              link_to "photo_#{index+1}", "#{request.protocol}#{request.host_with_port}#{photo.try(:file).try(:url)}" if photo.file.file.exists?
-            end
-          end
+        images = ''
+        category.photos.map(&:file).compact.map(&:url).compact.each do |p|
+          images += "#{link_to("photo", p)}<br>"
         end
+        images.html_safe
       end
     end
   end
