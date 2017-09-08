@@ -15,7 +15,7 @@ ActiveAdmin.register Project do
     column :title, label: "Project Title"
     column :summary, label: "Project Summary"
     column :tags
-    column "Number_of_users" do |p|
+    column "Number of users" do |p|
       p.users.count
     end
     column :client_name
@@ -71,13 +71,19 @@ ActiveAdmin.register Project do
     def update(options={}, &block)
       # You can put your send email code over here
       begin
-        raise 'pm' if params[:project][:project_manager_id].blank?
-        resource.project_manager = ProjectManager.find(params[:project].delete(:project_manager_id)) if params[:project] && params[:project][:project_manager_id]
-        resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags], client: params[:project][:client])
-        resource.save!
-        redirect_to admin_projects_path
+        raise 'Project manager is required' if params[:project][:project_manager_id].blank?
+        project_manager = ProjectManager.find(params[:project].delete(:project_manager_id))
+        Project.transaction do
+          resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags], client_name: params[:project][:client_name])
+          project_manager.managed_project = resource
+          project_manager.save!
+          resource.save!
+          flash[:notice] = "Project updated successfully."
+          redirect_to admin_projects_path
+        end
       rescue => e
-        redirect_to edit_admin_project_path(project_manager_blank: (e.to_s == 'pm' ? '': 'no pm issue'))
+        flash[:error] = e.is_a?(String) ? e : e.message
+        redirect_to edit_admin_project_path(resource)
       end
     end
     def new
@@ -87,16 +93,18 @@ ActiveAdmin.register Project do
     def create
       begin
         @project = Project.new(permitted_params[:project])
-        raise 'pm' if params[:project][:project_manager_id].blank?
+        raise 'Project manager is required' if params[:project][:project_manager_id].blank?
         @project_manager = ProjectManager.find(params[:project][:project_manager_id])
         Project.transaction do
           @project.save!
           @project_manager.managed_project = @project
           @project_manager.save!
+          flash[:notice] = "Project created successfully."
           redirect_to admin_projects_path
         end
       rescue => e
-        redirect_to new_admin_project_path(project_manager_blank: (e.to_s == 'pm' ? '': 'no pm issue'))
+        flash[:error] = e.is_a?(String) ? e : e.message
+        redirect_to edit_admin_project_path(resource)
       end
     end
   end
