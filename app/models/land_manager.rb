@@ -15,10 +15,9 @@ class LandManager < User
       PushNotification.sends(
           device_type: land_manager.device_type,
           device_token: land_manager.device_token,
-          #badge: receiver.ios? ? Conversation.get_receivers_unread_conversation_count(receiver.id) : 0,
           data: {
               type: 'alert',
-              alert: 'push notification text will be replaced here'
+              alert: 'Your weed survey is due. Please notify us in the feedback form if you are unable to complete. Have a great day.'
           }
       )
     end
