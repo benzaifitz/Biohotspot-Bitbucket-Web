@@ -1,6 +1,4 @@
 Rails.application.configure do
-  # Settings specified here will take precedence over those in config/application.rb.
-
   # Code is not reloaded between requests.
   config.cache_classes = true
 
@@ -14,6 +12,20 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
+  # Enable Rack::Cache to put a simple HTTP cache in front of your application
+  # Add `rack-cache` to your Gemfile before enabling this.
+  # For large-scale production use, consider using a caching reverse proxy like
+  # NGINX, varnish or squid.
+  # config.action_dispatch.rack_cache = true
+
+
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = true
+
+  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
+  # yet still be able to expire them through the digest params.
+  config.assets.digest = true
+
   config.action_mailer.default_url_options = { host: 'productionhost', port: 80 }
 
   # Disable serving static files from the `/public` folder by default since
@@ -23,9 +35,6 @@ Rails.application.configure do
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
-
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
