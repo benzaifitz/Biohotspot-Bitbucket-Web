@@ -119,5 +119,32 @@ ActiveAdmin.register Submission do
     end
   end
 
+  csv do
+    column :stem_diameter
+    column :health_score
+    column :live_leaf_cover
+    column :live_branch_stem
+    column :dieback
+    column :temperature
+    column 'Site' do |s|
+      s.try(:sub_category).try(:category).try(:site).try(:title)
+    end
+    column 'Project' do |s|
+      s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
+    end
+    column :rainfall
+    column :humidity
+    column :leaf_tie_month
+    column :seed_borer
+    column :loopers
+    column :grazing
+    column :field_notes
+    column :survey_number
+    column :submitted_by
+    column :lat
+    column :long
+    column :created_at
+    column :updated_at
+  end
 
 end
