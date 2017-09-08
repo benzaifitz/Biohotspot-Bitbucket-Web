@@ -17,6 +17,12 @@ ActiveAdmin.register Submission do
     column :live_branch_stem
     column :dieback
     column :temperature
+    column 'Site' do |s|
+      s.try(:sub_category).try(:category).try(:site).try(:title)
+    end
+    column 'Project' do |s|
+      s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
+    end
     column :rainfall
     column :humidity
     column :leaf_tie_month
@@ -90,6 +96,12 @@ ActiveAdmin.register Submission do
       row :live_branch_stem
       row :dieback
       row :temperature
+      row 'Site' do |s|
+        s.try(:sub_category).try(:category).try(:site).try(:title)
+      end
+      row 'Project' do |s|
+        s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
+      end
       row :rainfall
       row :humidity
       row :leaf_tie_month
