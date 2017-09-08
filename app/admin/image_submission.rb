@@ -18,6 +18,27 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     column :category do |p|
       link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)
     end
+    column 'Status' do |p|
+      if p.approved?
+        status_tag('active', :ok, class: 'important', label: 'Approved')
+      else
+        status_tag('error', :ok, class: 'important', label: 'Rejected')
+      end
+    end
+    actions do |p|
+      item 'Approve', approve_admin_image_submission_path(p), method: :put if !p.approved?
+      item 'Reject', reject_admin_image_submission_path(p), method: :put, confirm: 'Are you sure you want to reject this photo?' if p.approved?
+    end
+  end
+
+  member_action :approve, method: :put do
+    resource.update_attributes!(approved: true)
+    redirect_to admin_image_submissions_path, :notice => 'Photo approved.' and return
+  end
+
+  member_action :reject, method: :put do
+    resource.update_attributes!(approved: false)
+    redirect_to admin_image_submissions_path, :notice => 'Photo rejected.' and return
   end
 
   controller do
