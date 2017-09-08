@@ -44,12 +44,12 @@ set :use_sudo, true
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 # set up sidekiq_role
-set :sidekiq_role, :app
+# set :sidekiq_role, :app
 # set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 # sed :sidekiq_queue
 # set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
-set :sidekiq_queue, ['default', 'mailchimp']
-set :sidekiq_pid, File.join(shared_path, 'tmp', 'sidekiq.pid')
+# set :sidekiq_queue, ['default', 'mailchimp']
+# set :sidekiq_pid, File.join(shared_path, 'tmp', 'sidekiq.pid')
 namespace :deploy do
 
   desc 'Restart application'
