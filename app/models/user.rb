@@ -70,6 +70,7 @@ class User < ApplicationRecord
   has_many :conversation_participants, dependent: :destroy
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
   has_many :rpush_notifications, dependent: :destroy
+  has_many :sub_categories, dependent: :destroy
 
   validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
@@ -80,13 +81,13 @@ class User < ApplicationRecord
   attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 
   after_update :log_user_events
-  after_commit :add_to_mailchimp, on: :create
+  #after_commit :add_to_mailchimp, on: :create
   after_update do
-    self.mailchimp_fields_updated = mailchimp_related_fields_updated?
+    #self.mailchimp_fields_updated = mailchimp_related_fields_updated?
     self.status_updated = status_changed?
   end
-  after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
-  after_commit :delete_from_mailchimp, on: :destroy
+  #after_commit :update_on_mailchimp, if: 'self.mailchimp_fields_updated || self.status_updated', on: :update
+  #after_commit :delete_from_mailchimp, on: :destroy
 
   def log_user_events
     attr = {item_type: 'User', item_id: self.id, object: PaperTrail.serializer.dump(self.attributes)}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829104048) do
+ActiveRecord::Schema.define(version: 20170905100335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -273,7 +273,9 @@ ActiveRecord::Schema.define(version: 20170829104048) do
     t.integer  "category_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.integer  "user_id"
     t.index ["category_id"], name: "index_sub_categories_on_category_id", using: :btree
+    t.index ["user_id"], name: "index_sub_categories_on_user_id", using: :btree
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -285,12 +287,20 @@ ActiveRecord::Schema.define(version: 20170829104048) do
     t.string   "rainfall"
     t.string   "humidity"
     t.string   "temperature"
-    t.float    "health_score"
+    t.string   "health_score"
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.string   "sample_photo"
+    t.string   "monitoring_photo"
+    t.string   "dieback"
+    t.boolean  "leaf_tie_month",                            default: false
+    t.boolean  "seed_borer",                                default: false
+    t.boolean  "loopers",                                   default: false
+    t.boolean  "grazing",                                   default: false
+    t.text     "field_notes"
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end

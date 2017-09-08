@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
+  # require 'sidekiq/web'
+  # mount Sidekiq::Web => '/sidekiq'
   apipie
   # devise_for :users, ActiveAdmin::Devise.config
   devise_for :users, {
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
        end
        resources :documents
        resources :categories
-
+       resources :submissions
      end
    end
   ActiveAdmin.routes(self)   
