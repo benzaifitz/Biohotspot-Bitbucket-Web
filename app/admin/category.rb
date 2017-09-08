@@ -7,6 +7,29 @@ ActiveAdmin.register Category do
 
   actions :all
 
+  index do
+    selectable_column
+    column :id
+    column :name
+    column :description
+    column :tags
+    column :class_name
+    column :location
+    column :url
+    column :family_common
+    column :family_scientific
+    column :species_common
+    column :species_scientific
+    column :status
+    column :growth
+    column :habit
+    column :impact
+    column :distribution
+    column :created_at
+    column :updated_at
+    actions
+  end
+
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Administrator Details' do
@@ -26,7 +49,6 @@ ActiveAdmin.register Category do
       f.input :distribution
       f.input :location
       f.input :url
-      f.input :deleted_at,:as => :string, :input_html => {:class => 'datepicker hasDatePicker'}
       f.inputs "Photos"  do
         f.has_many :photos, allow_destroy: true do |pm|
           pm.input :file, as: :file
@@ -61,18 +83,19 @@ ActiveAdmin.register Category do
       row :site_id
       row :created_at
       row :updated_at
-      row :deleted_at
       row "Images" do
         ul do
           category.photos.each_with_index do |photo,index|
             li do
-              link_to "photo_#{index+1}", "#{request.host_with_port}#{photo.try(:file).try(:url)}"
-              # image_tag(photo.file.url)
+              link_to "photo_#{index+1}", "#{request.protocol}#{request.host_with_port}#{photo.try(:file).try(:url)}" if photo.file.file.exists?
             end
           end
         end
       end
     end
   end
+
+  preserve_default_filters!
+  remove_filter :deleted_at
 
 end

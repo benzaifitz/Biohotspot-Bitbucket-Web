@@ -29,7 +29,7 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
 
       def show_tutorial
-        Tutorial.all.order("id asc").limit(5).map{|a|{ id: a.id, avatar_url: "#{request.host_with_port}#{a.avatar.url}", avatar_text: a.avatar_text}}
+        Tutorial.all.order("id asc").limit(5).map{|a|{ id: a.id, avatar_url: "#{request.protocol}#{request.host_with_port}#{a.avatar.url}", avatar_text: a.avatar_text}}
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.

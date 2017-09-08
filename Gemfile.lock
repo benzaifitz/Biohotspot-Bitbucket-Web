@@ -17,6 +17,14 @@ GIT
       sshkit (~> 1.2)
 
 GIT
+  remote: git://github.com/galetahub/ckeditor.git
+  revision: 32bc0c6702388549cb4b3f00f82afbc3798d6891
+  specs:
+    ckeditor (4.2.4)
+      cocaine
+      orm_adapter (~> 0.5.0)
+
+GIT
   remote: git://github.com/rpush/rpush.git
   revision: 8e8d98e996b7c395178387f12d182afef5fa71af
   specs:
@@ -146,10 +154,7 @@ GEM
     childprocess (0.5.9)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
-    ckeditor (4.2.2)
-      cocaine
-      orm_adapter (~> 0.5.0)
-    climate_control (0.1.0)
+    climate_control (0.2.0)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.1)
@@ -563,7 +568,7 @@ DEPENDENCIES
   capistrano-sidekiq
   capybara
   carrierwave (~> 0.10.0)
-  ckeditor (~> 4.1, >= 4.1.5)
+  ckeditor!
   coffee-rails (~> 4.2.1)
   database_cleaner
   devise

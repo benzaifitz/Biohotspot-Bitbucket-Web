@@ -26,7 +26,7 @@ module Api
       end
 
       def show_data data
-        {id: data.id, name: data.name, document: "#{request.host_with_port}#{data.document.url}", project: data.try(:project).try(:title), document_category: data.try(:category_document).try(:name)}
+        {id: data.id, name: data.name, document: "#{request.protocol}#{request.host_with_port}#{data.document.url}", project: data.try(:project).try(:title), document_category: data.try(:category_document).try(:name)}
       end
     end
   end

@@ -70,6 +70,7 @@ class User < ApplicationRecord
   has_many :conversation_participants, dependent: :destroy
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
   has_many :rpush_notifications, dependent: :destroy
+  has_many :sub_categories, dependent: :destroy
 
   validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
@@ -134,6 +135,18 @@ class User < ApplicationRecord
 
   def bannable
     self
+  end
+
+  def active_for_authentication?
+    super && (!self.banned? && self.approved?)
+  end
+
+  def inactive_message
+    if !self.approved?
+      'Your account has not been approved. Please contact your Administrator.'
+    elsif self.banned?
+      'Your account has been banned. Please contact your Administrator.'
+    end
   end
 
   def add_to_mailchimp

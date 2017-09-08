@@ -33,7 +33,7 @@ set :linked_files, %w{config/database.yml .env}
 # Default value for linked_dirs is []
 set :linked_dirs, %w{log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads public/stock_content}
 
-set :sidekiq_config, 'config/sidekiq.yml'
+# set :sidekiq_config, 'config/sidekiq.yml'
 
 set :passenger_restart_with_touch, true
 set :user, "ubuntu"
@@ -42,14 +42,14 @@ set :use_sudo, true
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 2
 # set up sidekiq_role
-set :sidekiq_role, :app
+# set :sidekiq_role, :app
 # set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 # sed :sidekiq_queue
 # set :sidekiq_queue, ['default', 'mailchimp', 'rpush_notifications']
-set :sidekiq_queue, ['default', 'mailchimp']
-set :sidekiq_pid, File.join(shared_path, 'tmp', 'sidekiq.pid')
+# set :sidekiq_queue, ['default', 'mailchimp']
+# set :sidekiq_pid, File.join(shared_path, 'tmp', 'sidekiq.pid')
 namespace :deploy do
 
   desc 'Restart application'

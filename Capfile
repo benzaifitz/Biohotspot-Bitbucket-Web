@@ -21,7 +21,9 @@ require 'capistrano/rvm'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
-require 'capistrano/sidekiq'
+# require 'capistrano/sidekiq'
+require "capistrano/scm/git"
+install_plugin Capistrano::SCM::Git
 set :rvm_type, :user
 set :rvm_ruby_version, '2.3.0p0'
 
