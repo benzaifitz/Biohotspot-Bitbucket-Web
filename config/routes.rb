@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       controllers: {
           passwords: "active_admin/devise/passwords",
           confirmations: 'active_admin/devise/confirmations',
-          sessions: "users/sessions"
+          sessions: "active_admin/devise/sessions"
       },
       path_names: {sign_in: 'login', sign_out: "logout"},
       sign_out_via: [*::Devise.sign_out_via, ActiveAdmin.application.logout_link_method].uniq

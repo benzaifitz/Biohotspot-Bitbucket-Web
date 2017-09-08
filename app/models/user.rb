@@ -138,7 +138,15 @@ class User < ApplicationRecord
   end
 
   def active_for_authentication?
-    super && !self.banned?
+    super && (!self.banned? && self.approved?)
+  end
+
+  def inactive_message
+    if !self.approved?
+      'Your account has not been approved. Please contact your Administrator.'
+    elsif self.banned?
+      'Your account has been banned. Please contact your Administrator.'
+    end
   end
 
   def add_to_mailchimp
