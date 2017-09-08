@@ -1,52 +1,32 @@
-ActiveAdmin.register Submission, as: "Image Submission" do
+ActiveAdmin.register Photo, as: "Image Submission" do
 
   menu label: 'Image Submissions List', parent: 'Submissions', priority: 2
 
-  permit_params do
-    allowed = [:sub_category_id, :survey_number, :submitted_by, :lat, :long, :sub_category, :rainfall, :humidity, :temperature,
-               :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter]
-    allowed.uniq
-  end
-
-  actions :all
+  actions :index
 
   index do
-    selectable_column
-    id_column
-    column :surver_number
-    column :submitted_by
-    column :lat
-    column :long
-    column :rainfall
-    column :humidity
-    column :temperature
-    column :health_score
-    column :live_leaf_cover
-    column :live_branch_stem
-    column :stem_diameter
-    column :created_at
-    column :updated_at
-    actions
-  end
-
-  form do |f|
-    f.inputs do
-      f.input :sub_category
-      f.input :survey_number
-      f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
-      # f.input :submitted_by
-      f.input :lat
-      f.input :long
-      f.input :rainfall
-      f.input :humidity
-      f.input :temperature
-      f.input :health_score
-      f.input :live_leaf_cover
-      f.input :live_branch_stem
-      f.input :stem_diameter
-
-      actions
+    column :id
+    column 'Image' do |p|
+      image_tag p.file.url, style: 'width:80px'
+    end
+    column :submission do |p|
+      link_to p.imageable.id, admin_submission_path(p.imageable.id)
+    end
+    column :sub_category do |p|
+      link_to p.imageable.sub_category.name, admin_sub_category_path(p.imageable.sub_category.id)
+    end
+    column :category do |p|
+      link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)
     end
   end
+
+  controller do
+    def scoped_collection
+      Photo.joins(:submission).where("file is not null or url != ''")
+    end
+  end
+
+  filter :submission_sub_category_in, as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
+  filter :submission_category_in, as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
 
 end
