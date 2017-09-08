@@ -137,6 +137,10 @@ class User < ApplicationRecord
     self
   end
 
+  def active_for_authentication?
+    super && !self.banned?
+  end
+
   def add_to_mailchimp
     MailchimpAddUserJob.perform_later(self.id)
   end
