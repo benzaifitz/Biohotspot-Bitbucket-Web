@@ -1,4 +1,4 @@
-ActiveAdmin.register User, as: 'Land Manager' do
+ActiveAdmin.register LandManager, as: 'Land Manager' do
 
   menu false
 
@@ -8,7 +8,8 @@ ActiveAdmin.register User, as: 'Land Manager' do
   permit_params do
     allowed = []
     allowed.push :password if params[:user] && !params[:user][:password].blank?
-    allowed += [:first_name, :last_name, :email, :mobile_number, :company, :profile_picture, :profile_picture_cache, :username]
+    allowed += [:first_name, :last_name, :email, :mobile_number, :company, :profile_picture,
+                :profile_picture_cache, :username, sub_category_ids: []]
     allowed.uniq
   end
 
@@ -23,6 +24,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
       # f.input :company
       f.input :first_name
       f.input :last_name
+      f.input :sub_categories
       # f.input :project
 =begin
       f.inputs "Profile Picture", :multipart => true do
@@ -58,13 +60,7 @@ ActiveAdmin.register User, as: 'Land Manager' do
       end
     end
   end
-
-  controller do
-    def scoped_collection
-      User.where(user_type: User.user_types[:land_manager])
-    end
-  end
-
+  
   member_action :promote_to_project_manager, method: :put do
     resource.update_attributes!(user_type: User.user_types['project_manager'])
     redirect_to admin_users_path, :notice => 'User Promoted to Project Manager successfully.' and return

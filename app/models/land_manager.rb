@@ -1,4 +1,9 @@
 class LandManager < User
+
+  has_many :land_manager_sub_categories
+  has_many :sub_categories, :through => :land_manager_sub_categories
+  accepts_nested_attributes_for :land_manager_sub_categories, :allow_destroy => true
+
   include PushNotification
   default_scope -> { where(user_type: User.user_types['land_manager']) }
   before_update :check_duplicate_email
@@ -10,6 +15,7 @@ class LandManager < User
       true
     end
   end
+
   def self.send_push_notification_to_land_manager
     LandManager.all.each do |land_manager|
       PushNotification.sends(

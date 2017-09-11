@@ -1,10 +1,10 @@
 module Api
   module V1
     class LandManagersController < ApiController
-      before_action :authenticate_user!
-      before_action :check_user_eula_and_privacy, except: [:update, :about]
-      before_action :verify_land_manager, only: [:update]
-      before_action :set_land_manager, only: [:show, :update]
+      # before_action :authenticate_user!
+      # before_action :check_user_eula_and_privacy, except: [:update, :about]
+      # before_action :verify_land_manager, only: [:update]
+      # before_action :set_land_manager, only: [:show, :update]
 
       #POST /
       api :POST, '/auth/', 'Create a new user(project_manager or land_manager). No encapsulation needed'
@@ -28,6 +28,7 @@ module Api
       api :GET, '/land_managers/:id.json', 'Show single land_manager resource.'
       # param :id, Integer, desc: 'ID of land_manager to be shown.', required: true
       def show
+        @land_manager = LandManager.first
       end
 
       # PATCH/PUT /api/v1/land_managers/1.json
@@ -82,7 +83,7 @@ module Api
       # Use callbacks to share common setup or constraints between actions.
       def set_land_manager
         if current_user.project_manager?
-          @land_manager = Land Manager.includes(:rated_on_ratings).find(params[:id])
+          @land_manager = LandManager.includes(:rated_on_ratings).find(params[:id])
         elsif current_user.land_manager?
           @land_manager = current_user
         end
