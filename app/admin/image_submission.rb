@@ -18,6 +18,9 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     column :category do |p|
       link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)
     end
+    column 'Reject Comment' do |p|
+      p.reject_comment if !p.approved?
+    end
     column 'Status' do |p|
       if p.approved?
         status_tag('active', :ok, class: 'important', label: 'Approved')
@@ -27,7 +30,7 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     end
     actions do |p|
       item 'Approve', approve_admin_image_submission_path(p), method: :put if !p.approved?
-      item 'Reject', reject_admin_image_submission_path(p), method: :put, confirm: 'Are you sure you want to reject this photo?' if p.approved?
+      (item 'Reject', reject_admin_image_submission_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
     end
   end
 
@@ -36,9 +39,16 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     redirect_to admin_image_submissions_path, :notice => 'Photo approved.' and return
   end
 
-  member_action :reject, method: :put do
-    resource.update_attributes!(approved: false)
+  member_action :reject_image, method: :put do
+    pn_msg = params[:photo][:reject_comment].to_s.html_safe
+    lm = LandManager.where(id: Photo.find(resource.id).submission.submitted_by).first rescue nil
+    lm.send_photo_rejected_pn(pn_msg) if lm
+    resource.update_attributes!(approved: false, reject_comment: pn_msg)
     redirect_to admin_image_submissions_path, :notice => 'Photo rejected.' and return
+  end
+
+  member_action :reject, method: :get do
+    render template: 'admin/image_submissions/reject', layout: false
   end
 
   controller do
