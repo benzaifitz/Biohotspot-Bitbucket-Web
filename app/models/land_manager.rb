@@ -22,4 +22,15 @@ class LandManager < User
       )
     end
   end
+
+  def send_photo_rejected_pn(message = '')
+      PushNotification.sends(
+          device_type: self.device_type,
+          device_token: self.device_token,
+          data: {
+              type: 'alert',
+              alert: message
+          }
+      )
+  end
 end
