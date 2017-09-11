@@ -3,7 +3,7 @@ class Category < ApplicationRecord
   # Or to get all client use Category.unscoped
   acts_as_paranoid
   belongs_to :site
-
+  attr_accessor :file_cache
   has_many :sub_categories
   has_many :photos, as: :imageable, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true

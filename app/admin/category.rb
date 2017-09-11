@@ -30,7 +30,7 @@ ActiveAdmin.register Category do
     actions
   end
 
-  form do |f|
+  form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Administrator Details' do
       f.input :site_id, as: :select, collection: Site.all.map{|a| [a.title, a.id]}
@@ -49,16 +49,19 @@ ActiveAdmin.register Category do
       f.input :distribution
       f.input :location
       f.input :url
-      f.inputs "Photos"  do
+      f.inputs "Photos", :multipart => true  do
         f.has_many :photos, allow_destroy: true do |pm|
-          pm.input :file, as: :file
-          pm.input :url
+          pm.input :file, :as => :file, :hint => pm.object.file.present? \
+                        ? image_tag(pm.object.file.url(:thumb))
+                        : content_tag(:span, 'no image selected')
+
+          pm.input :file_cache, :as => :hidden
         end
       end
     end
     f.actions do
       f.action(:submit)
-      f.cancel_link(admin_users_path)
+      f.cancel_link(admin_categories_path)
     end
   end
 
@@ -85,8 +88,8 @@ ActiveAdmin.register Category do
       row :updated_at
       row "Images" do
         images = ''
-        category.photos.map(&:file).compact.map(&:url).compact.each do |p|
-          images += "#{link_to("photo", p)}<br>"
+        category.photos.map(&:file).compact.each do |p|
+          images += "#{link_to(image_tag(p.url(:thumb)), p.url, target: '_blank')}<br><br>"
         end
         images.html_safe
       end

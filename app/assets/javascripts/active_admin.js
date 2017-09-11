@@ -13,7 +13,7 @@ $(document).ready(function() {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#profile_picture_preview').attr('src', e.target.result);
+                $('#picture_preview').attr('src', e.target.result);
             }
 
             reader.readAsDataURL(input.files[0]);
@@ -23,6 +23,26 @@ $(document).ready(function() {
     $("#user_profile_picture").on('change', function(){
         readURL(this);
     });
+
+    $("#land_manager_profile_picture").on('change', function(){
+        readURL(this);
+    });
+
+    $(document).on('change','input[id*="category_photos_attributes_"]', function(){
+        readCategoryImageURL(this);
+    });
+
+    function readCategoryImageURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(input).parent().find('.inline-hints').html("<div><img width='100px' src='" +e.target.result +"'/></div>");
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 
     $( "form" ).on( "submit", function() {
         if($('#submission_sub_category_id').val() == ''){

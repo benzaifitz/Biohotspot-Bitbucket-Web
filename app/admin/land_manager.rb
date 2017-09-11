@@ -25,18 +25,15 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
       f.input :first_name
       f.input :last_name
       f.input :sub_categories
-      # f.input :project
-=begin
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden
         insert_tag(Arbre::HTML::Li, class: 'file input optional') do
           insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-            insert_tag(Arbre::HTML::Img, id: 'profile_picture_preview', height: '48px', width: '48px', src: "#{f.object.profile_picture.url}?#{Random.rand(100)}")
+            insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', width: '100px', src: "#{f.object.profile_picture.url(:thumb)}?#{Random.rand(100)}")
           end
         end
       end
-=end
     end
     f.actions do
       f.action(:submit)
