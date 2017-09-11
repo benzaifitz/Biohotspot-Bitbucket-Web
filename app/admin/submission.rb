@@ -42,11 +42,30 @@ ActiveAdmin.register Submission do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-      f.input :sample_photo, as: :file
-      f.input :monitoring_photo, as: :file
+      f.inputs "Sample Picture", :multipart => true do
+        f.input :sample_photo, as: :file
+        f.input :sample_photo_cache, :as => :hidden
+        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+            insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', src: "#{f.object.sample_photo.url(:thumb)}?#{Random.rand(100)}")
+          end
+        end
+      end
+      f.inputs "Monitoring Picture", :multipart => true do
+        f.input :monitoring_photo, as: :file
+        f.input :monitoring_photo_cache, :as => :hidden
+        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+            insert_tag(Arbre::HTML::Img, id: 'monitoring_picture_preview', height: '100px', src: "#{f.object.monitoring_photo.url(:thumb)}?#{Random.rand(100)}")
+          end
+        end
+      end
       f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
-        pm.input :file, as: :file
-        pm.input :url
+        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+                        ? image_tag(pm.object.file.url(:thumb))
+                      : content_tag(:span, 'no image selected')
+
+        pm.input :file_cache, :as => :hidden
       end
       f.input :stem_diameter, label: 'Stem diameter (trunk)'
       f.input :health_score, :input_html => { :type => "number" }
@@ -64,10 +83,7 @@ ActiveAdmin.register Submission do
       end
       f.input :field_notes
       f.input :sub_category, input_html: { class: 'sub_category'}
-      # f.input :survey_number
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
-      # f.input :lat
-      # f.input :long
       actions
     end
   end
@@ -76,19 +92,16 @@ ActiveAdmin.register Submission do
     attributes_table do
       row :id
       row :sample_photo do |a|
-        image_tag a.try(:sample_photo).try(:url), class: 'image_width' if a.sample_photo.url.present?
+        link_to(image_tag(a.try(:sample_photo).url(:thumb), height: '100px'),a.sample_photo.url, target: '_blank') if a.sample_photo.url.present?
       end
       row :monitoring_photo do |a|
-        image_tag a.try(:monitoring_photo).try(:url), class: 'image_width'  if a.monitoring_photo.url.present?
+        link_to(image_tag(a.try(:monitoring_photo).url(:thumb), height: '100px'),a.monitoring_photo.url, target: '_blank')  if a.monitoring_photo.url.present?
       end
       row "Additional Photos" do
-        ul do
-          submission.photos.each do |photo|
-            li do
-              image_tag photo.try(:file).try(:url), class: 'image_width' if photo.file.url.present?
-            end
-          end
+        images = submission.photos.map do |photo|
+          link_to(image_tag(photo.try(:file).url(:thumb), height: '100px'),photo.file.url, target: '_blank') if photo.file.url.present?
         end
+        images.join("<br><br>").html_safe
       end
       row :stem_diameter
       row :health_score

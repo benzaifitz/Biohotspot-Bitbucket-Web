@@ -8,12 +8,24 @@
 $(document).ready(function() {
     $("a.fancybox").fancybox();
 
-    function readURL(input) {
+    //function readURL(input) {
+    //    if (input.files && input.files[0]) {
+    //        var reader = new FileReader();
+    //
+    //        reader.onload = function (e) {
+    //            $('#picture_preview').attr('src', e.target.result);
+    //        }
+    //
+    //        reader.readAsDataURL(input.files[0]);
+    //    }
+    //}
+
+    function readURL(input,object) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                $('#picture_preview').attr('src', e.target.result);
+                object.attr('src', e.target.result);
             }
 
             reader.readAsDataURL(input.files[0]);
@@ -21,14 +33,26 @@ $(document).ready(function() {
     }
 
     $("#user_profile_picture").on('change', function(){
-        readURL(this);
+        readURL(this,$('#picture_preview'));
+    });
+
+    $("#submission_sample_photo").on('change', function(){
+        readURL(this,$('#picture_preview'));
+    });
+
+    $("#submission_monitoring_photo").on('change', function(){
+        readURL(this,$("#monitoring_picture_preview"));
     });
 
     $("#land_manager_profile_picture").on('change', function(){
-        readURL(this);
+        readURL(this,$('#picture_preview'));
     });
 
     $(document).on('change','input[id*="category_photos_attributes_"]', function(){
+        readCategoryImageURL(this);
+    });
+
+    $(document).on('change','input[id*="submission_photos_attributes_"]', function(){
         readCategoryImageURL(this);
     });
 
