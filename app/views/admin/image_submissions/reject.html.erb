@@ -1,0 +1,9 @@
+<div class="panel">
+  <h3><%= "Reject image" %></h3>
+  <div class="panel-contents">
+    <%= form_for resource, url: { action: "reject_image" }, method: :put do |f| %>
+        <%= text_area :photo, :reject_comment, cols: 50, rows: 5, placeholder: 'Please specify the reason for rejecting this image.' %>
+        <%= f.submit 'Reject Image' %>
+    <% end %>
+  </div>
+</div>
