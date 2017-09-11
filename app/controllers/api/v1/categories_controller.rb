@@ -1,12 +1,13 @@
 module Api
   module V1
     class CategoriesController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :set_category, only: [:show, :destroy, :update]
 
       api :GET, '/categories.json', 'Return all categories'
       def index
         @categories = Category.all
+        render json: @categories.map{|a| {id: a.id, name: a.name, location: a.location, surveys: a.sub_categories.map{|a| a.submissions.count}.sum, photo: a.photos.present? ? a.photos.first.file_url : ""}}, status: :ok
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
