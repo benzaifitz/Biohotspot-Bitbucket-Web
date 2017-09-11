@@ -29,4 +29,8 @@ class Photo < ApplicationRecord
     parent.table[:id]
   end
 
+  def file_thumb_url
+    self.file_url(:thumb)
+  end
+
 end
