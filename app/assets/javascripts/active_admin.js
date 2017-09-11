@@ -1,6 +1,9 @@
 //= require active_admin/base
+//= require activeadmin_addons/all
 //= require fancybox
 //= require jquery-ui
+//= require underscore
+//= require gmaps/google
 
 $(document).ready(function() {
     $("a.fancybox").fancybox();
@@ -27,5 +30,26 @@ $(document).ready(function() {
             return false;
         }
     });
+
+    window.fetch_near_by_submissions = function() {
+        if (!$('body').hasClass("loading")) {
+            $('body').addClass("loading");
+        }
+        var selected=[];
+        $('#category_ids :selected').each(function(){
+            selected[$(this).val()]=$(this).val();
+        });
+        console.log(selected);
+        return $.ajax({
+            url: "/admin/submission_map/search_submissions",
+            data: {
+                category_ids: selected
+            },
+            complete: function(jqxhr, response) {
+                $('body').removeClass("loading");
+                return $(".map").html(jqxhr.responseText);
+            }
+        });
+    };
 });
 

@@ -78,3 +78,5 @@ group :test do
   gem 'selenium-webdriver'
 end
 gem 'sinatra', :require => nil #may re-enable it
+gem 'underscore-rails'
+gem 'activeadmin_addons'
