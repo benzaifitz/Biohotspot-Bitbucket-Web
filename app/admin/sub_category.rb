@@ -3,7 +3,7 @@ ActiveAdmin.register SubCategory do
   menu label: 'Sub Categories List', parent: 'Categories', priority: 2
 
   permit_params do
-    [:name, :category_id, :user_id]
+    [:name, :category_id]
   end
 
   actions :all
@@ -13,7 +13,7 @@ ActiveAdmin.register SubCategory do
     f.inputs 'Administrator Details' do
       f.input :name
       f.input :category_id, as: :select, collection: Category.all.map{|a| [a.name, a.id]}
-      f.input :user_id, label: 'Land Manager', as: :select, collection: User.project_manager.all.map{|a| [a.email, a.id]}
+      # f.input :user_id, label: 'Land Manager', as: :select, collection: User.project_manager.all.map{|a| [a.email, a.id]}
     end
     f.actions do
       f.action(:submit)
@@ -26,9 +26,9 @@ ActiveAdmin.register SubCategory do
     id_column
     column :name
     column :category_id
-    column 'Land Manager',:user_id do |category|
-      link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
-    end
+    # column 'Land Manager',:user_id do |category|
+    #   link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
+    # end
     column :created_at
     column :updated_at
     actions
@@ -39,9 +39,9 @@ ActiveAdmin.register SubCategory do
       row :id
       row :name
       row :category_id
-      row :user_id do
-        link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
-      end
+      # row :user_id do
+      #   link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
+      # end
       row :created_at
       row :updated_at
     end

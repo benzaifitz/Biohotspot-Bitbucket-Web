@@ -60,7 +60,7 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
       end
     end
   end
-  
+
   member_action :promote_to_project_manager, method: :put do
     resource.update_attributes!(user_type: User.user_types['project_manager'])
     redirect_to admin_users_path, :notice => 'User Promoted to Project Manager successfully.' and return
