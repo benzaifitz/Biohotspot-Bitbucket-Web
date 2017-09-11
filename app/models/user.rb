@@ -73,7 +73,6 @@ class User < ApplicationRecord
 
   validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
-  validates_presence_of :project_id, if: Proc.new { |user| user.land_manager? }
   validates_presence_of :mobile_number, if: lambda { |user| user.land_manager? }
   validates_uniqueness_of :email
 
