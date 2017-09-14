@@ -6,7 +6,8 @@ module Api
 
       api :GET, '/documents.json', 'Return all documents'
       def index
-        @documents = Document.all.map{|a| show_data(a)}.group_by{|a| a[:document_category]}
+        @category_documents = CategoryDocument.all.map{|a| {"#{a.name}" => a.documents}}
+        render json: @category_documents
       end
 
       api :GET, '/documents/:id.json', 'Return single document'
