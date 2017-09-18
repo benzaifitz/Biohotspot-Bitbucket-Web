@@ -77,6 +77,7 @@ class User < ApplicationRecord
   validates_presence_of :mobile_number, if: lambda { |user| user.land_manager? }
   validates_uniqueness_of :email
 
+  scope :administrators, -> { where(user_type: User.user_types[:administrator]) }
   attr_accessor :status_change_comment, :mailchimp_fields_updated, :status_updated
 
   after_update :log_user_events
