@@ -15,12 +15,14 @@ module Api
       api :POST, '/feedbacks.json', 'Create a new feedback.'
       param :comment, String, desc: 'Comment.{"feedback":{"comment":"ABC"}}', required: false
       def create
-        @feedback = Feedback.new(feedback_params.merge(land_manager_id: current_user.id, project_id: current_user.project.id))
         begin
+          @feedback = Feedback.new(feedback_params.merge(land_manager_id: current_user.id, project_id: current_user.project.id))
           @feedback.save!
           render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @feedback.errors.full_messages[0])
+        rescue StandardError
+          error(E_INTERNAL, 'Verify that you are logged in and have a project assigned to you.')
         end
       end
 
