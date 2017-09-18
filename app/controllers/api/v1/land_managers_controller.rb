@@ -28,7 +28,6 @@ module Api
       api :GET, '/land_managers/:id.json', 'Show single land_manager resource.'
       # param :id, Integer, desc: 'ID of land_manager to be shown.', required: true
       def show
-        @land_manager = LandManager.first
       end
 
       # PATCH/PUT /api/v1/land_managers/1.json
