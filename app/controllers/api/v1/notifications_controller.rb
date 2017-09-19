@@ -9,7 +9,7 @@ module Api
       api :GET, '/notifications.json', 'Returns a list of push notifications recieved by the current user.'
       param :page, String, desc: 'Value should be 1 or greater'
       def index
-        offset = params[:page].blank? ? 10 : (params[:page].to_i * 10)
+        offset = params[:page].blank? ? 0 : (params[:page].to_i * 10)
         @notifications = Rpush::Client::ActiveRecord::Notification.includes(:user, :sender).where(user: current_user)
                              .limit(Api::V1::LIMIT).offset(offset)
       end
