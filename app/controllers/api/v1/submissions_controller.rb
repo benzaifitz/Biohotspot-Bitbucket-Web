@@ -4,9 +4,13 @@ module Api
       before_action :authenticate_user!
       before_action :set_submission, only: [:show, :destroy, :update]
 
-      api :GET, '/submissions.json', 'Return all submissions'
+      api :GET, '/submissions.json', 'Return all submissions. Send params (unknown_submission= true) to get all unknown submissions'
       def index
+        if params[:unknown_submission] == 'true'
+          @submissions = Submission.where(sub_category_id: nil)
+        else
         @submissions = Submission.all
+        end
       end
 
       api :GET, '/submissions/:id.json', 'Return single submission'
