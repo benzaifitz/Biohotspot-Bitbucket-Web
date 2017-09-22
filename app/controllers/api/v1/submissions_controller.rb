@@ -33,10 +33,10 @@ module Api
       param :sample_photo, String, desc:'Required true', required: false
       param :monitoring_photo, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
-      param :leaf_tie_month, String, desc:'', required: false
-      param :seed_borer, String, desc:'', required: false
-      param :loopers, String, desc:'', required: false
-      param :grazing, String, desc:'', required: false
+      param :leaf_tie_month, [true, false], desc:'', required: false
+      param :seed_borer, [true, false], desc:'', required: false
+      param :loopers, [true, false], desc:'', required: false
+      param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
       param :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def create
@@ -66,10 +66,10 @@ module Api
       param :sample_photo, String, desc:'Required true', required: false
       param :monitoring_photo, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
-      param :leaf_tie_month, String, desc:'', required: false
-      param :seed_borer, String, desc:'', required: false
-      param :loopers, String, desc:'', required: false
-      param :grazing, String, desc:'', required: false
+      param :leaf_tie_month, [true, false], desc:'', required: false
+      param :seed_borer, [true, false], desc:'', required: false
+      param :loopers, [true, false], desc:'', required: false
+      param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
       param :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def update

@@ -5,7 +5,7 @@ class Submission < ApplicationRecord
   mount_uploader :monitoring_photo, MonitoringPhotoUploader
   attr_accessor :sample_photo_cache, :monitoring_photo_cache
   accepts_nested_attributes_for :photos, allow_destroy: true
-  validates_presence_of :monitoring_photo, :sample_photo, :sub_category
+  # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
   validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :dieback, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
 
   after_create :generate_survey_number
