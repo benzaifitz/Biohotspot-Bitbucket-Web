@@ -41,9 +41,9 @@ module Api
         #TODO incorporate caching
         latest_eula = Eula.find_by_is_latest(true)
         # latest_privacy = Privacy.find_by_is_latest(true)
-        # if latest_eula.id != current_user.eula_id
-        #   render json: { deprecated_eula: latest_eula.id != current_user.eula_id}, status: '419' and return
-        # end
+        if current_user.id == 33 && latest_eula.id != current_user.eula_id
+          render json: { deprecated_eula: latest_eula.id != current_user.eula_id}, status: '419' and return
+        end
       end
     end
   end
