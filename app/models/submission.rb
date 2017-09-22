@@ -21,4 +21,8 @@ class Submission < ApplicationRecord
   def generate_survey_number
     self.update_column(:survey_number, "#{self.sub_category_id}+#{self.created_at}")
   end
+
+  def save_by_status(submission_status)
+    submission_status == 'incomplete' ? self.save(validate: false) : self.save!
+  end
 end

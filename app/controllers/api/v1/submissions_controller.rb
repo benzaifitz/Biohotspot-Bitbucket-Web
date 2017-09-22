@@ -38,10 +38,11 @@ module Api
       param :loopers, String, desc:'', required: false
       param :grazing, String, desc:'', required: false
       param :field_notes, String, desc:'', required: false
+      params :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def create
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
-          @submission.save!
+          @submission.save_by_status(params[:submission_status])
           photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
@@ -70,8 +71,10 @@ module Api
       param :loopers, String, desc:'', required: false
       param :grazing, String, desc:'', required: false
       param :field_notes, String, desc:'', required: false
+      params :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def update
-        if @submission.update!(submission_params.merge(submitted_by: current_user.id))
+        @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
+        if @submission.save_by_status(params[:submission_status])
           photos_for_submission(params, @submission)
           render :show
         else
