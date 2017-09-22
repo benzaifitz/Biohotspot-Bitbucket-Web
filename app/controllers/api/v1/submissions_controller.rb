@@ -38,7 +38,7 @@ module Api
       param :loopers, String, desc:'', required: false
       param :grazing, String, desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      params :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def create
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
@@ -71,7 +71,7 @@ module Api
       param :loopers, String, desc:'', required: false
       param :grazing, String, desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      params :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
       def update
         @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
         if @submission.save_by_status(params[:submission_status])
