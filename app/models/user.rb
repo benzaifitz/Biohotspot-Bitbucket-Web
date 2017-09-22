@@ -209,6 +209,38 @@ class User < ApplicationRecord
 
     self.profile_picture = io
   end
+
+  def as_json(options = {})
+    {
+        status: status,
+        approved: approved,
+        id: id,
+        email: email,
+        provider: provider,
+        profile_picture: profile_picture.serializable_hash,
+        user_type: user_type,
+        mobile_number: mobile_number,
+        uid: uid,
+        name: name,
+        eula_id: eula_id,
+        first_name: first_name,
+        last_name: last_name,
+        company: company,
+        rating: rating,
+        number_of_ratings: number_of_ratings,
+        username: username,
+        device_token: device_token,
+        device_type: device_type,
+        uuid_iphone: uuid_iphone,
+        privacy_id: privacy_id,
+        project_id: project_id,
+        managed_project_id: managed_project_id,
+        aws_access_key_id: Rails.application.secrets.aws_access_key_id,
+        aws_secret_access_key: Rails.application.secrets.aws_secret_access_key,
+        aws_s3_bucket: Rails.application.secrets.s3_bucket,
+        aws_s3_region: Rails.application.secrets.s3_region
+    }
+  end
 end
 
 class CarrierStringIO < StringIO
