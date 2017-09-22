@@ -10,9 +10,9 @@ module Api
           ActiveRecord::RecordNotSaved
       ]
 
-      rescue_from Exception do |e|
-        error(E_API, "An internal API error occured. Please try again.\n #{e.message}")
-      end
+      # rescue_from Exception do |e|
+      #   error(E_API, "An internal API error occured. Please try again.\n #{e.message}")
+      # end
 
       def error(code = E_INTERNAL, message = 'API Error')
         render json: {
@@ -40,11 +40,10 @@ module Api
       def check_user_eula_and_privacy
         #TODO incorporate caching
         latest_eula = Eula.find_by_is_latest(true)
-        latest_privacy = Privacy.find_by_is_latest(true)
-        if latest_eula.id != current_user.eula_id || latest_privacy.id != current_user.privacy_id
-          render json: { deprecated_eula: latest_eula.id != current_user.eula_id,
-                         deprecated_privacy: latest_privacy.id != current_user.privacy_id }, status: '419' and return
-        end
+        # latest_privacy = Privacy.find_by_is_latest(true)
+        # if latest_eula.id != current_user.eula_id
+        #   render json: { deprecated_eula: latest_eula.id != current_user.eula_id}, status: '419' and return
+        # end
       end
     end
   end

@@ -12,6 +12,9 @@ module Api
 
       api :GET, '/categories/:id.json', 'Return single category'
       def show
+        if @category.present?
+          render json: @category.as_json.merge(:photos => @category.photos.map{|a| {uri: a.file.url}}, submissions: @category.sub_categories.map{|a| a.submissions})
+        end
       end
 
       api :POST, '/categories.json', 'Create a category'

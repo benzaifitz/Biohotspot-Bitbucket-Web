@@ -7,7 +7,7 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
 
   permit_params do
     allowed = []
-    allowed.push :password if params[:user] && !params[:user][:password].blank?
+    allowed.push :password if params[:land_manager] && !params[:land_manager][:password].blank?
     allowed += [:first_name, :last_name, :email, :mobile_number, :company, :profile_picture,
                 :profile_picture_cache, :username, sub_category_ids: []]
     allowed.uniq

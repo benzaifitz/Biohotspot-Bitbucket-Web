@@ -7,11 +7,11 @@ module Api
 
       # GET /api/v1/notifications.json
       api :GET, '/notifications.json', 'Returns a list of push notifications recieved by the current user.'
-      param :timestamp, String, desc: 'Timestamp of the first or last record in the cache. timestamp and direction are to be used in conjunction'
-      param :direction, String, desc: 'Direction of records. up: 0 and down: 1, with up all records updated after the timestamp are returned, and with down 20 records updated before the timestamp will be returned'
+      param :page, String, desc: 'Value should be 1 or greater'
       def index
+        offset = params[:page].blank? ? 0 : (params[:page].to_i * 10)
         @notifications = Rpush::Client::ActiveRecord::Notification.includes(:user, :sender).where(user: current_user)
-                          .where.not(device_token: nil).paginate_with_timestamp(params[:timestamp], params[:direction])
+                             .limit(Api::V1::LIMIT).offset(offset)
       end
 
       # DELETE /api/v1/notifications/1
