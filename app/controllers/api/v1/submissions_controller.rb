@@ -22,7 +22,7 @@ module Api
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
       param :temperature,String, desc:'', required: false
-      param :health_score, Float, desc:'value must be between 1-5', required: false
+      param :health_score, String, desc:'value must be between 1-5', required: false
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
@@ -54,7 +54,7 @@ module Api
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
       param :temperature,String, desc:'', required: false
-      param :health_score, Float, desc:'value must be between 1-5', required: false
+      param :health_score, String, desc:'value must be between 1-5', required: false
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
