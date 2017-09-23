@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170923050231) do
+ActiveRecord::Schema.define(version: 20170923090459) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -306,8 +306,6 @@ ActiveRecord::Schema.define(version: 20170923050231) do
   create_table "submissions", force: :cascade do |t|
     t.string   "survey_number"
     t.integer  "submitted_by"
-    t.decimal  "lat",              precision: 13, scale: 9
-    t.decimal  "long",             precision: 13, scale: 9
     t.integer  "sub_category_id"
     t.string   "rainfall"
     t.string   "humidity"
@@ -316,16 +314,19 @@ ActiveRecord::Schema.define(version: 20170923050231) do
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.string   "sample_photo"
     t.string   "monitoring_photo"
     t.string   "dieback"
-    t.boolean  "leaf_tie_month",                            default: false
-    t.boolean  "seed_borer",                                default: false
-    t.boolean  "loopers",                                   default: false
-    t.boolean  "grazing",                                   default: false
+    t.boolean  "leaf_tie_month",   default: false
+    t.boolean  "seed_borer",       default: false
+    t.boolean  "loopers",          default: false
+    t.boolean  "grazing",          default: false
     t.text     "field_notes"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "address"
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end

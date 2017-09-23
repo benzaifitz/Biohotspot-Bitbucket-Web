@@ -1,6 +1,6 @@
 if @submission.present?
-  json.extract! @submission, :id, :survey_number, :submitted_by, :lat, :long, :sub_category_id, :rainfall, :humidity,
-                :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter,
+  json.extract! @submission, :id, :survey_number, :submitted_by, :latitude, :longitude, :sub_category_id, :rainfall, :humidity,
+                :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :address,
                 :sample_photo_url, :sample_photo_thumb_url, :monitoring_photo_thumb_url, :monitoring_photo_url,
                 :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes, :created_at, :updated_at
 

@@ -27,8 +27,8 @@
     var handler = Gmaps.build('Google');
     handler.buildMap({ internal: {id: 'map'}}, function(){
         var marker_arr = [];
-        <% submissions.each do |s| %>
-            marker_arr.push({lat: <%= s.lat %>, lng: <%= s.long %>,infowindow: '<%= "Survey number: #{s.survey_number}" %>'});
+        <%- submissions.each do |s| %>
+            marker_arr.push({lat: <%= s.latitude %>, lng: <%= s.longitude %>,infowindow: '<%= "Survey number: #{s.survey_number}" %>'});
         <% end %>
         var markers = handler.addMarkers(marker_arr);
         handler.bounds.extendWith(markers);

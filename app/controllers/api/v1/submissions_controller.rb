@@ -20,8 +20,8 @@ module Api
       api :POST, '/submissions.json', 'Create a submission'
       param :survey_number, String, desc:'', required: false
       param :submitted_by, Integer, desc:'', required: false
-      param :lat, Float, desc:'', required: false
-      param :long, Float, desc:'', required: false
+      param :latitude, Float, desc:'', required: false
+      param :longitude, Float, desc:'', required: false
       param :sub_category_id, Integer, desc:'', required: false
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
@@ -53,8 +53,8 @@ module Api
       api :PUT, '/submissions/:id.json', 'Update a submission'
       param :survey_number, String, desc:'', required: false
       param :submitted_by, Integer, desc:'', required: false
-      param :lat, Float, desc:'', required: false
-      param :long, Float, desc:'', required: false
+      param :latitude, Float, desc:'', required: false
+      param :longitude, Float, desc:'', required: false
       param :sub_category_id, Integer, desc:'', required: false
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
@@ -105,7 +105,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
-        params.require(:submission).permit([:survey_number, :submitted_by, :lat, :long, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
+        params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
       end
     end
   end

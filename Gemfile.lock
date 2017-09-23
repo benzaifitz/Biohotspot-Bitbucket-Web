@@ -341,6 +341,7 @@ GEM
     formtastic (3.1.4)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
+    geocoder (1.4.4)
     gibbon (2.2.5)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
@@ -594,6 +595,7 @@ DEPENDENCIES
   faker
   fancybox-rails (~> 0.3.0)
   fog (~> 1.36)
+  geocoder
   gibbon
   gmaps4rails
   high_voltage!

@@ -7,7 +7,8 @@ ActiveAdmin.register_page 'Submission map' do
   end
 
   page_action :search_submissions, method: :get do
-    @submissions = Category.where(id: params[:category_ids]).map(&:sub_categories).flatten.map(&:submissions).flatten rescue []
+    submission_ids = Category.where(id: params[:category_ids]).map(&:sub_categories).flatten.map(&:submissions).flatten.map(&:id) rescue []
+    @submissions = Submission.where(id :submission_ids).where.not(latitude: nil, longitude: nil) rescue []
     render partial: 'populate_map', locals: {submissions: @submissions}
   end
 
