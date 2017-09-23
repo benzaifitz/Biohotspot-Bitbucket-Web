@@ -26,6 +26,10 @@ module Api
               errors: message
           }, status: :forbidden
         end
+
+        def render_create_success
+          render "api/v1/users/success"
+        end
       end
     end
   end
