@@ -3,11 +3,18 @@ class Photo < ApplicationRecord
   belongs_to :submission, -> { where( photos: { imageable_type: 'Submission' } ).includes( :photos ) }, foreign_key: 'imageable_id'
 
   mount_uploader :file, PhotoUploader
+
   validates :file,
             :file_size => {
                 :maximum => 2.0.megabytes.to_i
             }
   # belongs_to :category
+
+  after_commit :save_images_from_api, if: 'url && url_changed?'
+
+  def save_images_from_api
+    self.update_column(:file, url.split('/').last)
+  end
 
 
 

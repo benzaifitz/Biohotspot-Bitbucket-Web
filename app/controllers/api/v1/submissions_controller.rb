@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubmissionsController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :set_submission, only: [:show, :destroy, :update]
 
       api :GET, '/submissions.json', 'Return all submissions. Send params (unknown_submission= true) to get all unknown submissions'
@@ -9,7 +9,7 @@ module Api
         if params[:unknown_submission] == 'true'
           @submissions = Submission.where(sub_category_id: nil)
         else
-        @submissions = Submission.all
+          @submissions = Submission.all
         end
       end
 
@@ -30,8 +30,8 @@ module Api
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
-      param :sample_photo, String, desc:'Required true', required: false
-      param :monitoring_photo, String, desc:'Required true', required: false
+      param :sample_photo_full_url, String, desc:'Required true', required: false
+      param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
       param :leaf_tie_month, [true, false], desc:'', required: false
       param :seed_borer, [true, false], desc:'', required: false
@@ -63,8 +63,8 @@ module Api
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
-      param :sample_photo, String, desc:'Required true', required: false
-      param :monitoring_photo, String, desc:'Required true', required: false
+      param :sample_photo_full_url, String, desc:'Required true', required: false
+      param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
       param :leaf_tie_month, [true, false], desc:'', required: false
       param :seed_borer, [true, false], desc:'', required: false
@@ -94,7 +94,7 @@ module Api
         if params[:submission][:photos].present?
           submission.photos.destroy_all
           params[:submission][:photos].each do |photo|
-            Photo.create(file: photo['file'], url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
+            Photo.create(url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
           end
         end
       end
@@ -105,7 +105,10 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
-        params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
+        params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
+                                            :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover,
+                                            :live_branch_stem, :stem_diameter, :sample_photo_full_url, :monitoring_photo_full_url,
+                                            :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
       end
     end
   end
