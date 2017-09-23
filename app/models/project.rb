@@ -1,6 +1,7 @@
 class Project < ApplicationRecord
   has_many :users
   has_many :sites
+  has_many :document_projects
   has_many :documents, :through => :document_projects
   has_many :feedbacks
 
