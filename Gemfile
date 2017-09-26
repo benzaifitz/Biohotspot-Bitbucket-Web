@@ -83,3 +83,4 @@ gem 'activeadmin_addons'
 gem 'geocoder'
 gem 'mina','1.0.7'
 gem 'mina-rpush', require: false
+gem 'mina-sidekiq'

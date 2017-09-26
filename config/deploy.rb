@@ -1,12 +1,14 @@
-require 'mina/deploy'
-require 'mina/install'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rvm'
+require_relative 'deploy/recipes/redis'
+require_relative 'deploy/recipes/rpush'
+require_relative 'deploy/recipes/sidekiq'
+
 set :domain, '54.206.115.78'
 set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
-set :branch, 'master'
+set :branch, 'feat/PWM-216'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true
@@ -18,6 +20,7 @@ set :identity_file, '~/.ssh/pwm.pem'
 #   branch       - Branch name to deploy. (needed by mina/git)
 set :application_name, 'pilbara-weed-management-web'
 set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/secrets.yml', '.env')
+set :shared_paths, ['log','tmp']
 
 # Optional settings:
 #   set :user, 'foobar'          # Username in the server to SSH to.
@@ -53,53 +56,19 @@ task :'deploy' do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-
     on :launch do
       in_path(fetch(:current_path)) do
+        invoke :'rvm:use', 'ruby-2.3.0@default'
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
-        invoke :'redis:restart'
-        invoke :'deploy:restart'
+        invoke 'redis:restart'
+        invoke 'rpush:restart'
+        invoke 'sidekiq:stop'
       end
+
     end
   end
 
 end
 
-namespace :redis do
-  desc "Install the latest release of Redis"
-  task :install do
-    on roles(:app) do
-      run "#{sudo} add-apt-repository ppa:chris-lea/redis-server", :pty => true do |ch, stream, data|
-        press_enter(ch, stream, data)
-      end
-      run "#{sudo} apt-get -y update"
-      run "#{sudo} apt-get -y install redis-server"
-    end
-  end
 
-  %w[start stop restart].each do |command|
-    desc "#{command} redis"
-    task command do
-      on roles(:web), in: :sequence, wait: 1 do
-        # run "#{sudo} service redis-server #{command}"
-        execute :sudo, "nohup service redis-server #{command}"
-      end
-    end
-  end
-end
-
-namespace :deploy do
-  task :rpush_restart do
-    on roles(:all) do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          if test("[ -f #{release_path}/tmp/pids/rpush.pid ]")
-            execute :bundle, :exec, "rpush stop -e #{fetch(:rails_env)}"
-          end
-          execute :bundle, :exec, "rpush start -e #{fetch(:rails_env)}"
-        end
-      end
-    end
-  end
-end
