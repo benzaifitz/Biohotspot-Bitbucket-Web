@@ -392,6 +392,8 @@ GEM
     mina (1.0.7)
       open4 (~> 1.3.4)
       rake
+    mina-rpush (1.0.0)
+      rpush
     mini_magick (4.6.0)
     mini_portile2 (2.1.0)
     minitest (5.10.1)
@@ -610,7 +612,8 @@ DEPENDENCIES
   jquery-ui-rails (~> 5.0.5)
   launchy
   letter_opener
-  mina
+  mina (= 1.0.7)
+  mina-rpush
   mini_magick (~> 4.3, >= 4.3.6)
   omniauth (>= 1.3.1)
   paper_trail (~> 4.0.0)

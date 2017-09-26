@@ -81,4 +81,5 @@ gem 'sinatra', :require => nil #may re-enable it
 gem 'underscore-rails'
 gem 'activeadmin_addons'
 gem 'geocoder'
-gem 'mina'
+gem 'mina','1.0.7'
+gem 'mina-rpush', require: false
