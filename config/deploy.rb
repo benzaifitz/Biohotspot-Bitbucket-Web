@@ -8,7 +8,7 @@ require_relative 'deploy/recipes/sidekiq'
 set :domain, '54.206.115.78'
 set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
-set :branch, 'develop'
+set :branch, 'feat/PWM-192'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true
@@ -56,13 +56,14 @@ task :'deploy' do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
+    invoke 'rpush:stop'
     on :launch do
       in_path(fetch(:current_path)) do
         invoke :'rvm:use', 'ruby-2.3.0@default'
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
         invoke 'redis:restart'
-        invoke 'rpush:restart'
+        invoke 'rpush:start'
         invoke 'sidekiq:stop'
       end
 
