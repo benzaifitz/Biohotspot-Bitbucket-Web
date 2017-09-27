@@ -14,8 +14,8 @@ class Submission < ApplicationRecord
 
   after_create :generate_survey_number
 
-  after_commit :save_sample_photo_from_api, if: 'sample_photo_full_url && sample_photo_full_url_changed?'
-  after_commit :save_monitoring_photo_from_api, if: 'monitoring_photo_full_url && monitoring_photo_full_url_changed?'
+  after_save :save_sample_photo_from_api, if: 'sample_photo_full_url && sample_photo_full_url_changed?'
+  after_save :save_monitoring_photo_from_api, if: 'monitoring_photo_full_url && monitoring_photo_full_url_changed?'
 
   def save_sample_photo_from_api
     self.update_column(:sample_photo, sample_photo_full_url.split('/').last)
