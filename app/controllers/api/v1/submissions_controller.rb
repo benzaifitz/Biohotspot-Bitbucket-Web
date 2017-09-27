@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubmissionsController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
       before_action :set_submission, only: [:show, :destroy, :update]
 
       api :GET, '/submissions.json', 'Return all submissions. Send params (unknown_submission= true) to get all unknown submissions'
