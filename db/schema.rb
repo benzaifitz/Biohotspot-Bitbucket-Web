@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927103625) do
+ActiveRecord::Schema.define(version: 20170927111636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -332,7 +332,7 @@ ActiveRecord::Schema.define(version: 20170927103625) do
     t.string   "sample_photo_secure_token"
     t.string   "sample_photo_full_url"
     t.string   "monitoring_photo_full_url"
-    t.integer  "status",                        default: 0
+    t.integer  "status",                        default: 1
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end

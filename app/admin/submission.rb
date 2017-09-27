@@ -4,7 +4,7 @@ ActiveAdmin.register Submission do
 
   permit_params :sub_category_id, :survey_number, :submitted_by, :sub_category, :rainfall, :humidity, :temperature,
                 :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback,
-                :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes,
+                :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes, :status,
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
   actions :all
 
@@ -74,6 +74,7 @@ ActiveAdmin.register Submission do
       f.input :temperature, label: 'Temperature (ave for previous month)'
       f.input :rainfall
       f.input :humidity, label: 'Temperature (ave for previous month)'
+      f.input :status
       f.inputs "IS THE FOLLOWING ON THE PLANT?"  do
         f.input :leaf_tie_month, as: :boolean
         f.input :seed_borer, as: :boolean
