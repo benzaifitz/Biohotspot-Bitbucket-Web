@@ -38,11 +38,11 @@ module Api
       param :loopers, [true, false], desc:'', required: false
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def create
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
-          @submission.save_by_status(params[:submission_status])
+          @submission.save_by_status
           photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
@@ -71,10 +71,10 @@ module Api
       param :loopers, [true, false], desc:'', required: false
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def update
         @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
-        if @submission.save_by_status(params[:submission_status])
+        if @submission.save_by_status
           photos_for_submission(params, @submission)
           render :show
         else
@@ -106,7 +106,7 @@ module Api
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
         params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
-                                            :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover,
+                                            :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :status,
                                             :live_branch_stem, :stem_diameter, :sample_photo_full_url, :monitoring_photo_full_url,
                                             :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
       end

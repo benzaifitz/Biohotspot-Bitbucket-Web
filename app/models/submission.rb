@@ -8,6 +8,7 @@ class Submission < ApplicationRecord
   # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
   validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :dieback, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
 
+  enum status: [:complete, :incomplete]
   reverse_geocoded_by :latitude, :longitude
   after_validation :reverse_geocode
 
@@ -36,7 +37,7 @@ class Submission < ApplicationRecord
     self.update_column(:survey_number, "#{self.sub_category_id}+#{self.created_at}")
   end
 
-  def save_by_status(submission_status)
-    submission_status == 'incomplete' ? self.save(validate: false) : self.save!
+  def save_by_status
+    incomplete? ? self.save(validate: false) : self.save!
   end
 end
