@@ -209,6 +209,7 @@ class User < ApplicationRecord
 
     self.profile_picture = io
   end
+  
 end
 
 class CarrierStringIO < StringIO

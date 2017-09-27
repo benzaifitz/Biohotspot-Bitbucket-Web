@@ -10,16 +10,28 @@ module Api
           ActiveRecord::RecordNotSaved
       ]
 
-      # rescue_from Exception do |e|
-      #   error(E_API, "An internal API error occured. Please try again.\n #{e.message}")
+      rescue_from Exception do |e|
+        error(E_API, "An internal API error occured. Please try again.\n #{e.message}")
+      end
+
+      # def error(code = E_INTERNAL, message = 'API Error')
+      #   render json: {
+      #              status: STATUS_ERROR,
+      #              error_no: code,
+      #              message: message
+      #          }, :status=>406
       # end
 
-      def error(code = E_INTERNAL, message = 'API Error')
+      def error(code = E_INTERNAL, message = 'API Error', status = 406)
         render json: {
                    status: STATUS_ERROR,
                    error_no: code,
-                   message: message
-               }, :status=>406
+                   message: message,
+                   errors: {
+                       message: message,
+                       full_messages: [message]
+                   }
+               }, status: status
       end
 
       def validate_json

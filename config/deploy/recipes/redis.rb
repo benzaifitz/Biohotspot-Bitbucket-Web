@@ -12,15 +12,10 @@ namespace :redis do
   #   end
   # end
 
-
-  %w[start stop restart].each do |command|
-    desc "#{command} redis"
-    task command do
-      on roles(:web), in: :sequence, wait: 1 do
-        # run "#{sudo} service redis-server #{command}"
-        execute :sudo, "nohup service redis-server #{command}"
-      end
+  task :restart do
+    in_path(fetch(:current_path)) do
+      command %{sudo nohup service redis-server restart}
     end
   end
-  after "deploy:restart", 'redis:restart'
+
 end

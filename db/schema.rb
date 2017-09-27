@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170918064459) do
+ActiveRecord::Schema.define(version: 20170927111636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,12 +165,13 @@ ActiveRecord::Schema.define(version: 20170918064459) do
   create_table "photos", force: :cascade do |t|
     t.string   "file"
     t.string   "url"
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.integer  "imageable_id"
     t.string   "imageable_type"
-    t.boolean  "approved",       default: true
+    t.boolean  "approved",          default: true
     t.string   "reject_comment"
+    t.string   "file_secure_token"
     t.index ["imageable_id", "imageable_type"], name: "index_photos_on_imageable_id_and_imageable_type", using: :btree
   end
 
@@ -276,6 +277,7 @@ ActiveRecord::Schema.define(version: 20170918064459) do
     t.integer  "user_id"
     t.integer  "sent_by_id"
     t.boolean  "is_admin_notification",            default: false
+    t.boolean  "deleted",                          default: false
     t.index ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
     t.index ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
     t.index ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
@@ -305,8 +307,6 @@ ActiveRecord::Schema.define(version: 20170918064459) do
   create_table "submissions", force: :cascade do |t|
     t.string   "survey_number"
     t.integer  "submitted_by"
-    t.decimal  "lat",              precision: 13, scale: 9
-    t.decimal  "long",             precision: 13, scale: 9
     t.integer  "sub_category_id"
     t.string   "rainfall"
     t.string   "humidity"
@@ -315,16 +315,24 @@ ActiveRecord::Schema.define(version: 20170918064459) do
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
     t.float    "stem_diameter"
-    t.datetime "created_at",                                                null: false
-    t.datetime "updated_at",                                                null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.string   "sample_photo"
     t.string   "monitoring_photo"
     t.string   "dieback"
-    t.boolean  "leaf_tie_month",                            default: false
-    t.boolean  "seed_borer",                                default: false
-    t.boolean  "loopers",                                   default: false
-    t.boolean  "grazing",                                   default: false
+    t.boolean  "leaf_tie_month",                default: false
+    t.boolean  "seed_borer",                    default: false
+    t.boolean  "loopers",                       default: false
+    t.boolean  "grazing",                       default: false
     t.text     "field_notes"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.string   "address"
+    t.string   "monitoring_photo_secure_token"
+    t.string   "sample_photo_secure_token"
+    t.string   "sample_photo_full_url"
+    t.string   "monitoring_photo_full_url"
+    t.integer  "status",                        default: 1
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end

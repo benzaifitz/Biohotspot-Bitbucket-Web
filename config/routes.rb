@@ -45,6 +45,7 @@ Rails.application.routes.draw do
        resources :reported_chats, only: [:show, :create]
        resources :jobs
        resources :notifications, only: [:index, :destroy]
+       delete 'notifications' => 'notifications#destroy_all'
        resources :tutorials
        resources :pages do
          collection do

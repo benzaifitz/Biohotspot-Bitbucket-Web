@@ -20,11 +20,19 @@ module Api
         private
 
         def render_error_banned_user(user)
-          message = user.banned? ? [I18n.t("devise_token_auth.sessions.disabled_account")] : [I18n.t("devise_token_auth.sessions.unapproved_account")]
+          message = (user && user.banned?) ? [I18n.t("devise_token_auth.sessions.disabled_account")] : [I18n.t("devise_token_auth.sessions.unapproved_account")]
           render json: {
               success: false,
-              errors: message
+              message: message,
+              errors: {
+                  message: message,
+                  full_messages: [message]
+              }
           }, status: :forbidden
+        end
+
+        def render_create_success
+          render "api/v1/users/success"
         end
       end
     end

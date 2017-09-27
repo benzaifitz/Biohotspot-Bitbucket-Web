@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubmissionsController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :set_submission, only: [:show, :destroy, :update]
 
       api :GET, '/submissions.json', 'Return all submissions. Send params (unknown_submission= true) to get all unknown submissions'
@@ -9,7 +9,7 @@ module Api
         if params[:unknown_submission] == 'true'
           @submissions = Submission.where(sub_category_id: nil)
         else
-        @submissions = Submission.all
+          @submissions = Submission.all
         end
       end
 
@@ -20,8 +20,8 @@ module Api
       api :POST, '/submissions.json', 'Create a submission'
       param :survey_number, String, desc:'', required: false
       param :submitted_by, Integer, desc:'', required: false
-      param :lat, Float, desc:'', required: false
-      param :long, Float, desc:'', required: false
+      param :latitude, Float, desc:'', required: false
+      param :longitude, Float, desc:'', required: false
       param :sub_category_id, Integer, desc:'', required: false
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
@@ -30,19 +30,19 @@ module Api
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
-      param :sample_photo, String, desc:'Required true', required: false
-      param :monitoring_photo, String, desc:'Required true', required: false
+      param :sample_photo_full_url, String, desc:'Required true', required: false
+      param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
       param :leaf_tie_month, [true, false], desc:'', required: false
       param :seed_borer, [true, false], desc:'', required: false
       param :loopers, [true, false], desc:'', required: false
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def create
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
-          @submission.save_by_status(params[:submission_status])
+          @submission.save_by_status
           photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
@@ -53,8 +53,8 @@ module Api
       api :PUT, '/submissions/:id.json', 'Update a submission'
       param :survey_number, String, desc:'', required: false
       param :submitted_by, Integer, desc:'', required: false
-      param :lat, Float, desc:'', required: false
-      param :long, Float, desc:'', required: false
+      param :latitude, Float, desc:'', required: false
+      param :longitude, Float, desc:'', required: false
       param :sub_category_id, Integer, desc:'', required: false
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
@@ -63,18 +63,18 @@ module Api
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
       param :stem_diameter, Float, desc:'value must be between 1-5', required: false
-      param :sample_photo, String, desc:'Required true', required: false
-      param :monitoring_photo, String, desc:'Required true', required: false
+      param :sample_photo_full_url, String, desc:'Required true', required: false
+      param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
       param :leaf_tie_month, [true, false], desc:'', required: false
       param :seed_borer, [true, false], desc:'', required: false
       param :loopers, [true, false], desc:'', required: false
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      param :submission_status, String, desc: 'Should be send outside submission hash', required: false
+      param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def update
         @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
-        if @submission.save_by_status(params[:submission_status])
+        if @submission.save_by_status
           photos_for_submission(params, @submission)
           render :show
         else
@@ -94,7 +94,7 @@ module Api
         if params[:submission][:photos].present?
           submission.photos.destroy_all
           params[:submission][:photos].each do |photo|
-            Photo.create(file: photo['file'], url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
+            Photo.create(url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
           end
         end
       end
@@ -105,7 +105,10 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
-        params.require(:submission).permit([:survey_number, :submitted_by, :lat, :long, :sub_category_id, :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
+        params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
+                                            :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :status,
+                                            :live_branch_stem, :stem_diameter, :sample_photo_full_url, :monitoring_photo_full_url,
+                                            :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
       end
     end
   end
