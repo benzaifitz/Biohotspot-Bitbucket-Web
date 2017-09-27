@@ -8,7 +8,7 @@ require_relative 'deploy/recipes/sidekiq'
 set :domain, '54.206.115.78'
 set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
-set :branch, 'feat/PWM-216'
+set :branch, 'develop'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true

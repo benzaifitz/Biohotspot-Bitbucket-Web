@@ -7,13 +7,17 @@ module Api
       api :GET, '/categories.json', 'Return all categories'
       def index
         @categories = Category.all
-        render json: @categories.map{|a| {id: a.id, name: a.name, location: a.location, surveys: a.sub_categories.map{|a| a.submissions.count}.sum, photo: a.photos.present? ? a.photos.first.file_url : ""}}, status: :ok
+        render json: @categories.map{|a| {id: a.id, name: a.name, location: a.location,
+                                          surveys: a.sub_categories.map{|a| a.submissions.count}.sum,
+                                          complete_surveys: a.sub_categories.map{|a| a.submissions.where(status: Submission.statuses[:complete]).count}.sum,
+                                          photo: a.photos.present? ? a.photos.first.file_url : ""}}, status: :ok
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
       def show
         if @category.present?
-          render json: @category.as_json.merge(:photos => @category.photos.map{|a| {uri: a.file.url}}, submissions: @category.sub_categories.map{|a| a.submissions})
+          render json: @category.as_json.merge(:photos => @category.photos.map{|a| {uri: a.file.url}},
+                                               submissions: @category.sub_categories.map{|a| a.submissions})
         end
       end
 
