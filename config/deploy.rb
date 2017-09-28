@@ -19,7 +19,7 @@ set :identity_file, '~/.ssh/pwm.pem'
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
 set :application_name, 'pilbara-weed-management-web'
-set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/secrets.yml', '.env')
+set :shared_files, fetch(:shared_files, []).push('config/certs/distribution.yml', 'config/database.yml', 'config/secrets.yml', '.env')
 set :shared_paths, fetch(:shared_paths, []).push('log','tmp', 'config/certs')
 
 # Optional settings:
