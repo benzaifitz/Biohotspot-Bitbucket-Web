@@ -23,10 +23,10 @@ class Job < ApplicationRecord
   validate :offered_by_user_is_customer, :offered_to_user_is_staff
 
   before_create :is_created_by_customer?
-  after_create :send_push_notification_to_staff
+  # after_create :send_push_notification_to_staff
   before_update :is_user_allowed_to_set_job_status
-  after_update :send_push_notification_to_customer, :send_email_notification_to_customer, if: :status_of_customers_interest_has_changed?
-  after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
+  # after_update :send_push_notification_to_customer, :send_email_notification_to_customer, if: :status_of_customers_interest_has_changed?
+  # after_update :send_push_notification_to_staff, if: :status_of_staffs_interest_has_changed?
 
   def is_created_by_customer?
      if self.offered_by.land_manager?
@@ -49,7 +49,7 @@ class Job < ApplicationRecord
 
   def send_push_notification_to_customer
     return if self.offered_by.nil? || self.offered_by.device_token.nil?
-    n = Rpush::Apns::Notification.new
+    n = Rpush::Apns2::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
@@ -73,7 +73,7 @@ class Job < ApplicationRecord
 
   def send_push_notification_to_staff
     return if self.user.nil? || self.user.device_token.nil?
-    n = Rpush::Apns::Notification.new
+    n = Rpush::Apns2::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.user.device_token
     n.alert = "Status of job changed to #{status} by #{self.offered_by.full_name}"

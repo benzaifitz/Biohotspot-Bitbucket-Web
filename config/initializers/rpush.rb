@@ -138,8 +138,8 @@ end
 module Rpush
   module Client
     module ActiveRecord
-      module Apns
-        class Notification < Rpush::Client::ActiveRecord::Notification
+      module Apns2
+        class Notification < Rpush::Client::ActiveRecord::Apns::Notification
           belongs_to :user
           belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
         end

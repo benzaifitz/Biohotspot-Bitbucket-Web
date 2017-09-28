@@ -1,6 +1,6 @@
 module PushNotification
 
-  APNS_APP = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+  APNS_APP = Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name)
   FCM_APP = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
 
   def self.sends(opts)
@@ -17,7 +17,7 @@ module PushNotification
   end
 
   def self.send_apns_notifications(opts)
-    n = Rpush::Apns::Notification.new
+    n = Rpush::Apns2::Notification.new
     n.app = APNS_APP
     n.device_token = opts[:device_token]
     n.alert = opts[:data][:alert]

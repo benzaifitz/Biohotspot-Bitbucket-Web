@@ -191,8 +191,8 @@ class User < ApplicationRecord
     unread_conversations = unread(conversations) + unread(user_conversations)
     badge_counter = unread_conversations # Also add other notifications to counter
 
-    n = Rpush::Apns::Notification.new
-    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n = Rpush::Apns2::Notification.new
+    n.app = Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.device_token
     n.alert = msgst
     n.data = { key: 'MSG', unread_conversations: unread_conversations }

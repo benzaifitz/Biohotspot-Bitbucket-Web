@@ -20,7 +20,7 @@ class Chat < ApplicationRecord
   validates_presence_of :from_user_id, :conversation_id, :status
   validate :conversation_is_not_abandoned
 
-  after_create :send_push_notification_to_reciever, :send_email_notification_to_customer
+  # after_create :send_push_notification_to_reciever, :send_email_notification_to_customer
 
   delegate :ban_with_comment, :enable_with_comment, :bannable, to: :from_user
   delegate :recipient, to: :conversation
@@ -45,7 +45,7 @@ class Chat < ApplicationRecord
     sender, receiver = get_users_for_chat(conversation)
 
     return if receiver.device_token.nil? || receiver.is_logged_out?
-    n = Rpush::Apns::Notification.new
+    n = Rpush::Apns2::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = receiver.device_token
     n.alert = "#{sender.full_name} sent you a message: #{self.message}"
@@ -61,7 +61,7 @@ class Chat < ApplicationRecord
     return unless receiver.is_logged_out?
 
     n = RpushNotification.new
-    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n.app = Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name)
     n.category = "#{sender.full_name} sent you a message"
     n.alert = "#{sender.full_name} sent you a message: #{self.message}"
     n.data = { type: Chat.to_s, data: { conversation_id: self.conversation_id, message_id: self.id, message: self.message } }

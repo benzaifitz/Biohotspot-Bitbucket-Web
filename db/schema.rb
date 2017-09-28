@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170927111636) do
+ActiveRecord::Schema.define(version: 20170928070648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -249,7 +249,7 @@ ActiveRecord::Schema.define(version: 20170927111636) do
     t.integer  "badge"
     t.string   "device_token",          limit: 64
     t.string   "sound",                            default: "default"
-    t.string   "alert"
+    t.text     "alert"
     t.text     "data"
     t.integer  "expiry",                           default: 86400
     t.boolean  "delivered",                        default: false,     null: false
@@ -278,6 +278,9 @@ ActiveRecord::Schema.define(version: 20170927111636) do
     t.integer  "sent_by_id"
     t.boolean  "is_admin_notification",            default: false
     t.boolean  "deleted",                          default: false
+    t.boolean  "content_available",                default: false
+    t.text     "notification"
+    t.boolean  "mutable_content",                  default: false
     t.index ["delivered", "failed"], name: "index_rpush_notifications_multi", where: "((NOT delivered) AND (NOT failed))", using: :btree
     t.index ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
     t.index ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree

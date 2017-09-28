@@ -20,14 +20,14 @@ module Api
       api :DELETE, '/notifications/:id.json', 'Delete the notification.'
       param :id, String, desc: 'Id of the job which is to be deleted.', required: true
       def destroy
-        Rpush::Apns::Notification.where(id: params[:id], user: current_user).delete_all
+        Rpush::Client::ActiveRecord::Notification.where(id: params[:id], user: current_user).delete_all
         render json: {success: 'Notification deleted successfully.'}
       end
 
       # DELETE /api/v1/notifications.json
       api :DELETE, '/notifications.json', 'Delete all the notifications of current user.'
       def destroy_all
-        Rpush::Apns::Notification.where(user: current_user).update_all(deleted: true)
+        Rpush::Client::ActiveRecord::Notification.where(user: current_user).update_all(deleted: true)
         render json: {success: 'All Notifications deleted successfully.'}
       end
     end
