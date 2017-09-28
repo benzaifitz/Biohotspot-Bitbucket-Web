@@ -20,7 +20,7 @@ set :identity_file, '~/.ssh/pwm.pem'
 #   branch       - Branch name to deploy. (needed by mina/git)
 set :application_name, 'pilbara-weed-management-web'
 set :shared_files, fetch(:shared_files, []).push('config/database.yml', 'config/secrets.yml', '.env')
-set :shared_paths, ['log','tmp', 'config/certs']
+set :shared_paths, fetch(:shared_paths, []).push('log','tmp', 'config/certs')
 
 # Optional settings:
 #   set :user, 'foobar'          # Username in the server to SSH to.
