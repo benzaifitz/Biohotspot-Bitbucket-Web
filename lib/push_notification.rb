@@ -42,7 +42,6 @@ module PushNotification
     n.device_token = '5870ae3cdfc04d9a8d31ac0028f4907b6e97a32988e3fc2a69c8ab55e827a8b5'
     n.alert = "Test 1234 #{SecureRandom.hex(20)}"
     n.user_id = 17
-    n.data = {"job_id":6,"status":"withdrawn","offered_by_id":11,"detail":"offering job"}
     n.badge = 1
     n.save!
   end

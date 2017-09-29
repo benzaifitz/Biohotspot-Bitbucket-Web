@@ -11,7 +11,7 @@
 if Rails.env.development? && Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name).nil?
   app = Rpush::Apns::App.new
   app.name = Rails.application.secrets.app_name
-  app.certificate = File.read("#{Rails.root}/config/certs/development.pem")
+  app.certificate = File.read("#{Rails.root}/config/certs/DevCertificate.pem")
   app.environment = 'development'
   app.password = nil
   app.connections = 1
