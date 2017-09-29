@@ -9,7 +9,7 @@ module Api
         if params[:unknown_submission] == 'true'
           @submissions = Submission.where(sub_category_id: nil)
         else
-          @submissions = Submission.all
+          @submissions = Submission.where.not(sub_category_id: nil).where(submitted_by: current_user.id)
         end
       end
 

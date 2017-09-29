@@ -54,6 +54,7 @@ Rails.application.routes.draw do
        end
        resources :documents
        resources :categories
+       resources :sub_categories, only: [:index]
        resources :submissions
      end
    end
