@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubCategoriesController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
 
 
       api :GET, '/sub_categories.json', 'Return all sub categories'
