@@ -6,7 +6,8 @@ module Api
 
       api :GET, '/sub_categories.json', 'Return all sub categories'
       def index
-        @sub_categories = Submission.where.not(sub_category_id: nil).map(&:sub_category).flatten
+        @sub_categories = Submission.where.not(sub_category_id: nil).
+            where(submitted_by: current_user.id).map(&:sub_category).flatten
       end
 
 
