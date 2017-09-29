@@ -9,6 +9,7 @@ module DevisePermittedParameters
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name])
+    devise_parameter_sanitizer.permit(:sign_in, keys: [:device_token, :device_type])
     devise_parameter_sanitizer.permit(:account_update, keys:[:name])
   end
 

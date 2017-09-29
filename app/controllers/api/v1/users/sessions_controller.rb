@@ -8,6 +8,8 @@ module Api
           user = User.find_by(email: params[:email])
           user_by_mobile = User.find_by(mobile_number: params[:email]) if params[:email].length > 0
           if user && user.active_for_authentication?
+            user.device_token = params[:device_token]
+            user.device_type = params[:device_type]
             super
           elsif user_by_mobile && user_by_mobile.active? && user_by_mobile.land_manager?
             params[:email] = user_by_mobile.email

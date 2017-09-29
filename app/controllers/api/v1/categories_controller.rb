@@ -8,8 +8,8 @@ module Api
       def index
         @categories = Category.all
         render json: @categories.map{|a| {id: a.id, name: a.name, location: a.location,
-                                          surveys: a.sub_categories.map{|a| a.submissions.count}.sum,
-                                          complete_surveys: a.sub_categories.map{|a| a.submissions.where(status: Submission.statuses[:complete]).count}.sum,
+                                          surveys: a.sub_categories.map{|a| a.submission}.compact.count,
+                                          complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
                                           photo: a.photos.present? ? a.photos.first.file_url : ""}}, status: :ok
       end
 
@@ -17,7 +17,7 @@ module Api
       def show
         if @category.present?
           render json: @category.as_json.merge(site: @category.site,:photos => @category.photos.map{|a| {uri: a.file.url}},
-                                               submissions: @category.sub_categories.map{|a| a.submissions})
+                                               submissions: @category.sub_categories.map{|a| a.submission})
         end
       end
 
