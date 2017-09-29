@@ -1,5 +1,7 @@
 if @category.present?
-  json.category @category
+  json.category do
+    json.partial! "api/v1/sub_categories/category", category: @category
+  end
   if @sub_categories.present?
     json.sub_categories @sub_categories do |sub_category|
       json.extract! sub_category, :id, :name, :category_id, :user_id
