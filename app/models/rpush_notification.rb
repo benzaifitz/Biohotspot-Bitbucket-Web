@@ -40,7 +40,7 @@ class Rpush::Client::ActiveRecord::Notification
   belongs_to :sender, class_name: "User", foreign_key: "sent_by_id"
 end
 
-class RpushNotification < Rpush::Client::ActiveRecord::Apns2::Notification
+class RpushNotification < Rpush::Client::ActiveRecord::Apns::Notification
   attr_accessor :user_type
   attr_accessor :notification_type
 

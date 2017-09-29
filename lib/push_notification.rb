@@ -1,6 +1,6 @@
 module PushNotification
 
-  APNS_APP = Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name)
+  APNS_APP = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
   FCM_APP = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
 
   def self.sends(opts)
@@ -17,7 +17,7 @@ module PushNotification
   end
 
   def self.send_apns_notifications(opts)
-    n = Rpush::Apns2::Notification.new
+    n = Rpush::Apns::Notification.new
     n.app = APNS_APP
     n.device_token = opts[:device_token]
     n.alert = opts[:data][:alert]
@@ -35,4 +35,15 @@ module PushNotification
     n.save!
   end
 
+  def taaa
+
+    n = Rpush::Apns::Notification.new
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    n.device_token = '5870ae3cdfc04d9a8d31ac0028f4907b6e97a32988e3fc2a69c8ab55e827a8b5'
+    n.alert = "Test 1234 #{SecureRandom.hex(20)}"
+    n.user_id = 17
+    n.data = {"job_id":6,"status":"withdrawn","offered_by_id":11,"detail":"offering job"}
+    n.badge = 1
+    n.save!
+  end
 end

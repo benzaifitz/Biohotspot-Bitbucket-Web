@@ -49,7 +49,7 @@ class Job < ApplicationRecord
 
   def send_push_notification_to_customer
     return if self.offered_by.nil? || self.offered_by.device_token.nil?
-    n = Rpush::Apns2::Notification.new
+    n = Rpush::Apns::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.offered_by.device_token
     n.alert = "Status of job changed to #{status} by #{self.user.full_name}"
@@ -73,7 +73,7 @@ class Job < ApplicationRecord
 
   def send_push_notification_to_staff
     return if self.user.nil? || self.user.device_token.nil?
-    n = Rpush::Apns2::Notification.new
+    n = Rpush::Apns::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = self.user.device_token
     n.alert = "Status of job changed to #{status} by #{self.offered_by.full_name}"

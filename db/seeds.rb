@@ -8,18 +8,18 @@
 # user = CreateAdminService.new.call
 # puts 'CREATED ADMIN USER: ' << user.email
 
-if Rails.env.development? && Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name).nil?
-  app = Rpush::Apns2::App.new
+if Rails.env.development? && Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name).nil?
+  app = Rpush::Apns::App.new
   app.name = Rails.application.secrets.app_name
   app.certificate = File.read("#{Rails.root}/config/certs/development.pem")
-  app.environment = 'sandbox'
-  app.password = 'test1234'
+  app.environment = 'development'
+  app.password = nil
   app.connections = 1
   app.save!
 end
 
-if Rails.env.production? && Rpush::Apns2::App.find_by_name(Rails.application.secrets.app_name).nil?
-  app = Rpush::Apns2::App.new
+if Rails.env.production? && Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name).nil?
+  app = Rpush::Apns::App.new
   app.name = Rails.application.secrets.app_name
   app.certificate = File.read("#{Rails.root}/config/certs/distribution.pem")
   app.environment = 'production'
