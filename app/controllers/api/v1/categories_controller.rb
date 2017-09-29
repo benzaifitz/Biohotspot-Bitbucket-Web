@@ -1,7 +1,7 @@
 module Api
   module V1
     class CategoriesController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
       before_action :set_category, only: [:show, :destroy, :update]
 
       api :GET, '/categories.json', 'Return all categories'
@@ -16,7 +16,7 @@ module Api
       api :GET, '/categories/:id.json', 'Return single category'
       def show
         if @category.present?
-          render json: @category.as_json.merge(:photos => @category.photos.map{|a| {uri: a.file.url}},
+          render json: @category.as_json.merge(site: @category.site,:photos => @category.photos.map{|a| {uri: a.file.url}},
                                                submissions: @category.sub_categories.map{|a| a.submissions})
         end
       end
