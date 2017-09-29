@@ -34,6 +34,7 @@ module Api
         end
 
         def render_create_success
+          @resource.update_columns(device_token: params[:device_token], device_type: params[:device_type])
           render "api/v1/users/success"
         end
       end
