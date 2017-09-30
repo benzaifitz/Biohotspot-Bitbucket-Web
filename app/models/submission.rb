@@ -38,6 +38,6 @@ class Submission < ApplicationRecord
   end
 
   def save_by_status
-    incomplete? ? self.save(validate: false) : self.save!
+    incomplete? ? self.save(validate: false) : self.save(validate: false)
   end
 end
