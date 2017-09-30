@@ -39,7 +39,8 @@ class Submission < ApplicationRecord
   end
 
   def save_by_status
-    incomplete? ? self.save(validate: false) : self.save!
+    self.save(validate: false)
+    # incomplete? ? self.save(validate: false) : self.save!
   end
 
   def convert_data_type
