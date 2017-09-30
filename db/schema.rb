@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170928070648) do
+ActiveRecord::Schema.define(version: 20170930084411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20170928070648) do
     t.string   "health_score"
     t.string   "live_leaf_cover"
     t.string   "live_branch_stem"
-    t.float    "stem_diameter"
+    t.string   "stem_diameter"
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
     t.string   "sample_photo"

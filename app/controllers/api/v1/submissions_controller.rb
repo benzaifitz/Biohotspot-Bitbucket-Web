@@ -29,7 +29,7 @@ module Api
       param :health_score, String, desc:'value must be between 1-5', required: false
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
-      param :stem_diameter, Float, desc:'value must be between 1-5', required: false
+      param :stem_diameter, String, desc:'value must be between 1-5', required: false
       param :sample_photo_full_url, String, desc:'Required true', required: false
       param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
@@ -62,7 +62,7 @@ module Api
       param :health_score, String, desc:'value must be between 1-5', required: false
       param :live_leaf_cover, String, desc:'value must be between 1-5', required: false
       param :live_branch_stem, String, desc:'value must be between 1-5', required: false
-      param :stem_diameter, Float, desc:'value must be between 1-5', required: false
+      param :stem_diameter, String, desc:'value must be between 1-5', required: false
       param :sample_photo_full_url, String, desc:'Required true', required: false
       param :monitoring_photo_full_url, String, desc:'Required true', required: false
       param :dieback, Integer, desc:'value must be between 1-5', required: false
