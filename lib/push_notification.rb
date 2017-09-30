@@ -35,6 +35,20 @@ module PushNotification
     n.save!
   end
 
+  def self.gcm_test(opts)
+    n = Rpush::Gcm::Notification.new
+    n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
+    n.registration_ids = ['ehvC-udAH1s:APA91bH7u8XgcSG4GznPB1TkNqE-6W4saUC00hV_SuZDIZaGVvo8ctrfcvvThWxMXOXpC5yrAyjN9y0ZBq3GccwkAxEZzSuP34H54qOZ6dDC7gPcWaeYNp_kUKEY68i2sjBBbmgIEDqN']
+    n.data = { message: "hi from zahid!" }
+    n.priority = 'high'
+    n.content_available = true
+    n.notification = { body: 'great match!',
+                       title: 'Portugal vs. Denmark',
+                       icon: 'myicon'
+    }
+    n.save!
+  end
+
   def taaa
 
     n = Rpush::Apns::Notification.new

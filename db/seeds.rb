@@ -18,6 +18,16 @@ if Rails.env.development? && Rpush::Apns::App.find_by_name(Rails.application.sec
   app.save!
 end
 
+
+
+if Rails.env.development? && Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name).nil?
+  app = Rpush::Gcm::App.new
+  app.name = Rails.application.secrets.app_name
+  app.auth_key = "AIzaSyDVlnsgsgILF5_eANQEHFeD6Sdg0Tju5T4"
+  app.connections = 1
+  app.save!
+end
+
 if Rails.env.production? && Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name).nil?
   app = Rpush::Apns::App.new
   app.name = Rails.application.secrets.app_name
