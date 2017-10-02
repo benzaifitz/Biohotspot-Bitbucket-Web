@@ -36,10 +36,11 @@ module PushNotification
   end
 
   def self.gcm_test(opts)
+    # this is working example of FCM
     n = Rpush::Gcm::Notification.new
     n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
-    n.registration_ids = ['ehvC-udAH1s:APA91bH7u8XgcSG4GznPB1TkNqE-6W4saUC00hV_SuZDIZaGVvo8ctrfcvvThWxMXOXpC5yrAyjN9y0ZBq3GccwkAxEZzSuP34H54qOZ6dDC7gPcWaeYNp_kUKEY68i2sjBBbmgIEDqN']
-    n.data = { message: "hi from zahid!" }
+    n.registration_ids = ['cJvs3tHx2kw:APA91bEP6YBtWV0g7G-agv2XwN4rcmaYrb-qrP43ErmeadlolGXJZv24Q-kSqca7B1wEFWLu6dz-SsMN2TUYOcdptMN-JSQTZ-LnrLv-zLi35r7orU1dh8BA-wEI0uCn7ZN9Xitc6DyS']
+    n.data = { message: "hi mom!" }
     n.priority = 'high'
     n.content_available = true
     n.notification = { body: 'great match!',
@@ -50,7 +51,6 @@ module PushNotification
   end
 
   def taaa
-
     n = Rpush::Apns::Notification.new
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.device_token = '5870ae3cdfc04d9a8d31ac0028f4907b6e97a32988e3fc2a69c8ab55e827a8b5'
@@ -60,3 +60,4 @@ module PushNotification
     n.save!
   end
 end
+
