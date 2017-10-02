@@ -2,6 +2,7 @@ module Api
   module V1
     class TutorialsController < ApiController
       before_action :authenticate_user!
+      before_action :check_user_eula_and_privacy
 
       api :GET, '/tutorials.json', 'Return 5 images with text'
       param :help, String, desc:"set to true", required: false
