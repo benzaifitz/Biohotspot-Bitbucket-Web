@@ -4,9 +4,9 @@ class Photo < ApplicationRecord
 
   mount_uploader :file, PhotoUploader
 
-  ADDITIONAL_PHOTO = 'additional'
-  SAMPLE_PHOTO = 'sample'
-  MONITORING_PHOTO = 'monitoring'
+  ADDITIONAL_IMAGES = 'additional'
+  SAMPLE_IMAGE = 'sample'
+  MONITORING_IMAGE = 'monitoring'
 
   validates :file,
             :file_size => {

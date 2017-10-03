@@ -43,7 +43,7 @@ module Api
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
           @submission.save_by_status
-          # photos_for_submission(params, @submission)
+          photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @submission.errors.full_messages[0])
@@ -75,7 +75,7 @@ module Api
       def update
         @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
         if @submission.save_by_status
-          # photos_for_submission(params, @submission)
+          photos_for_submission(params, @submission)
           render :show
         else
           render json: {error: @submission.errors.messages}, status: :unprocessable_entity
@@ -91,10 +91,12 @@ module Api
       private
 
       def photos_for_submission params, submission
-        if params[:submission][:photos].present?
-          submission.photos.destroy_all
-          params[:submission][:photos].each do |photo|
-            Photo.create(url: photo['url'], imageable_id: submission.id, imageable_type: 'Submission')
+        %w{monitoring_image sample_image additional_images}.each do |t|
+          attr = params[:submission][t.to_sym]
+          if attr.present? && !attr[:url].blank?
+            t == 'additional_images' ? submission.photos.destroy_all : submission.send(t).delete
+            Photo.create(url: attr['url'], imageable_id: submission.id, imageable_type: 'Submission',
+                           imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
           end
         end
       end
@@ -105,30 +107,13 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
-        monitoring_params
-        sample_image_params
-        additional_photos_params
         params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
                                             :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :status,
                                             :live_branch_stem, :stem_diameter, :sample_photo_full_url, :monitoring_photo_full_url,
-                                            :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes,
-                                            monitoring_image_attributes: [:url, :imageable_sub_type],
-                                            photos_attributes: [:url, :imageable_sub_type],
-                                            sample_image_attributes: [:url, :imageable_sub_type]])
+                                            :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])
 
       end
 
-      def monitoring_params
-        params[:submission][:monitoring_image_attributes].reverse_merge!(imageable_sub_type: Photo::MONITORING_PHOTO) if params[:submission][:monitoring_image_attributes]
-      end
-
-      def sample_image_params
-        params[:submission][:sample_image_attributes].reverse_merge!(imageable_sub_type: Photo::SAMPLE_PHOTO) if params[:submission][:sample_image_attributes]
-      end
-
-      def additional_photos_params
-        params[:submission][:photos_attributes].each{|p| p.reverse_merge!(imageable_sub_type: Photo::ADDITIONAL_PHOTO)} if params[:submission][:photos_attributes]
-      end
     end
   end
 end

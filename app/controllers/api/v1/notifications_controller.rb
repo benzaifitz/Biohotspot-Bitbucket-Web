@@ -11,7 +11,7 @@ module Api
       def index
         offset = params[:page].blank? ? 0 : (params[:page].to_i * 10)
         @notifications = Rpush::Client::ActiveRecord::Notification.includes(:user, :sender).
-            where(user: current_user, deleted: false, delivered: true)
+            where(user_id: current_user.id, deleted: false, delivered: true)
             .limit(Api::V1::LIMIT).offset(offset)
       end
 
