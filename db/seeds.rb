@@ -23,6 +23,7 @@ end
 if Rails.env.development? && Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name).nil?
   app = Rpush::Gcm::App.new
   app.name = Rails.application.secrets.app_name
+  app.environment = 'development'
   app.auth_key = Rails.application.secrets.fcm_server_key
   app.connections = 1
   app.save!
