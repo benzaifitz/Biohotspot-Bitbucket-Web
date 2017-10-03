@@ -4,13 +4,17 @@ class Photo < ApplicationRecord
 
   mount_uploader :file, PhotoUploader
 
+  ADDITIONAL_PHOTO = 'additional'
+  SAMPLE_PHOTO = 'sample'
+  MONITORING_PHOTO = 'monitoring'
+
   validates :file,
             :file_size => {
                 :maximum => 2.0.megabytes.to_i
             }
   # belongs_to :category
 
-  after_commit :save_images_from_api, if: 'url && url_changed?'
+  after_save :save_images_from_api, if: 'url && url_changed?'
 
   def save_images_from_api
     self.update_column(:file, url.split('/').last)

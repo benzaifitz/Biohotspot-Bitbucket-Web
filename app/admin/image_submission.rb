@@ -7,16 +7,16 @@ ActiveAdmin.register Photo, as: "Image Submission" do
   index do
     column :id
     column 'Image' do |p|
-      image_tag p.file.url, style: 'width:80px'
+      image_tag(p.file.url, style: 'width:80px') if p.file && p.file.url
     end
     column :submission do |p|
       link_to p.imageable.id, admin_submission_path(p.imageable.id)
     end
     column :sub_category do |p|
-      link_to p.imageable.sub_category.name, admin_sub_category_path(p.imageable.sub_category.id)
+      link_to p.imageable.sub_category.name, admin_sub_category_path(p.imageable.sub_category.id) if p.imageable.sub_category
     end
     column :category do |p|
-      link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)
+      link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id) if p.imageable.sub_category
     end
     column 'Reject Comment' do |p|
       p.reject_comment if !p.approved?

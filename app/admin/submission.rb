@@ -5,7 +5,9 @@ ActiveAdmin.register Submission do
   permit_params :sub_category_id, :survey_number, :submitted_by, :sub_category, :rainfall, :humidity, :temperature,
                 :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback,
                 :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes, :status,
-                photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
+                monitoring_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
+                sample_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
+                photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ]
   actions :all
 
   index do
@@ -43,24 +45,38 @@ ActiveAdmin.register Submission do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-      f.inputs "Sample Picture", :multipart => true do
-        f.input :sample_photo, as: :file
-        f.input :sample_photo_cache, :as => :hidden
-        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
-          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-            insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', src: "#{f.object.sample_photo.url(:thumb)}?#{Random.rand(100)}")
-          end
-        end
+      f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
+        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+                        ? image_tag(pm.object.file.url(:thumb))
+                      : content_tag(:span, 'no image selected')
+
+        pm.input :file_cache, :as => :hidden
       end
-      f.inputs "Monitoring Picture", :multipart => true do
-        f.input :monitoring_photo, as: :file
-        f.input :monitoring_photo_cache, :as => :hidden
-        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
-          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-            insert_tag(Arbre::HTML::Img, id: 'monitoring_picture_preview', height: '100px', src: "#{f.object.monitoring_photo.url(:thumb)}?#{Random.rand(100)}")
-          end
-        end
+      f.has_many :monitoring_image, heading: 'Monitoring Photos', new_record: false do |pm|
+        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+                        ? image_tag(pm.object.file.url(:thumb))
+                      : content_tag(:span, 'no image selected')
+
+        pm.input :file_cache, :as => :hidden
       end
+      # f.inputs "Sample Picture", :multipart => true do
+      #   f.input :sample_photo, as: :file
+      #   f.input :sample_photo_cache, :as => :hidden
+      #   insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+      #     insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+      #       insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', src: "#{f.object.sample_photo.url(:thumb)}?#{Random.rand(100)}")
+      #     end
+      #   end
+      # end
+      # f.inputs "Monitoring Picture", :multipart => true do
+      #   f.input :monitoring_photo, as: :file
+      #   f.input :monitoring_photo_cache, :as => :hidden
+      #   insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+      #     insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+      #       insert_tag(Arbre::HTML::Img, id: 'monitoring_picture_preview', height: '100px', src: "#{f.object.monitoring_photo.url(:thumb)}?#{Random.rand(100)}")
+      #     end
+      #   end
+      # end
       f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
         pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
@@ -94,10 +110,10 @@ ActiveAdmin.register Submission do
     attributes_table do
       row :id
       row :sample_photo do |a|
-        link_to(image_tag(a.try(:sample_photo).url(:thumb), height: '100px'),a.sample_photo.url, target: '_blank') if a.sample_photo.url.present?
+        link_to(image_tag(a.sample_image.file.url(:thumb), height: '100px'),a.sample_image.file.url, target: '_blank') if a.sample_image.file.url.present?
       end
       row :monitoring_photo do |a|
-        link_to(image_tag(a.try(:monitoring_photo).url(:thumb), height: '100px'),a.monitoring_photo.url, target: '_blank')  if a.monitoring_photo.url.present?
+        link_to(image_tag(a.monitoring_image.file.url(:thumb), height: '100px'),a.monitoring_image.file.url, target: '_blank')  if a.monitoring_image.file.url.present?
       end
       row "Additional Photos" do
         images = submission.photos.map do |photo|

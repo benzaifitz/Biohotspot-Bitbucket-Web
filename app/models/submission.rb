@@ -1,10 +1,14 @@
 class Submission < ApplicationRecord
   belongs_to :sub_category
-  has_many :photos, as: :imageable
-  mount_uploader :sample_photo, SamplePhotoUploader
-  mount_uploader :monitoring_photo, MonitoringPhotoUploader
+  has_many :photos, -> { where(imageable_sub_type: Photo::ADDITIONAL_PHOTO)}, as: :imageable
+  has_one :sample_image, -> { where(imageable_sub_type: Photo::SAMPLE_PHOTO)}, as: :imageable, class_name: 'Photo'
+  has_one :monitoring_image, -> { where(imageable_sub_type: Photo::MONITORING_PHOTO)}, as: :imageable, class_name: 'Photo'
+  # mount_uploader :sample_photo, SamplePhotoUploader
+  # mount_uploader :monitoring_photo, MonitoringPhotoUploader
   attr_accessor :sample_photo_cache, :monitoring_photo_cache
   accepts_nested_attributes_for :photos, allow_destroy: true
+  accepts_nested_attributes_for :sample_image, allow_destroy: true
+  accepts_nested_attributes_for :monitoring_image, allow_destroy: true
   # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
   validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :dieback, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
 
@@ -15,8 +19,8 @@ class Submission < ApplicationRecord
 
   after_create :generate_survey_number
 
-  after_save :save_sample_photo_from_api, if: 'sample_photo_full_url && sample_photo_full_url_changed?'
-  after_save :save_monitoring_photo_from_api, if: 'monitoring_photo_full_url && monitoring_photo_full_url_changed?'
+  # after_save :save_sample_photo_from_api, if: 'sample_photo_full_url && sample_photo_full_url_changed?'
+  # after_save :save_monitoring_photo_from_api, if: 'monitoring_photo_full_url && monitoring_photo_full_url_changed?'
 
   def save_sample_photo_from_api
     self.update_column(:sample_photo, sample_photo_full_url.split('/').last)
