@@ -33,6 +33,8 @@ ActiveAdmin.register Submission do
     column :survey_number
     column :submitted_by
     column :address
+    column :latitude
+    column :longitude
     column :created_at
     column :updated_at
     actions
@@ -125,6 +127,8 @@ ActiveAdmin.register Submission do
       row :survey_number
       row :submitted_by
       row :address
+      row :latitude
+      row :longitude
       row :created_at
       row :updated_at
 
@@ -154,6 +158,8 @@ ActiveAdmin.register Submission do
     column :survey_number
     column :submitted_by
     column :address
+    column :latitude
+    column :longitude
     column :created_at
     column :updated_at
   end

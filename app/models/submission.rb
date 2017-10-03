@@ -11,7 +11,7 @@ class Submission < ApplicationRecord
   before_validation :convert_data_type
   enum status: [:complete, :incomplete]
   reverse_geocoded_by :latitude, :longitude
-  after_validation :reverse_geocode
+  before_save :reverse_geocode
 
   after_create :generate_survey_number
 
