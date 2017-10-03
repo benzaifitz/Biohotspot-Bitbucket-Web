@@ -43,7 +43,7 @@ module Api
         @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
         begin
           @submission.save_by_status
-          photos_for_submission(params, @submission)
+          # photos_for_submission(params, @submission)
           render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @submission.errors.full_messages[0])
