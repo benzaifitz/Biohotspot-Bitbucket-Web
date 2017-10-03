@@ -5,12 +5,7 @@ module PushNotification
 
   def self.sends(opts)
     begin
-      case opts[:device_type]
-        when "ios"
-          self.send_apns_notifications(opts)
-        when "android"
-          self.send_gcm_notifications(opts)
-      end
+      self.send_fcm_notifications(opts)
     rescue => exception
       Rails.logger.info "Something went wrong: #{exception}"
     end
@@ -35,29 +30,21 @@ module PushNotification
     n.save!
   end
 
-  def self.gcm_test(opts)
+  def self.send_fcm_notifications(opts)
     # this is working example of FCM
     n = Rpush::Gcm::Notification.new
-    n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
-    n.registration_ids = ['cJvs3tHx2kw:APA91bEP6YBtWV0g7G-agv2XwN4rcmaYrb-qrP43ErmeadlolGXJZv24Q-kSqca7B1wEFWLu6dz-SsMN2TUYOcdptMN-JSQTZ-LnrLv-zLi35r7orU1dh8BA-wEI0uCn7ZN9Xitc6DyS']
-    n.data = { message: "hi mom!" }
+    n.app = FCM_APP
+    n.registration_ids = [opts[:device_token]]
+    n.data = opts[:data]
     n.priority = 'high'
     n.content_available = true
-    n.notification = { body: 'great match!',
-                       title: 'Portugal vs. Denmark',
-                       icon: 'myicon'
-    }
+    # n.notification = { body: 'great match!',
+    #                    title: 'Portugal vs. Denmark',
+    #                    icon: 'myicon'
+    # }
+    n.notification = opts[:notification]
     n.save!
   end
 
-  def taaa
-    n = Rpush::Apns::Notification.new
-    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
-    n.device_token = '5870ae3cdfc04d9a8d31ac0028f4907b6e97a32988e3fc2a69c8ab55e827a8b5'
-    n.alert = "Test 1234 #{SecureRandom.hex(20)}"
-    n.user_id = 17
-    n.badge = 1
-    n.save!
-  end
 end
 

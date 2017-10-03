@@ -25,6 +25,10 @@ class LandManager < User
           data: {
               type: 'alert',
               alert: 'Your weed survey is due. Please notify us in the feedback form if you are unable to complete. Have a great day.'
+          },
+          notification: {
+              title: 'Weed Survey Due',
+              body: 'Your weed survey is due. Please notify us in the feedback form if you are unable to complete. Have a great day.'
           }
       )
     end
@@ -37,6 +41,10 @@ class LandManager < User
           data: {
               type: 'alert',
               alert: message
+          },
+          notification: {
+              title: 'Photo Rejected',
+              body: message
           }
       )
   end

@@ -6,3 +6,4 @@ json.aws_access_key_id Rails.application.secrets.aws_access_key_id
 json.aws_secret_access_key Rails.application.secrets.aws_secret_access_key
 json.aws_s3_bucket Rails.application.secrets.s3_bucket
 json.aws_s3_region Rails.application.secrets.s3_region
+json.fcm_server_key Rails.application.secrets.fcm_server_key
