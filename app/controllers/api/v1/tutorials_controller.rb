@@ -37,6 +37,12 @@ module Api
       def tutorial_params
         params.require(:tutorial).permit([:avatar, :avatar_text])
       end
+
+
+      def deprecated_eula
+        latest_eula = Eula.find_by_is_latest(true)
+        latest_eula.id != current_user.eula_id
+      end
     end
   end
 end

@@ -2,16 +2,16 @@ module Api
   module V1
     class CategoriesController < ApiController
       before_action :authenticate_user!
-      before_action :check_user_eula_and_privacy
       before_action :set_category, only: [:show, :destroy, :update]
 
       api :GET, '/categories.json', 'Return all categories'
       def index
         @categories = Category.all
-        render json: @categories.map{|a| {id: a.id, name: a.name, location: a.location,
-                                          surveys: a.sub_categories.map{|a| a.submission}.compact.count,
-                                          complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
-                                          photo: a.photos.present? ? a.photos.first.file_url : ""}}, status: :ok
+        render json: {deprecated_eula: deprecated_eula,
+                      categories: @categories.map{|a| {id: a.id, name: a.name, location: a.location,
+                      surveys: a.sub_categories.map{|a| a.submission}.compact.count,
+                      complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
+                      photo: a.photos.present? ? a.photos.first.file_url : ""}}}, status: :ok
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
@@ -72,6 +72,11 @@ module Api
       # Never trust parameters from the scary internet, only allow the white list through.
       def category_params
         params.require(:category).permit([:name, :description, :tags, :class_name, :family, :location, :url, :site_id])
+      end
+
+      def deprecated_eula
+        latest_eula = Eula.find_by_is_latest(true)
+        latest_eula.id != current_user.eula_id
       end
     end
   end
