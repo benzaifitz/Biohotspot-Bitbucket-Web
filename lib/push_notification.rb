@@ -35,7 +35,7 @@ module PushNotification
     n = Rpush::Gcm::Notification.new
     n.app = FCM_APP
     n.registration_ids = [opts[:device_token]]
-    n.data = opts[:data]
+    n.data = {message: 'Test'}
     n.priority = 'high'
     n.content_available = true
     # n.notification = { body: 'great match!',
