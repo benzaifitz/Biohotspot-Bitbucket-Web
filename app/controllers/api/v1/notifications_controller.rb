@@ -2,8 +2,6 @@ module Api
   module V1
     class NotificationsController < ApiController
       before_action :authenticate_user!
-      before_action :check_user_eula_and_privacy
-      before_action :set_reported_rating, only: [:show]
 
       # GET /api/v1/notifications.json
       api :GET, '/notifications.json', 'Returns a list of push notifications recieved by the current user.'
@@ -11,7 +9,7 @@ module Api
       def index
         offset = params[:page].blank? ? 0 : (params[:page].to_i * 10)
         @notifications = Rpush::Client::ActiveRecord::Notification.includes(:user, :sender).
-            where(user_id: current_user.id, deleted: false, delivered: true)
+            where(user_id: current_user.id, deleted: false)
             .limit(Api::V1::LIMIT).offset(offset)
       end
 
