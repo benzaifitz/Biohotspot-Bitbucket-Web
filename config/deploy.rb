@@ -1,6 +1,7 @@
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rvm'
+require 'mina/whenever'
 require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
