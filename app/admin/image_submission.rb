@@ -43,7 +43,7 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     pn_msg = params[:photo][:reject_comment].to_s.html_safe
     lm = LandManager.where(id: Photo.find(resource.id).submission.submitted_by).first rescue nil
     lm.send_photo_rejected_pn(pn_msg) if lm
-    resource.update_attributes!(approved: false, reject_comment: pn_msg)
+    resource.update_columns(approved: false, reject_comment: pn_msg)
     redirect_to admin_image_submissions_path, :notice => 'Photo rejected.' and return
   end
 
