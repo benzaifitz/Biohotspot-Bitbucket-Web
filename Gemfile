@@ -84,3 +84,4 @@ gem 'geocoder'
 gem 'mina','1.0.3'
 gem 'mina-rpush', require: false
 gem 'mina-sidekiq'
+gem 'mina-whenever'

@@ -62,6 +62,7 @@ task :'deploy' do
         invoke :'rvm:use', 'ruby-2.3.0@default'
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
+        invoke :'whenever:update'
         invoke 'redis:restart'
         invoke 'rpush:start'
         invoke 'sidekiq:stop'
