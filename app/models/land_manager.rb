@@ -22,6 +22,7 @@ class LandManager < User
       PushNotification.sends(
           device_type: land_manager.device_type,
           device_token: land_manager.device_token,
+          user_id: land_manager.id,
           data: {
               type: 'alert',
               alert: 'Your weed survey is due. Please notify us in the feedback form if you are unable to complete. Have a great day.'
@@ -38,6 +39,7 @@ class LandManager < User
       PushNotification.sends(
           device_type: self.device_type,
           device_token: self.device_token,
+          user_id: self.id,
           data: {
               type: 'alert',
               alert: message

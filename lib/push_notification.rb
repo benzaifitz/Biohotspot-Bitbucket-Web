@@ -37,6 +37,7 @@ module PushNotification
     n.registration_ids = [opts[:device_token]]
     n.data = {message: 'Test'}
     n.priority = 'high'
+    n.user_id = opts[:user_id]
     n.content_available = true
     # n.notification = { body: 'great match!',
     #                    title: 'Portugal vs. Denmark',
