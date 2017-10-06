@@ -1,14 +1,14 @@
 class Submission < ApplicationRecord
   belongs_to :sub_category
   has_many :photos, -> { where(imageable_sub_type: Photo::ADDITIONAL_IMAGES)}, as: :imageable
-  has_many :additional_images, -> { where(imageable_sub_type: Photo::ADDITIONAL_IMAGES)}, as: :imageable
+  # has_many :additional_images, -> { where(imageable_sub_type: Photo::ADDITIONAL_IMAGES)}, as: :imageable
   has_one :sample_image, -> { where(imageable_sub_type: Photo::SAMPLE_IMAGE)}, as: :imageable, class_name: 'Photo'
   has_one :monitoring_image, -> { where(imageable_sub_type: Photo::MONITORING_IMAGE)}, as: :imageable, class_name: 'Photo'
   # mount_uploader :sample_photo, SamplePhotoUploader
   # mount_uploader :monitoring_photo, MonitoringPhotoUploader
   attr_accessor :sample_photo_cache, :monitoring_photo_cache
   accepts_nested_attributes_for :photos, allow_destroy: true
-  accepts_nested_attributes_for :additional_images, allow_destroy: true
+  # accepts_nested_attributes_for :additional_images, allow_destroy: true
   accepts_nested_attributes_for :sample_image, allow_destroy: true
   accepts_nested_attributes_for :monitoring_image, allow_destroy: true
   # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
