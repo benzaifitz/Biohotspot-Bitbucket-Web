@@ -14,7 +14,7 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  config.action_mailer.default_url_options = { host: 'productionhost', port: 80 }
+
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
@@ -58,20 +58,21 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "fram_#{Rails.env}"
   config.action_mailer.smtp_settings = {
-      address:              'smtp.gmail.com',
-      port:                 587,
-      domain:               'gmail.com',
-      user_name:            'dappertesting2017@gmail.com',
-      password:             'dapper1234',
-      authentication:       :plain,
-      enable_starttls_auto: true
+      address:              ENV['EMAIL_SERVER_ADDRESS'],
+      port:                 ENV['EMAIL_PORT'],
+      domain:               ENV['EMAIL_DOMAIN'],
+      user_name:            ENV['EMAIL_USERNAME'],
+      password:             ENV['EMAIL_PASSWORD'],
+      authentication:       :login,
+      enable_starttls_auto: true,
+      :tls  => ActiveRecord::Type::Boolean.new.cast(ENV['EMAIL_TLS'])
   }
-  config.action_mailer.default_url_options = { :host => '54.206.115.78', :protocol => 'http' }
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { :host => Rails.application.secrets.domain_name, :protocol => 'http' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.logger = Logger.new('log/email.log')
-  config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -100,3 +101,5 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
+
+

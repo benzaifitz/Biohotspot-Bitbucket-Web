@@ -23,4 +23,12 @@ class FeedbackMailer < ApplicationMailer
     end
   end
 
+  def email_project
+    @feedback = Feedback.first
+    # to_email = @feedback.project.project_manager.email rescue nil
+    # if to_email
+      mail(to: 'zahid@dapperapps.com.au', subject: "Feeback recevied for ")
+    # end
+  end
+
 end

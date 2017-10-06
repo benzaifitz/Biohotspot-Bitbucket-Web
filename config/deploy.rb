@@ -6,14 +6,16 @@ require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-set :domain, '54.206.115.78'
+set :domain, '54.206.115.78' # staging
+# set :domain, '52.64.75.81'  # production
 set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
 set :branch, 'develop'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true
-set :identity_file, '~/.ssh/pwm.pem'
+set :identity_file, '~/.ssh/pwm.pem' #staging
+# set :identity_file, '~/.ssh/pwm-production.pem' #production
 # Basic settings:
 #   domain       - The hostname to SSH to.
 #   deploy_to    - Path to deploy into.
