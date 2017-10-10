@@ -97,6 +97,7 @@ module Api
              if t == 'additional_images'
                submission.photos.destroy_all
                attr.each do |p|
+                 next if p['url'].blank?
                  Photo.create(url: p['url'], imageable_id: submission.id, imageable_type: 'Submission',
                               imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
                end
