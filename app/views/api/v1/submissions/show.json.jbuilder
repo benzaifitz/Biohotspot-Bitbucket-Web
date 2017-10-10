@@ -9,6 +9,6 @@ if @submission.present?
   #   json.photo photo.file.url rescue nil
   # end
   json.additional_photos do
-    json.array! Photo.where(imageable_id: @submission.id, imageable_type: 'Submission', imageable_sub_type: Photo::ADDITIONAL_IMAGES).map(&:url)
+    json.array! (Photo.where(imageable_id: @submission.id, imageable_type: 'Submission', imageable_sub_type: Photo::ADDITIONAL_IMAGES).map(&:url) + [''])
   end
 end
