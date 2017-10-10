@@ -8,8 +8,8 @@ if @submissions.present?
     json.monitoring_image submission.monitoring_image.serializable_hash rescue nil
     json.sample_photo submission.sample_image.serializable_hash rescue nil
     json.additional_photo @submission.photos.first.serializable_hash rescue nil
-    json.additional_photos submission.photos do |photo|
-      json.photo photo.file.serializable_hash rescue nil
+    json.additional_photos do
+      json.array! Photo.where(imageable_id: submission.id, imageable_type: 'Submission', imageable_sub_type: Photo::ADDITIONAL_IMAGES).map(&:url)
     end
   end
 end

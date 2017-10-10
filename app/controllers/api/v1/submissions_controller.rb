@@ -93,10 +93,20 @@ module Api
       def photos_for_submission params, submission
         %w{monitoring_image sample_image additional_images}.each do |t|
           attr = params[:submission][t.to_sym]
-          if attr.present? && !attr[:url].blank?
-            t == 'additional_images' ? submission.photos.destroy_all : submission.send(t).delete
-            Photo.create(url: attr['url'], imageable_id: submission.id, imageable_type: 'Submission',
-                           imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
+          if attr.present?
+             if t == 'additional_images'
+               submission.photos.destroy_all
+               attr.each do |p|
+                 Photo.create(url: p['url'], imageable_id: submission.id, imageable_type: 'Submission',
+                              imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
+               end
+             else
+               if !attr[:url].blank?
+                submission.send(t).delete
+                Photo.create(url: attr['url'], imageable_id: submission.id, imageable_type: 'Submission',
+                            imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
+               end
+             end
           end
         end
       end
