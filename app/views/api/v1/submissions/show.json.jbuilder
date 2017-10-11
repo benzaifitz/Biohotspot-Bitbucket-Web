@@ -4,6 +4,8 @@ if @submission.present?
                 :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes, :created_at, :updated_at
   json.monitoring_photo @submission.monitoring_image.serializable_hash rescue nil
   json.sample_photo @submission.sample_image.serializable_hash rescue nil
+  json.monitoring_image @submission.monitoring_image.serializable_hash rescue nil
+  json.sample_image @submission.sample_image.serializable_hash rescue nil
   # json.additional_photo @submission.photos.first.serializable_hash rescue nil
   # json.additional_photos Photo.where(imageable_id: @submission.id, imageable_type: 'Submission', imageable_sub_type: Photo::ADDITIONAL_IMAGES) do |photo|
   #   json.photo photo.file.url rescue nil
