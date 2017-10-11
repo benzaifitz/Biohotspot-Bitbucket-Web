@@ -95,7 +95,7 @@ module Api
           attr = params[:submission][t.to_sym]
           if attr.present?
              if t == 'additional_images'
-               submission.photos.destroy_all
+               submission.photos.destroy_all rescue nil
                attr.each do |p|
                  next if p['url'].blank?
                  Photo.create(url: p['url'], imageable_id: submission.id, imageable_type: 'Submission',
@@ -103,7 +103,7 @@ module Api
                end
              else
                if !attr[:url].blank?
-                submission.send(t).delete
+                submission.send(t).delete rescue nil
                 Photo.create(url: attr['url'], imageable_id: submission.id, imageable_type: 'Submission',
                             imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
                end
