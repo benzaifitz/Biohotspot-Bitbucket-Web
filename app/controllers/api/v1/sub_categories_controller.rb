@@ -10,7 +10,8 @@ module Api
             where(submitted_by: current_user.id).
             map(&:sub_category_id).flatten.compact
         @category = Category.find(params[:id])
-        @sub_categories = @category.sub_categories.where(id: sub_categories_ids)
+        sub_categories_ids = sub_categories_ids + @category.sub_categories.map{|sc| sc.id if sc.submission.blank?}
+        @sub_categories = @category.sub_categories.where(id: sub_categories_ids.uniq)
       end
 
 

@@ -113,7 +113,7 @@ module Api
       end
 
       def set_submission
-        @submission = Submission.find(params[:id])
+        @submission = Submission.find(params[:id]) rescue Submission.new
       end
 
       # Never trust parameters from the scary internet, only allow the white list through.
