@@ -97,14 +97,14 @@ module Api
              if t == 'additional_images'
                submission.photos.destroy_all rescue nil
                attr.each do |p|
-                 next if p['url'].blank?
-                 Photo.create(url: p['url'], imageable_id: submission.id, imageable_type: 'Submission',
+                 next if p.blank?
+                 Photo.create(url: p, imageable_id: submission.id, imageable_type: 'Submission',
                               imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
                end
              else
-               if !attr[:url].blank?
+               if !attr.blank?
                 submission.send(t).delete rescue nil
-                Photo.create(url: attr['url'], imageable_id: submission.id, imageable_type: 'Submission',
+                Photo.create(url: attr, imageable_id: submission.id, imageable_type: 'Submission',
                             imageable_sub_type: ("Photo::"+(t.upcase)).constantize)
                end
              end
