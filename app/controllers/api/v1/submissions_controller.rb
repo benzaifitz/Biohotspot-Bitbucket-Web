@@ -51,8 +51,8 @@ module Api
       # end
 
       def create
-        @sub_category_id = SubCategory.find(params[:submission][:sub_category_id])
-        if @sub_category_id.submission.blank?
+        @sub_category_id = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
+        if @sub_category_id.blank? || @sub_category_id.submission.blank?
           @submission = Submission.new(submission_params.merge(submitted_by: 22))
           begin
             @submission.save_by_status
