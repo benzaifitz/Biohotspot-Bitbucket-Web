@@ -3,10 +3,10 @@ require 'mina/git'
 require 'mina/rvm'
 require 'mina/whenever'
 require_relative 'deploy/recipes/redis'
-require_relative 'deploy/recipes/rpush'
+# require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-set :domain, '54.206.115.78' # staging
+set :domain, '13.54.208.193' # staging
 # set :domain, '52.64.75.81'  # production
 set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
 set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
@@ -59,7 +59,7 @@ task :'deploy' do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    invoke 'rpush:stop'
+    # invoke 'rpush:stop'
     on :launch do
       in_path(fetch(:current_path)) do
         invoke :'rvm:use', 'ruby-2.3.0@default'
@@ -67,7 +67,7 @@ task :'deploy' do
         command %{touch tmp/restart.txt}
         invoke :'whenever:update'
         invoke 'redis:restart'
-        invoke 'rpush:start'
+        # invoke 'rpush:start'
         invoke 'sidekiq:stop'
       end
 
