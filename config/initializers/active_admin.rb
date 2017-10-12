@@ -230,25 +230,27 @@ ActiveAdmin.setup do |config|
     admin.current_user_method   = :current_user
     admin.logout_link_path      = :destroy_user_session_path
     admin.logout_link_method    = :delete
-    admin.root_to = 'users#index'
+    admin.root_to = 'projects#index'
     admin.build_menu do |menu|
-      menu.add label: 'Users', priority: 1
-      menu.add label: 'Projects', priority: 2
-      menu.add label: 'Sites', priority: 3
-      menu.add label: 'Categories', priority: 4
+      menu.add label: 'Projects', priority: 1
+      menu.add label: 'Sites', priority: 2
+      menu.add label: 'Categories', priority: 3
+      menu.add label: 'Submissions', priority: 4
       menu.add label: 'License', priority: 5
-      menu.add label: 'Submissions', priority: 6
-      menu.add label: 'Notifications', priority: 7
-      menu.add label: 'User Content', priority: 8 do |user_content|
+      menu.add label: 'Maps', priority: 5
+      menu.add label: 'Users', priority: 6
+      menu.add label: 'User Content', priority: 7 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
-      menu.add label: 'Communicate', priority: 9 do |communicate|
+      menu.add label: 'Communicate', priority: 8 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
-      menu.add label: 'Settings', priority: 10 do |settings_menu|
-        settings_menu.add label: 'Logout', url: '/users/sign_out', html_options: { method: 'delete' }, priority: 3
-      end
+      menu.add label: 'Notifications', priority: 9
+      menu.add label: 'Comments', priority: 10
+      menu.add label: 'License', priority: 11
+      menu.add label: 'Tutorial', priority: 12
+      menu.add label: 'Document', priority: 13
     end
   end
   config.namespace :pm do |pm|

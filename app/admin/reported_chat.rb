@@ -1,7 +1,7 @@
 ActiveAdmin.register ReportedChat do
   include SharedAdmin
 
-  menu label: 'Reported Messages', parent: 'User Content', priority: 2
+  menu false #label: 'Reported Messages', parent: 'User Content', priority: 2
 
   actions :index
 

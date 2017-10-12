@@ -1,6 +1,6 @@
 ActiveAdmin.register Site do
 
-  menu label: 'Sites List', parent: 'Sites', priority: 1
+  menu label: 'Sites', priority: 2
 
   permit_params do
     allowed = [:title, :summary, :tags, :project_id]

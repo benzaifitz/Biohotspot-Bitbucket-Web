@@ -1,6 +1,6 @@
 ActiveAdmin.register Photo, as: "Image Submission" do
 
-  menu label: 'Image Submissions List', parent: 'Submissions', priority: 2
+  menu label: 'Image Submissions List', parent: 'Submissions', priority: 4
 
   actions :index
 

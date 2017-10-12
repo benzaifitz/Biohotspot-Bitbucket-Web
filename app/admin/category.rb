@@ -1,6 +1,6 @@
 ActiveAdmin.register Category do
 
-  menu label: 'Categories List', parent: 'Categories', priority: 1
+  menu label: 'Categories List', parent: 'Categories', priority: 3
 
     permit_params :name, :description, :tags, :class_name, :family_scientific, :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :distribution, :location, :url, :site_id,
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]

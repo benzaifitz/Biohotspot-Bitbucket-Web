@@ -1,6 +1,6 @@
 ActiveAdmin.register Conversation do
 
-  menu label: 'Conversation', parent: 'Communicate', priority: 0
+  menu false #label: 'Conversation', parent: 'Communicate', priority: 0
 
   actions :index
 

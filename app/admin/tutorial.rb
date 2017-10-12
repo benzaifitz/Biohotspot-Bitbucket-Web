@@ -1,6 +1,6 @@
 ActiveAdmin.register Tutorial do
 
-  menu label: 'Tutorial List', parent: 'Tutorial', priority: 1
+  menu label: 'Tutorial List', parent: 'Tutorial', priority: 13
 
   permit_params :avatar, :avatar_text
   actions :all

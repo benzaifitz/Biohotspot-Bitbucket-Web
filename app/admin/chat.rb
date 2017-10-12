@@ -1,6 +1,6 @@
 ActiveAdmin.register Chat do
   include SharedAdmin
-  menu label: 'Chat', parent: 'Communicate', priority: 1
+  menu false #label: 'Chat', parent: 'Communicate', priority: 1
 
   actions :index
 

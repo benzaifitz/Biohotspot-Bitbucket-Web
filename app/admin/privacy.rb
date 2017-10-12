@@ -1,6 +1,6 @@
 ActiveAdmin.register Privacy, as: 'Privacy Policy' do
 
-  menu label: 'Privacy Policy', parent: 'License', priority: 1
+  menu false #label: 'Privacy Policy', parent: 'License', priority: 1
 
   permit_params :privacy_text
 
