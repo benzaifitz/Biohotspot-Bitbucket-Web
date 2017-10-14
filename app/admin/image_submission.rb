@@ -21,6 +21,7 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     column 'Reject Comment' do |p|
       p.reject_comment if !p.approved?
     end
+    column :created_at
     column 'Status' do |p|
       if p.approved?
         status_tag('active', :ok, class: 'important', label: 'Approved')
@@ -57,6 +58,7 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     end
   end
 
+  filter :created_at
   filter :submission_sub_category_in, as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
   filter :submission_category_in, as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
 
