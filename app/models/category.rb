@@ -22,4 +22,13 @@ class Category < ApplicationRecord
     end
     errors.add(:base, message) if groups_length > LIMIT
   end
+
+  def current_user_sub_catrgories(current_user_id)
+    sub_categories_ids = Submission.where.not(sub_category_id: nil).
+        where(submitted_by: current_user_id).
+        map(&:sub_category_id).flatten.compact
+    sub_categories_ids = sub_categories_ids + self.sub_categories.map{|sc| sc.id if sc.submission.blank?}
+    self.sub_categories.where(id: sub_categories_ids.uniq)
+  end
+
 end

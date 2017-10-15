@@ -7,11 +7,9 @@ module Api
       api :GET, '/categories.json', 'Return all categories'
       def index
         @categories = Category.all
-        render json: {deprecated_eula: deprecated_eula,
-                      categories: @categories.map{|a| {id: a.id, name: a.name, location: a.location,
-                      surveys: a.sub_categories.map{|a| a.submission}.compact.count,
-                      complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
-                      photo: a.photos.present? ? a.photos.first.file_url : ""}}}, status: :ok
+        # @categories = @categories.map{|a| a.attributes.merge({surveys: a.sub_categories.map{|a| a.submission}.compact.count,
+        #                                                       complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
+        #                                                       photo: a.photos.present? ? a.photos.first.file_url : ""})}
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
