@@ -53,7 +53,7 @@ module Api
       def create
         @sub_category_id = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
         if @sub_category_id.blank? || @sub_category_id.submission.blank?
-          @submission = Submission.new(submission_params.merge(submitted_by: 22))
+          @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
           begin
             @submission.save_by_status
             photos_for_submission(params, @submission)
