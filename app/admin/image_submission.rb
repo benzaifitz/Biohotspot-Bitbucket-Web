@@ -21,7 +21,7 @@ ActiveAdmin.register Photo, as: "Sample Image" do
       end
     end
     column :submission do |p|
-      link_to p.imageable.id, admin_submission_path(p.imageable.id)
+      link_to p.imageable.id, admin_sample_list_path(p.imageable.id)
     end
     column :sub_category do |p|
       link_to p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id) if p.imageable.sub_category
