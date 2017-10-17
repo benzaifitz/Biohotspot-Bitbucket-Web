@@ -1,6 +1,6 @@
-ActiveAdmin.register Submission do
+ActiveAdmin.register Submission, as: 'Sample List' do
 
-  menu label: 'Submissions List', parent: 'Submissions', priority: 4
+  menu label: 'Sample List', parent: 'Submissions', priority: 1
 
   permit_params :sub_category_id, :survey_number, :submitted_by, :sub_category, :rainfall, :humidity, :temperature,
                 :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback,

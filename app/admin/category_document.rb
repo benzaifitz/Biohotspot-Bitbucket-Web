@@ -1,6 +1,6 @@
 ActiveAdmin.register CategoryDocument, as: 'Document Category' do
 
-  menu label: 'Document Categories', priority: 14
+  menu label: 'Document Categories', parent: 'Document', priority: 2
 
   permit_params do
      [:name]

@@ -1,6 +1,6 @@
-ActiveAdmin.register SubCategory do
+ActiveAdmin.register SubCategory, as: 'Sample' do
 
-  menu label: 'Sub Categories List', parent: 'Categories', priority: 3
+  menu label: 'Sample List', parent: 'Species', priority: 3
 
   permit_params do
     [:name, :category_id]

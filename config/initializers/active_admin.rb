@@ -234,7 +234,7 @@ ActiveAdmin.setup do |config|
     admin.build_menu do |menu|
       menu.add label: 'Projects', priority: 1
       menu.add label: 'Sites', priority: 2
-      menu.add label: 'Categories', priority: 3
+      menu.add label: 'Species', priority: 3
       menu.add label: 'Submissions', priority: 4
       menu.add label: 'License', priority: 5
       menu.add label: 'Maps', priority: 5

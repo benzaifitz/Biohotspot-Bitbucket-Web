@@ -1,6 +1,6 @@
-ActiveAdmin.register Photo, as: "Image Submission" do
+ActiveAdmin.register Photo, as: "Sample Image" do
 
-  menu label: 'Image Submissions List', parent: 'Submissions', priority: 4
+  menu label: 'Sample Images', parent: 'Submissions', priority: 4
 
   actions :index
 
@@ -9,11 +9,22 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     column 'Image' do |p|
       image_tag(p.file.url, style: 'width:80px') if p.file && p.file.url
     end
+    column 'Type' do |p|
+      if p.imageable_sub_type == Photo::ADDITIONAL_IMAGES
+        status_tag('active', :ok, class: 'green', label: Photo::ADDITIONAL_IMAGES.upcase)
+      elsif p.imageable_sub_type == Photo::SAMPLE_IMAGE
+        status_tag('eactiverror', :ok, class: 'orange', label: Photo::SAMPLE_IMAGE.upcase)
+      elsif p.imageable_sub_type == Photo::MONITORING_IMAGE
+        status_tag('active', :ok, class: 'red', label: Photo::MONITORING_IMAGE.upcase)
+      else
+        status_tag('error', :ok, class: 'important', label: 'UNKNOWN')
+      end
+    end
     column :submission do |p|
       link_to p.imageable.id, admin_submission_path(p.imageable.id)
     end
     column :sub_category do |p|
-      link_to p.imageable.sub_category.name, admin_sub_category_path(p.imageable.sub_category.id) if p.imageable.sub_category
+      link_to p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id) if p.imageable.sub_category
     end
     column :category do |p|
       link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id) if p.imageable.sub_category
@@ -30,14 +41,14 @@ ActiveAdmin.register Photo, as: "Image Submission" do
       end
     end
     actions do |p|
-      item 'Approve', approve_admin_image_submission_path(p), method: :put if !p.approved?
-      (item 'Reject', reject_admin_image_submission_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
+      item 'Approve', approve_admin_sample_image_path(p), method: :put if !p.approved?
+      (item 'Reject', reject_admin_sample_image_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
     end
   end
 
   member_action :approve, method: :put do
-    resource.update_attributes!(approved: true)
-    redirect_to admin_image_submissions_path, :notice => 'Photo approved.' and return
+    resource.update_columns(approved: true)
+    redirect_to admin_sample_images_path, :notice => 'Photo approved.' and return
   end
 
   member_action :reject_image, method: :put do
@@ -45,7 +56,7 @@ ActiveAdmin.register Photo, as: "Image Submission" do
     lm = LandManager.where(id: Photo.find(resource.id).submission.submitted_by).first rescue nil
     lm.send_photo_rejected_pn(pn_msg) if lm
     resource.update_columns(approved: false, reject_comment: pn_msg)
-    redirect_to admin_image_submissions_path, :notice => 'Photo rejected.' and return
+    redirect_to admin_sample_images_path, :notice => 'Photo rejected.' and return
   end
 
   member_action :reject, method: :get do
