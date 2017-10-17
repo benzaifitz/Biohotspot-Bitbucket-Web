@@ -11,7 +11,8 @@ class FeedbackMailer < ApplicationMailer
     @feedback = Feedback.find(feedback_id)
     to_email = @feedback.project.project_manager.email rescue nil
     if to_email
-      mail(to: to_email, subject: "Feeback recevied for #{@feedback.project.title}")
+      @project_title = @feedback.project.title rescue 'N/A'
+      mail(to: to_email, subject: "Feeback received for #{@project_title}")
     end
   end
 
@@ -19,7 +20,8 @@ class FeedbackMailer < ApplicationMailer
     @feedback = Feedback.find(feedback_id)
     admin_emails = User.administrators.map(&:email).compact.uniq.join(',')
     if admin_emails
-      mail(to: admin_emails, subject: "Feeback recevied for #{@feedback.project.title}")
+      @project_title = @feedback.project.title rescue 'N/A'
+      mail(to: admin_emails, subject: "Feeback received for #{@project_title}")
     end
   end
 

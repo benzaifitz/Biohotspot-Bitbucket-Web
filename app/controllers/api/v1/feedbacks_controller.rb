@@ -16,7 +16,7 @@ module Api
       param :comment, String, desc: 'Comment.{"feedback":{"comment":"ABC"}}', required: false
       def create
         begin
-          @feedback = Feedback.new(feedback_params.merge(land_manager_id: current_user.id, project_id: current_user.project.id))
+          @feedback = Feedback.new(feedback_params.merge(land_manager_id: current_user.id, project_id: (current_user.project.id rescue nil)))
           @feedback.save!
           render :show
         rescue *RecoverableExceptions => e
