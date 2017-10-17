@@ -90,7 +90,7 @@ module Api
       param :field_notes, String, desc:'', required: false
       param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def update
-        @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
+        @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id, status: params[:status]))
         if @submission.save_by_status
           photos_for_submission(params, @submission)
           @submission.reload
