@@ -13,7 +13,12 @@ namespace :rpush do
   task stop: :environment do
     command %[echo '-----> Stopping rpush']
     # command "kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }')"
-    command "if (ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') ; then kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') ; fi"
+    # command "if $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') &> /dev/null; then kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') ; fi"
+    command "APP_ID=$(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }')
+              if [ -n \"${APP_ID}\" ]; then
+                echo \"Stopping instance $APP_ID\"
+                kill -9 $APP_ID
+              fi"
   end
 
   desc 'Restart rpush'
