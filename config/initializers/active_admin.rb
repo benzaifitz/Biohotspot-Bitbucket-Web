@@ -243,7 +243,7 @@ ActiveAdmin.setup do |config|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
       menu.add label: 'Communicate', priority: 8 do |communicate|
-        communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
+        # communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
       menu.add label: 'Notifications', priority: 9

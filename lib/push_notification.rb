@@ -44,6 +44,7 @@ module PushNotification
     #                    title: 'Portugal vs. Denmark',
     #                    icon: 'myicon'
     # }
+    n.alert = opts[:notification][:body] rescue nil
     n.notification = opts[:notification]
     n.save!
   end
