@@ -38,6 +38,7 @@ module PushNotification
     n.data = {message: 'Test'}
     n.priority = 'high'
     n.user_id = opts[:user_id]
+    n.sent_by_id = opts[:sent_by_id] || User.where(user_type: User.user_types[:administrator]).first.id rescue 1
     n.content_available = true
     # n.notification = { body: 'great match!',
     #                    title: 'Portugal vs. Denmark',

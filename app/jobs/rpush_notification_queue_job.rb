@@ -2,14 +2,14 @@ class RpushNotificationQueueJob < ApplicationJob
   queue_as :rpush_notifications
 
   def perform(attrs = {})
-    users = attrs[:user_id].blank? ? User.where(user_type: attrs[:user_type]) : User.where(id: attrs[:user_id])
-    app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
+    attrs = JSON.parse(attrs)
+    users = attrs[:user_id].blank? ? User.where(user_type: attrs['user_type']).where.not(device_token: nil) : User.where(id: attrs['user_id']).where.not(device_token: nil)
     users.find_each do |user|
       begin
-        if attrs[:notification_type] == RpushNotification::NOTIFICATION_TYPE[:push]
-          create_push_notification(attrs.merge(user: user, app: app))
-        elsif attrs[:notification_type] == RpushNotification::NOTIFICATION_TYPE[:email]
-          create_email_notification(attrs.merge(user: user, app: app))
+        if attrs['notification_type'] == RpushNotification::NOTIFICATION_TYPE[:push]
+          create_push_notification(attrs.merge(user: user))
+        elsif attrs['notification_type'] == RpushNotification::NOTIFICATION_TYPE[:email]
+          create_email_notification(attrs.merge(user: user))
         end
       rescue StandardError => err
         Rails.logger.error "[Push Notification] - #{err.message}"
@@ -18,16 +18,12 @@ class RpushNotificationQueueJob < ApplicationJob
   end
 
   def create_push_notification(attrs)
-    return if attrs[:user].device_token.nil?
-    n = RpushNotification.new
-    n.app = attrs[:app]
-    n.device_token = attrs[:user].device_token
-    n.sent_by_id = attrs[:sent_by_id]
-    n.user_id = attrs[:user].id
-    n.user_type = attrs[:user][:user_type]
-    n.alert = attrs[:alert].gsub(/<\/?[^>]*>/, "")
-    n.is_admin_notification = true
-    n.save!
+    notification = { body: attrs['alert'],
+                       title: 'Message from PWM Admin',
+                       icon: 'myicon'}
+    opts ={device_token: attrs[:user].device_token, notification: notification,
+     user_id: attrs[:user].id, sent_by_id: attrs['sent_by_id']}
+    PushNotification.send_fcm_notifications(opts)
   end
 
   def create_email_notification(attrs)
