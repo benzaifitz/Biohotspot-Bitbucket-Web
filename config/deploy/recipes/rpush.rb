@@ -12,7 +12,8 @@ namespace :rpush do
   desc 'Stop rpush'
   task stop: :environment do
     command %[echo '-----> Stopping rpush']
-    command "kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }')"
+    # command "kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }')"
+    command "if (ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') ; then kill -9 $(ps ax | grep rpush | fgrep -v grep | awk '{ print $1 }') ; fi"
   end
 
   desc 'Restart rpush'
