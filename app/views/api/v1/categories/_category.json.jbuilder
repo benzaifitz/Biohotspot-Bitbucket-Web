@@ -3,6 +3,8 @@ json.extract! category, "id", "name", "location"
 json.photos category.photos do |photo|
   json.uri photo.file_url
 end
+json.project category.site.project rescue nil
+json.site category.site rescue nil
 json.surveys category.sub_categories.map{|a| a.submission}.compact.count rescue nil
 json.complete_surveys category.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum
 json.photo category.photos.present? ? category.photos.first.file_url : ""
