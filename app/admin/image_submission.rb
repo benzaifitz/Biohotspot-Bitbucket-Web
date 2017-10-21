@@ -21,13 +21,13 @@ ActiveAdmin.register Photo, as: "Sample Image" do
       end
     end
     column :submission do |p|
-      link_to p.imageable.id, admin_sample_list_path(p.imageable.id)
+      link_to(p.imageable.id, admin_sample_list_path(p.imageable.id)) rescue nil
     end
     column :sub_category do |p|
-      link_to p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id) if p.imageable.sub_category
+      link_to(p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id)) rescue nil
     end
     column :category do |p|
-      link_to p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id) if p.imageable.sub_category
+      link_to(p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)) rescue nil
     end
     column 'Reject Comment' do |p|
       p.reject_comment if !p.approved?
