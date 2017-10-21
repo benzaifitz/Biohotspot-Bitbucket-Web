@@ -4,9 +4,9 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
 
   config.clear_action_items!
 
-  # action_item :view, only: :index do
-  #   link_to 'Email Notification', "#{new_admin_notification_path}?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
-  # end
+  action_item :view, only: :index do
+    link_to 'Email Notification', "#{new_admin_notification_path}?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
+  end
   action_item :view, only: :index do
     link_to 'Push Notification',  "#{new_admin_notification_path}?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
   end
@@ -71,7 +71,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
     inputs 'Details' do
       semantic_errors
       input :user_id, label: 'User Id'
-      # input :user_type, label: 'Group Type', as: :select, collection: User.user_types, include_blank: false
+      input :user_type, label: 'Group Type', as: :select, collection: User.user_types, include_blank: false
       input :notification_type, as: :hidden, input_html: { value: params[:notification_type] }
       if params[:notification_type] == RpushNotification::NOTIFICATION_TYPE[:email]
         input :category, label: 'Subject'

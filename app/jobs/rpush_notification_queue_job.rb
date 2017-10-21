@@ -3,7 +3,7 @@ class RpushNotificationQueueJob < ApplicationJob
 
   def perform(attrs = {})
     attrs = JSON.parse(attrs)
-    users = attrs[:user_id].blank? ? User.where(user_type: attrs['user_type']).where.not(device_token: nil) : User.where(id: attrs['user_id']).where.not(device_token: nil)
+    users = attrs['user_id'].blank? ? User.where(user_type: attrs['user_type']) : User.where(id: attrs['user_id'])
     users.find_each do |user|
       begin
         if attrs['notification_type'] == RpushNotification::NOTIFICATION_TYPE[:push]
@@ -26,16 +26,17 @@ class RpushNotificationQueueJob < ApplicationJob
     PushNotification.send_fcm_notifications(opts)
   end
 
-  def create_email_notification(attrs)
+  def self.create_email_notification(attrs)
+    sent_by = User.where(user_type: User.user_types[:administrator]).first
     n = RpushNotification.new
-    n.sent_by_id = attrs[:sent_by_id]
+    n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
+    n.category = attrs['category']
+    n.alert = attrs['alert']
+    n.data = { data: { title: 'Message from PWM Admin', message: attrs['alert'] } }
     n.user_id = attrs[:user].id
-    n.app = attrs[:app]
-    n.user_type = attrs[:user][:user_type]
-    n.alert = attrs[:alert]
-    n.delivered = false
-    n.category = attrs[:category]
-    n.is_admin_notification = true
+    n.sent_by_id = sent_by.id
     n.save(validate: false)
+
+
   end
 end
