@@ -40,8 +40,8 @@ module Api
       param :field_notes, String, desc:'', required: false
       param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def create
-        @sub_category = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
-        if @sub_category.blank? || @sub_category.current_user_submission(current_user.id).blank?
+        # @sub_category = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
+        # if @sub_category.blank? || @sub_category.current_user_submission(current_user.id).blank?
           @submission = Submission.new(submission_params.merge(submitted_by: current_user.id, status: params[:status]))
           begin
             @submission.save_by_status
@@ -51,9 +51,9 @@ module Api
           rescue *RecoverableExceptions => e
             error(E_INTERNAL, @submission.errors.full_messages[0])
           end
-        else
-          error(E_INTERNAL, 'Submission already present for this sub category.')
-        end
+        # else
+        #   error(E_INTERNAL, 'Submission already present for this sub category.')
+        # end
       end
 
       api :PUT, '/submissions/:id.json', 'Update a submission'
@@ -102,7 +102,7 @@ module Api
           attr = params[:submission][t.to_sym]
           if attr.present?
              if t == 'additional_images'
-               submission.photos.destroy_all rescue nil
+               # submission.photos.destroy_all rescue nil
                attr.each do |p|
                  next if p.blank?
                  Photo.create(url: p, imageable_id: submission.id, imageable_type: 'Submission',

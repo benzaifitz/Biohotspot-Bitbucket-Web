@@ -11,6 +11,6 @@ json.photo category.photos.present? ? category.photos.first.file_url : ""
 json.sub_categories category.current_user_sub_catrgories(current_user.id) do |sub_category|
   json.extract! sub_category, :id, :name, :category_id, :user_id
   json.submission do
-    json.partial! "api/v1/categories/submission", submission: (sub_category.current_user_submission(current_user.id) || Submission.new)
+    json.partial! "api/v1/categories/submission", submission: Submission.new
   end
 end
