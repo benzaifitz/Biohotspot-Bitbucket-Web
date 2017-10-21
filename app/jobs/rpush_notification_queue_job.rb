@@ -26,7 +26,7 @@ class RpushNotificationQueueJob < ApplicationJob
     PushNotification.send_fcm_notifications(opts)
   end
 
-  def self.create_email_notification(attrs)
+  def create_email_notification(attrs)
     sent_by = User.where(user_type: User.user_types[:administrator]).first
     n = RpushNotification.new
     n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
