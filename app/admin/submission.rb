@@ -33,7 +33,10 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :grazing
     column :field_notes
     column :survey_number
-    column :submitted_by
+    column :submitted_by do |s|
+      u = User.find(s.submitted_by) rescue nil
+      link_to(u.full_name, admin_user_path(u.id)) if u
+    end
     column :address
     column :latitude
     column :longitude
