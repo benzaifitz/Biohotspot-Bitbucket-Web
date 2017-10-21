@@ -35,19 +35,38 @@ class LandManager < User
     end
   end
 
-  def send_photo_rejected_pn(message = '')
-      PushNotification.sends(
-          device_type: self.device_type,
-          device_token: self.device_token,
-          user_id: self.id,
-          data: {
-              type: 'alert',
-              alert: message
-          },
-          notification: {
-              title: 'Photo Rejected',
-              body: message
-          }
-      )
+  def send_pn(title, message)
+    sent_by = User.where(user_type: User.user_types[:administrator]).first
+    PushNotification.sends(
+        device_type: self.device_type,
+        device_token: self.device_token,
+        user_id: self.id, sent_by_id: sent_by.id,
+        data: {
+             type: 'alert',
+             alert: message
+         },
+        notification: {
+            title: title,
+            body: message
+        }
+    )
   end
+
+  def send_email(title, message)
+    sent_by = User.where(user_type: User.user_types[:administrator]).first
+    n = RpushNotification.new
+    n.app = FCM_APP
+    n.category = title
+    n.alert = "#{sent_by.full_name} sent you a message: #{message}"
+    n.data = { data: { message: message } }
+    n.user_id = self.id
+    n.sent_by_id = sent_by.id
+    n.save(validate: false)
+  end
+
+  def send_pn_and_email_notification(title, message)
+    send_pn(title, message)
+    send_email(title, message)
+  end
+
 end

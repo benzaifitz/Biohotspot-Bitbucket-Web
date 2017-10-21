@@ -1,0 +1,9 @@
+<div class="panel">
+  <h3><%= "Reject Submission" %></h3>
+  <div class="panel-contents">
+    <%= form_for resource, url: { action: "reject_submission" }, method: :put do |f| %>
+        <%= text_area :submission, :reject_comment, cols: 50, rows: 5, placeholder: 'Please specify the reason for rejecting this submission.' %>
+        <%= f.submit 'Reject Submission' %>
+    <% end %>
+  </div>
+</div>

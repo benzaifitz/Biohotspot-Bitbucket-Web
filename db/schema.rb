@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171021072809) do
+ActiveRecord::Schema.define(version: 20171021103441) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,6 +337,8 @@ ActiveRecord::Schema.define(version: 20171021072809) do
     t.string   "sample_photo_full_url"
     t.string   "monitoring_photo_full_url"
     t.integer  "status",                        default: 1
+    t.boolean  "approved",                      default: true
+    t.string   "reject_comment"
     t.index ["sub_category_id"], name: "index_submissions_on_sub_category_id", using: :btree
     t.index ["submitted_by"], name: "index_submissions_on_submitted_by", using: :btree
   end

@@ -42,7 +42,28 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :longitude
     column :created_at
     column :updated_at
-    actions
+    actions do |p|
+      item 'Approve', approve_admin_sample_list_path(p), method: :put if !p.approved?
+      (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
+    end
+  end
+
+  member_action :approve, method: :put do
+    resource.update_columns(approved: true)
+    redirect_to admin_sample_lists_path, :notice => 'Submission approved.' and return
+  end
+
+  member_action :reject_submission, method: :put do
+    pn_msg = params[:submission][:reject_comment].to_s.html_safe
+    lm = LandManager.find(resource.submitted_by) rescue nil
+    lm.send_pn_and_email_notification('Submission Rejected', pn_msg) if lm
+    resource.update_columns(approved: false, reject_comment: pn_msg)
+    Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
+    redirect_to admin_sample_lists_path, :notice => 'Submission rejected.' and return
+  end
+
+  member_action :reject, method: :get do
+    render template: 'admin/submissions/reject', layout: false
   end
 
   form do |f|

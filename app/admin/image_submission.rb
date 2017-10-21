@@ -54,7 +54,7 @@ ActiveAdmin.register Photo, as: "Sample Image" do
   member_action :reject_image, method: :put do
     pn_msg = params[:photo][:reject_comment].to_s.html_safe
     lm = LandManager.where(id: Photo.find(resource.id).submission.submitted_by).first rescue nil
-    lm.send_photo_rejected_pn(pn_msg) if lm
+    lm.send_pn_and_email_notification('Photo Rejected', pn_msg) if lm
     resource.update_columns(approved: false, reject_comment: pn_msg)
     redirect_to admin_sample_images_path, :notice => 'Photo rejected.' and return
   end
