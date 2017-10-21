@@ -23,7 +23,7 @@ class RpushNotificationQueueJob < ApplicationJob
                        icon: 'myicon'}
     opts ={device_token: attrs[:user].device_token, notification: notification,
      user_id: attrs[:user].id, sent_by_id: attrs['sent_by_id']}
-    PushNotification.send_fcm_notifications(opts)
+    PushNotification.send_fcm_notifications(opts) if attrs[:user].device_token
   end
 
   def create_email_notification(attrs)
