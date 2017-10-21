@@ -32,8 +32,11 @@ ActiveAdmin.register User do
     column :status
     column :last_sign_in_at
     # TODO This will be implemented after adding categories model to system.
-    column :assigned_sub_categories do |c|
-      "--"
+    # column :assigned_sub_categories do |c|
+    #   "--"
+    # end
+    column :site do |u|
+      u.site.title rescue nil
     end
     actions do |user|
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'

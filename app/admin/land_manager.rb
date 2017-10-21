@@ -9,7 +9,7 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
     allowed = []
     allowed.push :password if params[:land_manager] && !params[:land_manager][:password].blank?
     allowed += [:first_name, :last_name, :email, :mobile_number, :company, :profile_picture,
-                :profile_picture_cache, :username, sub_category_ids: []]
+                :profile_picture_cache, :username, :site_id, sub_category_ids: []]
     allowed.uniq
   end
 
@@ -24,7 +24,8 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
       # f.input :company
       f.input :first_name
       f.input :last_name
-      f.input :sub_categories
+      # f.input :sub_categories
+      f.input :site
       f.inputs "Profile Picture", :multipart => true do
         f.input :profile_picture, :as => :file, :hint => f.object[:profile_picture]
         f.input :profile_picture_cache, :as => :hidden

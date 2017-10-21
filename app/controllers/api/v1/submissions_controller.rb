@@ -39,20 +39,9 @@ module Api
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
       param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
-      # def create
-      #   @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
-      #   begin
-      #     @submission.save_by_status
-      #     photos_for_submission(params, @submission)
-      #     render :show
-      #   rescue *RecoverableExceptions => e
-      #     error(E_INTERNAL, @submission.errors.full_messages[0])
-      #   end
-      # end
-
       def create
-        @sub_category_id = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
-        if @sub_category_id.blank? || @sub_category_id.submission.blank?
+        @sub_category = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
+        if @sub_category.blank? || @sub_category.current_user_submission(current_user.id).blank?
           @submission = Submission.new(submission_params.merge(submitted_by: current_user.id, status: params[:status]))
           begin
             @submission.save_by_status

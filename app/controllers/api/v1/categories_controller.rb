@@ -6,10 +6,7 @@ module Api
 
       api :GET, '/categories.json', 'Return all categories'
       def index
-        @categories = Category.all
-        # @categories = @categories.map{|a| a.attributes.merge({surveys: a.sub_categories.map{|a| a.submission}.compact.count,
-        #                                                       complete_surveys: a.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum,
-        #                                                       photo: a.photos.present? ? a.photos.first.file_url : ""})}
+        @categories = current_user.site.categories rescue Category.all
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
