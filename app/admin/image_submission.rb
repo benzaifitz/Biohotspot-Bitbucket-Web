@@ -72,7 +72,7 @@ ActiveAdmin.register Photo, as: "Sample Image" do
   collection_action :slider, method: :get do
     if !params[:q].blank?
       photos = Photo.ransack(params[:q])
-      photos.sorts = ['created_at asc']
+      photos.sorts = ['created_at asc'] if photos.sorts.empty?
       @photos = photos.result
     end
     render template: 'admin/image_submissions/slider', layout: false
