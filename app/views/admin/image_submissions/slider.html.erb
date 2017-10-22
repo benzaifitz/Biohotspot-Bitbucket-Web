@@ -4,17 +4,16 @@
       <%- @photos.each do |p| %>
           <%- if p.file && p.file.url %>
           <div>
+
+              <b style="color:red"> [Taken On- <%= p.created_at.strftime('%v') rescue nil %>]</b>
+              <b style="color:green"> [Type- <%= p.imageable_sub_type.capitalize rescue nil %>]</b>
+              <b style="color:blue"> [Sample- <%= p.imageable.sub_category.name.capitalize rescue nil %>]</b>
+              <b style="color:violet"> [Health Score- <%= p.imageable.health_score %>] </b>
+              <b style="color:brown">[Live Life Cover- <%= p.imageable.live_leaf_cover %>]</b>
+            <b style="color:dodgerblue"> [Live Branch Stem- <%= p.imageable.live_branch_stem %>]</b>
+                <b>[Die Back- <%= p.imageable.dieback %>]</b>
+
             <%= image_tag(p.file.url) %>
-            <table style="width:100%">
-              <tr>
-                <th>Taken On</th>
-                <th>Type</th>
-              </tr>
-              <tr>
-                <td><b> <%= p.created_at.strftime('%v') rescue nil %></b></td>
-                <td><b><%= p.imageable_sub_type.capitalize rescue nil %></b></td>
-              </tr>
-            </table>
           </div>
           <% end %>
       <% end %>
