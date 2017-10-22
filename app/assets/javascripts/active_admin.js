@@ -4,6 +4,8 @@
 //= require jquery-ui
 //= require underscore
 //= require gmaps/google
+//= require responsiveslides
+
 
 $(document).ready(function() {
     $("a.fancybox").fancybox();

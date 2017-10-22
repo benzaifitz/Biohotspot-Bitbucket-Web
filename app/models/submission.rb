@@ -1,5 +1,6 @@
 class Submission < ApplicationRecord
   belongs_to :sub_category
+
   has_many :photos, -> { where(imageable_sub_type: Photo::ADDITIONAL_IMAGES)}, as: :imageable
   # has_many :additional_images, -> { where(imageable_sub_type: Photo::ADDITIONAL_IMAGES)}, as: :imageable
   has_one :sample_image, -> { where(imageable_sub_type: Photo::SAMPLE_IMAGE)}, as: :imageable, class_name: 'Photo'

@@ -69,8 +69,25 @@ ActiveAdmin.register Photo, as: "Sample Image" do
     end
   end
 
+  collection_action :slider, method: :get do
+    if !params[:q].blank?
+      photos = Photo.ransack(params[:q])
+      photos.sorts = ['created_at asc']
+      @photos = photos.result
+    end
+    render template: 'admin/image_submissions/slider', layout: false
+  end
+
+  action_item :view_full_size, only: :index do
+    path = slider_admin_sample_images_path
+    q_p = {q: params.to_unsafe_h[:q].to_h}.to_query
+    path += "/?#{q_p}"
+    link_to('View Full Size', path, class: 'fancybox slider_fancybox', data: { 'fancybox-type' => 'ajax' })
+  end
+
   filter :created_at
   filter :submission_sub_category_in, as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
   filter :submission_category_in, as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
+  filter :imageable_sub_type, label: 'Image Type', as: :select, collection: [Photo::ADDITIONAL_IMAGES,Photo::MONITORING_IMAGE,Photo::SAMPLE_IMAGE]
 
 end

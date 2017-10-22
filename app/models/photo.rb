@@ -24,8 +24,8 @@ class Photo < ApplicationRecord
 
   ransacker :submission_sub_category,
     formatter: proc { |v|
-      submissions = SubCategory.find(v).submissions rescue nil
-      data = submissions.map(&:photos).flatten.map(&:id) rescue nil
+      submission = SubCategory.find(v).submission rescue nil
+      data = Photo.where(imageable_id: submission.id, imageable_type: 'Submission').map(&:id) rescue nil
       data = data.present? ? data : nil
     }, splat_params: true do |parent|
     parent.table[:id]
@@ -34,7 +34,8 @@ class Photo < ApplicationRecord
   ransacker :submission_category,
             formatter: proc { |v|
               sub_categories = Category.find(v).sub_categories rescue nil
-              data = sub_categories.map(&:submissions).flatten.map(&:photos).flatten.map(&:id) rescue nil
+              submission_ids = sub_categories.map(&:submission).flatten.map(&:id) rescue nil
+              data = Photo.where(imageable_id: submission_ids, imageable_type: 'Submission').map(&:id) rescue nil
               data = data.present? ? data : nil
             }, splat_params: true do |parent|
     parent.table[:id]

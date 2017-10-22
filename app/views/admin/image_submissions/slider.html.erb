@@ -1,0 +1,37 @@
+<%- if !@photos.blank? %>
+    <div class="rslides_container">
+      <ul class="rslides" id="slider1" style="height:700px;width:340px">
+      <%- @photos.each do |p| %>
+          <%- if p.file && p.file.url %>
+          <div>
+            <%= image_tag(p.file.url) %>
+            <table style="width:100%">
+              <tr>
+                <th>Taken On</th>
+                <th>Type</th>
+              </tr>
+              <tr>
+                <td><b> <%= p.created_at.strftime('%v') rescue nil %></b></td>
+                <td><b><%= p.imageable_sub_type.capitalize rescue nil %></b></td>
+              </tr>
+            </table>
+          </div>
+          <% end %>
+      <% end %>
+      </ul>
+    </div>
+    <script>
+        jQuery(document).ready(function ($) {
+            $("#slider1").responsiveSlides({
+                auto: false,
+                pager: false,
+                nav: true,
+                speed: 500,
+                maxwidth: 600,
+                namespace: "centered-btns"
+            });
+        });
+    </script>
+<%- else %>
+    Perform search before trying to view full scale images.
+<% end %>
