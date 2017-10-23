@@ -24,7 +24,7 @@ ActiveAdmin.register Document do
     selectable_column
     column :id
     column "Document" do |a|
-      link_to "#{request.protocol}#{request.host_with_port}#{a.document.url}", "#{request.protocol}#{request.host_with_port}#{a.document.url}" if a.document.url.present?
+      link_to(a.document.file.filename, a.document.url, target: '_blank') if a.document.url.present?
     end
     column :name
     column :category_document_id
@@ -52,7 +52,7 @@ ActiveAdmin.register Document do
     attributes_table do
       row :id
       row :document do |a|
-        link_to "#{request.protocol}#{request.host_with_port}#{a.document.url}", "#{request.protocol}#{request.host_with_port}#{a.document.url}" if a.document.url.present?
+        link_to a.document.file.filename, a.document.url if a.document.url.present?
       end
       row :category_document_id
       row :projects

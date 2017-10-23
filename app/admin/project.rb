@@ -109,4 +109,9 @@ ActiveAdmin.register Project do
     end
   end
 
+  preserve_default_filters!
+  remove_filter :document_projects
+  remove_filter :feedbacks
+  # remove_filter :sub_categories
+
 end

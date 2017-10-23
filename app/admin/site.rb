@@ -15,12 +15,12 @@ ActiveAdmin.register Site do
     column :title, label: "Project Title"
     column :summary, label: "Project Summary"
     column :tags
-    column :categories do |s|
+    column 'Species' do |s|
       table(:style => 'margin-bottom: 0') do
         s.categories.each do |sc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(sc.name.titleize, admin_category_path(sc))
+              link_to(sc.name.titleize, admin_species_path(sc))
             end
           end
         end
@@ -34,5 +34,12 @@ ActiveAdmin.register Site do
     column :updated_at
     actions
   end
+
+  filter :project
+  filter :categories, label: 'Species'
+  filter :title
+  filter :summary
+  filter :tags
+  filter :created_at
 
 end

@@ -41,7 +41,6 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :latitude
     column :longitude
     column :created_at
-    column :updated_at
     actions do |p|
       item 'Approve', approve_admin_sample_list_path(p), method: :put if !p.approved?
       (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
@@ -203,5 +202,27 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :created_at
     column :updated_at
   end
+
+  preserve_default_filters!
+  filter :sub_category, label: 'Sample'
+  filter :survey_number
+  filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
+  filter :rainfall
+  filter :humidity
+  filter :temperature
+  filter :health_score
+  filter :live_branch_stem
+  filter :live_leaf_cover
+  filter :stem_diameter
+  filter :dieback
+  filter :leaf_tie_month
+  filter :loopers
+  filter :seed_borer
+  filter :grazing
+  filter :field_notes
+  filter :latitude
+  filter :longitude
+  # filter :approved
+  filter :created_at
 
 end

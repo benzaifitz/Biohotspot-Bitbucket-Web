@@ -1,4 +1,4 @@
-ActiveAdmin.register Category do
+ActiveAdmin.register Category, as: 'Species' do
 
   menu label: 'Species', parent: 'Species', priority: 1
 
@@ -32,7 +32,7 @@ ActiveAdmin.register Category do
 
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
-    f.inputs 'Administrator Details' do
+    f.inputs 'Species Details' do
       f.input :site_id, as: :select, collection: Site.all.map{|a| [a.title, a.id]}
       f.input :name
       f.input :description
@@ -60,8 +60,12 @@ ActiveAdmin.register Category do
       end
     end
     f.actions do
-      f.action(:submit)
-      f.cancel_link(admin_categories_path)
+      if f.object.new_record?
+        f.action(:submit, as: :button, label: 'Create Species' )
+      else
+        f.action(:submit, as: :button, label: 'Update Species' )
+      end
+      f.cancel_link(collection_path)
     end
   end
 
@@ -98,5 +102,8 @@ ActiveAdmin.register Category do
 
   preserve_default_filters!
   remove_filter :deleted_at
+  remove_filter :photos
+  remove_filter :sub_categories
+
 
 end
