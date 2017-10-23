@@ -214,8 +214,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :created_at
     column :updated_at
   end
-
-  preserve_default_filters!
+  
   filter :sub_category, label: 'Sample'
   filter :survey_number
   filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
