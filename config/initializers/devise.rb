@@ -14,7 +14,7 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
   #TODO change this to a valid email once we have a domain
-  config.mailer_sender = 'dappertesting2017@gmail.com'
+  config.mailer_sender = ENV['DEFAULT_FROM_EMAIL']
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
