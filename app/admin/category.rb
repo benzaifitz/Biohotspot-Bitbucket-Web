@@ -27,7 +27,9 @@ ActiveAdmin.register Category, as: 'Species' do
     column :distribution
     column :created_at
     column :updated_at
-    actions
+    actions do |c|
+      link_to("Clone", clone_admin_species_path(id: c.id))
+    end
   end
 
   form :html => { :enctype => "multipart/form-data" } do |f|
@@ -104,6 +106,16 @@ ActiveAdmin.register Category, as: 'Species' do
   remove_filter :deleted_at
   remove_filter :photos
   remove_filter :sub_categories
+
+  member_action :clone, method: :get do
+    @resource = resource.dup
+    # @resource.photos = resource.photos.dup
+    render :new, :layout => false
+  end
+
+  action_item :only => :show do
+    link_to("Make a Copy", clone_admin_species_path(id: resource.id))
+  end
 
 
 end

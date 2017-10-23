@@ -9,6 +9,7 @@ class Category < ApplicationRecord
   accepts_nested_attributes_for :photos, allow_destroy: true
   serialize :tags
   LIMIT = 5
+  validates_uniqueness_of :name
 
   validate do |record|
     record.validate_photo_quota
