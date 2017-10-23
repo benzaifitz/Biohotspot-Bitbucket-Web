@@ -13,18 +13,24 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   index do
     selectable_column
     id_column
+    column 'Sample' do |s|
+      sc = s.try(:sub_category)
+      link_to(sc.name, admin_sample_path(sc.id)) if sc
+    end
+    column 'Site' do |s|
+      site = s.try(:sub_category).try(:category).try(:site)
+      link_to(site.title, admin_site_path(site.id)) if site
+    end
+    column 'Project' do |s|
+      project = s.try(:sub_category).try(:category).try(:site).try(:project)
+      link_to(project.title, admin_site_path(project.id)) if project
+    end
     column :stem_diameter
     column :health_score
     column :live_leaf_cover
     column :live_branch_stem
     column :dieback
     column :temperature
-    column 'Site' do |s|
-      s.try(:sub_category).try(:category).try(:site).try(:title)
-    end
-    column 'Project' do |s|
-      s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
-    end
     column :rainfall
     column :humidity
     column :leaf_tie_month
@@ -132,6 +138,15 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   show do |submission|
     attributes_table do
       row :id
+      row 'Sample' do |s|
+        s.try(:sub_category).try(:name)
+      end
+      row 'Site' do |s|
+        s.try(:sub_category).try(:category).try(:site).try(:title)
+      end
+      row 'Project' do |s|
+        s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
+      end
       row :sample_photo do |a|
         link_to(image_tag(a.sample_image.file.url(:thumb), height: '100px'),a.sample_image.file.url, target: '_blank') if a.sample_image && a.sample_image.file && a.sample_image.file.url.present?
       end
@@ -150,12 +165,6 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       row :live_branch_stem
       row :dieback
       row :temperature
-      row 'Site' do |s|
-        s.try(:sub_category).try(:category).try(:site).try(:title)
-      end
-      row 'Project' do |s|
-        s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
-      end
       row :rainfall
       row :humidity
       row :leaf_tie_month
@@ -175,18 +184,21 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   end
 
   csv do
-    column :stem_diameter
-    column :health_score
-    column :live_leaf_cover
-    column :live_branch_stem
-    column :dieback
-    column :temperature
+    column 'Sample' do |s|
+      s.try(:sub_category).try(:name)
+    end
     column 'Site' do |s|
       s.try(:sub_category).try(:category).try(:site).try(:title)
     end
     column 'Project' do |s|
       s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
     end
+    column :stem_diameter
+    column :health_score
+    column :live_leaf_cover
+    column :live_branch_stem
+    column :dieback
+    column :temperature
     column :rainfall
     column :humidity
     column :leaf_tie_month
