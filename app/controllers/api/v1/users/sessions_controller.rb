@@ -22,7 +22,13 @@ module Api
         private
 
         def render_error_banned_user(user)
-          message = (user && user.banned?) ? [I18n.t("devise_token_auth.sessions.disabled_account")] : [I18n.t("devise_token_auth.sessions.unapproved_account")]
+          message = if user && user.banned?
+                      [I18n.t("devise_token_auth.sessions.disabled_account")]
+                    elsif user && !user.confirmed?
+                      [I18n.t("devise.failure.unconfirmed")]
+                    else
+                      [I18n.t("devise_token_auth.sessions.unapproved_account")]
+                    end
           render json: {
               success: false,
               message: message,
