@@ -109,6 +109,14 @@ class User < ApplicationRecord
     (first_name.blank? && last_name.blank?) ? email : "#{first_name} #{last_name}"
   end
 
+  def name
+    full_name
+  end
+
+  def username
+    full_name
+  end
+
   def ban_with_comment(comment)
     self.status_change_comment = comment
     self.banned!
