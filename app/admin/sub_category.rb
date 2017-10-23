@@ -53,6 +53,8 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     end
   end
 
+
+
   filter :category_id, label: 'Species', as: :select, collection: -> {Category.all.map{|c| [c.name, c.id]}}
   filter :name
   filter :created_at

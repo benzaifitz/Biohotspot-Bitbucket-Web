@@ -11,4 +11,5 @@ class SubCategory < ApplicationRecord
   def current_user_submission(current_user_id)
     Submission.where(submitted_by: current_user_id, sub_category_id: self.id).first
   end
+
 end

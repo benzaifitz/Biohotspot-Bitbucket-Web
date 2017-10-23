@@ -8,10 +8,10 @@ ActiveAdmin.register PaperTrail::Version, as: 'User Events' do
     id_column
     column :created_at
     column "User" do |v|
-      link_to v.item.username, admin_user_path(v.item)
+      link_to(v.item.full_name, admin_user_path(v.item)) rescue nil
     end
     column :email do |v|
-      label v.item.email
+      v.item.email rescue nil
     end
     column :event, label: 'Event Type'
     column 'Admin' do |v|
