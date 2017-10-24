@@ -2,7 +2,9 @@ class Photo < ApplicationRecord
   belongs_to :imageable, polymorphic: true
   belongs_to :submission, -> { where( photos: { imageable_type: 'Submission' } ).includes( :photos ) }, foreign_key: 'imageable_id'
 
+  attr_accessor :crop_h, :crop_w, :crop_x, :crop_y
   mount_uploader :file, PhotoUploader
+  # crop_uploaded :file
 
   ADDITIONAL_IMAGES = 'additional'
   SAMPLE_IMAGE = 'sample'

@@ -43,6 +43,7 @@ gem 'fancybox-rails', '~> 0.3.0'
 
 gem 'mini_magick', '~> 4.3', '>= 4.3.6'
 gem 'carrierwave', '~> 0.10.0'
+gem 'carrierwave-crop'
 gem 'fog', '~> 1.36'
 gem 'whenever', :require => false
 

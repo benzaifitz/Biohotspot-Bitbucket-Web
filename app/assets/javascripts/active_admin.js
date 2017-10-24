@@ -5,22 +5,13 @@
 //= require underscore
 //= require gmaps/google
 //= require responsiveslides
+//= require jquery
+/* //= require jquery.jcrop */
 
+//window.JCropper
 
 $(document).ready(function() {
     $("a.fancybox").fancybox();
-
-    //function readURL(input) {
-    //    if (input.files && input.files[0]) {
-    //        var reader = new FileReader();
-    //
-    //        reader.onload = function (e) {
-    //            $('#picture_preview').attr('src', e.target.result);
-    //        }
-    //
-    //        reader.readAsDataURL(input.files[0]);
-    //    }
-    //}
 
     function readURL(input,object) {
         if (input.files && input.files[0]) {
@@ -98,4 +89,34 @@ $(document).ready(function() {
         });
     };
 });
+
+
+
+//
+//update_crop = function(coords) {
+//    var img_height, img_width, ratio, rx, ry;
+//    rx = 100 / coords.w;
+//    ry = 100 / coords.h;
+//    img_width = $('#category_photo_preview')[0].naturalWidth;
+//    img_height = $('#category_photo_preview')[0].naturalHeight;
+//    ratio = 1;
+//    $('#company_logo_crop_x').val(Math.round(coords.x * ratio));
+//    $('#company_logo_crop_y').val(Math.round(coords.y * ratio));
+//    $('#company_logo_crop_w').val(Math.round(coords.w * ratio));
+//    $('#company_logo_crop_h').val(Math.round(coords.h * ratio));
+//};
+//
+//jcrop_company_logo = function() {
+//    $('#category_photo_preview').Jcrop({
+//        onChange: update_crop,
+//        onSelect: update_crop,
+//        setSelect: [0, 0, 500, 500]
+//    }, function() {
+//        return window.JCropper = this;
+//    });
+//};
+//
+//$(function() {
+//    jcrop_company_logo();
+//});
 

@@ -2,7 +2,7 @@ ActiveAdmin.register Category, as: 'Species' do
 
   menu label: 'Species', parent: 'Species', priority: 1
 
-    permit_params :name, :description, :tags, :class_name, :family_scientific, :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :distribution, :location, :url, :site_id,
+    permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific, :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :distribution, :location, :url, :site_id,
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
@@ -58,6 +58,14 @@ ActiveAdmin.register Category, as: 'Species' do
                         : content_tag(:span, 'no image selected')
 
           pm.input :file_cache, :as => :hidden
+          # for attribute in [:crop_x, :crop_y, :crop_w, :crop_h]
+          #   pm.input attribute, :id => attribute, as: :hidden
+          # end
+          # insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+          #   insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+          #     insert_tag(Arbre::HTML::Img, id: 'category_photo_preview', src: "#{pm.object.file.url}?#{Random.rand(100)}")
+          #   end
+          # end
         end
       end
     end
