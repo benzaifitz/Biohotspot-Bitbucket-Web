@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024054550) do
+ActiveRecord::Schema.define(version: 20171024115853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -418,5 +418,4 @@ ActiveRecord::Schema.define(version: 20171024054550) do
   add_foreign_key "reported_chats", "chats"
   add_foreign_key "reported_ratings", "ratings"
   add_foreign_key "sub_categories", "categories"
-  add_foreign_key "submissions", "sub_categories"
 end
