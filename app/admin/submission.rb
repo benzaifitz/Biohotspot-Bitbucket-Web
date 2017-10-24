@@ -25,6 +25,17 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       project = s.try(:sub_category).try(:category).try(:site).try(:project)
       link_to(project.title, admin_site_path(project.id)) if project
     end
+    column 'Status' do |p|
+      if p.approved?
+        status_tag('active', :ok, class: 'green', label: 'APPROVED')
+      elsif p.rejected?
+        status_tag('active', :ok, class: 'red', label: 'REJECTED')
+      elsif p.submitted?
+        status_tag('active', :ok, class: 'orange', label: 'SUBMITTED')
+      else
+        status_tag('error', :ok, class: 'important', label: 'UNKNOWN')
+      end
+    end
     column :stem_diameter
     column :health_score
     column :live_leaf_cover
@@ -48,8 +59,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :longitude
     column :created_at
     actions do |p|
-      item 'Approve', approve_admin_sample_list_path(p), method: :put if !p.approved?
-      (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
+      (item 'Approve', approve_admin_sample_list_path(p), method: :put)
+      (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
     end
   end
 

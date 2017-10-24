@@ -41,7 +41,7 @@ module Api
       # param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def create
         # @sub_category = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
-        # if @sub_category.blank? || @sub_category.current_user_submission(current_user.id).blank?
+        # if can_create_submission?
           @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
           begin
             @submission.save_by_status
@@ -52,7 +52,7 @@ module Api
             error(E_INTERNAL, @submission.errors.full_messages[0])
           end
         # else
-        #   error(E_INTERNAL, 'Submission already present for this sub category.')
+        #   error(E_INTERNAL, 'Cannot submit another survey until previously submitted survey gets approval or rejection.')
         # end
       end
 
@@ -123,6 +123,9 @@ module Api
         @submission = Submission.find(params[:id]) rescue Submission.new
       end
 
+      def can_create_submission?
+        !(Submission.where(sub_category_id: params[:submission][:sub_category_id]).last.submitted? rescue nil)
+      end
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
         params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
