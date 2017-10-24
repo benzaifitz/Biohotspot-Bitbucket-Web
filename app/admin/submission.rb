@@ -54,7 +54,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   end
 
   member_action :approve, method: :put do
-    resource.update_columns(approved: true)
+    resource.approved!
     redirect_to admin_sample_lists_path, :notice => 'Submission approved.' and return
   end
 
@@ -62,7 +62,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     pn_msg = params[:submission][:reject_comment].to_s.html_safe
     lm = LandManager.find(resource.submitted_by) rescue nil
     lm.send_pn_and_email_notification('Submission Rejected', pn_msg) if lm
-    resource.update_columns(approved: false, reject_comment: pn_msg)
+    resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
     Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
     redirect_to admin_sample_lists_path, :notice => 'Submission rejected.' and return
   end
@@ -88,24 +88,6 @@ ActiveAdmin.register Submission, as: 'Sample List' do
 
         pm.input :file_cache, :as => :hidden
       end
-      # f.inputs "Sample Picture", :multipart => true do
-      #   f.input :sample_photo, as: :file
-      #   f.input :sample_photo_cache, :as => :hidden
-      #   insert_tag(Arbre::HTML::Li, class: 'file input optional') do
-      #     insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-      #       insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', src: "#{f.object.sample_photo.url(:thumb)}?#{Random.rand(100)}")
-      #     end
-      #   end
-      # end
-      # f.inputs "Monitoring Picture", :multipart => true do
-      #   f.input :monitoring_photo, as: :file
-      #   f.input :monitoring_photo_cache, :as => :hidden
-      #   insert_tag(Arbre::HTML::Li, class: 'file input optional') do
-      #     insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-      #       insert_tag(Arbre::HTML::Img, id: 'monitoring_picture_preview', height: '100px', src: "#{f.object.monitoring_photo.url(:thumb)}?#{Random.rand(100)}")
-      #     end
-      #   end
-      # end
       f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
         pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))

@@ -15,8 +15,10 @@ class Submission < ApplicationRecord
   # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
   validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :dieback, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
 
+  enum status: [ :submitted, :approved, :rejected ]
+
   before_validation :convert_data_type
-  enum status: [:complete, :incomplete]
+  # enum status: [:complete, :incomplete]
   reverse_geocoded_by :latitude, :longitude
   before_save :reverse_geocode
 

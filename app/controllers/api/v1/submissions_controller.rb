@@ -38,11 +38,11 @@ module Api
       param :loopers, [true, false], desc:'', required: false
       param :grazing, [true, false], desc:'', required: false
       param :field_notes, String, desc:'', required: false
-      param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
+      # param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def create
         # @sub_category = SubCategory.find(params[:submission][:sub_category_id]) rescue nil
         # if @sub_category.blank? || @sub_category.current_user_submission(current_user.id).blank?
-          @submission = Submission.new(submission_params.merge(submitted_by: current_user.id, status: params[:status]))
+          @submission = Submission.new(submission_params.merge(submitted_by: current_user.id))
           begin
             @submission.save_by_status
             photos_for_submission(params, @submission)
@@ -79,7 +79,7 @@ module Api
       param :field_notes, String, desc:'', required: false
       param :status, Integer, desc: 'Should be send outside submission hash.0 for complete and 1 for incomplete', required: false
       def update
-        @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id, status: params[:status]))
+        @submission.attributes = @submission.attributes.merge!(submission_params.merge(submitted_by: current_user.id))
         if @submission.save_by_status
           photos_for_submission(params, @submission)
           @submission.reload

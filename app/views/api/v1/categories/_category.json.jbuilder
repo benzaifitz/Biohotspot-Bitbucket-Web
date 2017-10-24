@@ -6,10 +6,11 @@ end
 json.project category.site.project rescue nil
 json.site category.site rescue nil
 json.surveys category.sub_categories.map{|a| a.submission}.compact.count rescue nil
-json.complete_surveys category.sub_categories.map{|a| 1 if a.submission && a.submission.complete?}.compact.sum
+json.complete_surveys category.sub_categories.map{|a| 1 if a.submission && a.submission.approved?}.compact.sum
 json.photo category.photos.present? ? category.photos.first.file_url : ""
 json.sub_categories category.current_user_sub_catrgories(current_user.id) do |sub_category|
   json.extract! sub_category, :id, :name, :category_id, :user_id
+  json.last_submission_status Submission.where(sub_category_id: sub_category.id).last.status rescue nil
   json.submission do
     json.partial! "api/v1/categories/submission", submission: Submission.new
   end
