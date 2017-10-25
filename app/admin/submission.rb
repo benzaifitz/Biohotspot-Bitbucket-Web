@@ -85,26 +85,30 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-      f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
-        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+      if f.object.new_record?
+        f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
+          pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
-                      : content_tag(:span, 'no image selected')
+                        : content_tag(:span, 'no image selected')
 
-        pm.input :file_cache, :as => :hidden
-      end
-      f.has_many :monitoring_image, heading: 'Monitoring Photos', new_record: false do |pm|
-        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+          pm.input :file_cache, :as => :hidden
+        end
+        f.has_many :monitoring_image, heading: 'Monitoring Photos', new_record: false do |pm|
+          pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
-                      : content_tag(:span, 'no image selected')
+                        : content_tag(:span, 'no image selected')
 
-        pm.input :file_cache, :as => :hidden
-      end
-      f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
-        pm.input :file, :as => :file, :hint => pm.object.file.present? \
+          pm.input :file_cache, :as => :hidden
+        end
+        f.has_many :photos, heading: 'Additional Photos', allow_destroy: true do |pm|
+          pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
-                      : content_tag(:span, 'no image selected')
+                        : content_tag(:span, 'no image selected')
 
-        pm.input :file_cache, :as => :hidden
+          pm.input :file_cache, :as => :hidden
+        end
+      else
+          render partial: 'admin/submissions/slider'
       end
       f.input :stem_diameter, label: 'Stem diameter (trunk)'
       f.input :health_score, :input_html => { :type => "number" }
