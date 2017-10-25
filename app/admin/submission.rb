@@ -122,7 +122,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
         f.input :grazing, as: :boolean
       end
       f.input :field_notes
-      f.input :sub_category, input_html: { class: 'sub_category'}
+      f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
       actions
     end
