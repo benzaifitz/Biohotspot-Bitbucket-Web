@@ -25,7 +25,7 @@ en:
         unapproved_account: "Your account has not been approved. Please contact your Administrator."
         disabled_account: "Your account requires activation by the software administrator"
         bad_credentials: "The current password you have entered is incorrect"
-        user_not_found: "User with provided email not found."
+        user_not_found: "User with provided credentials not found."
   errors:
       messages:
         wrong_size: "is the wrong size (should be %{file_size})"

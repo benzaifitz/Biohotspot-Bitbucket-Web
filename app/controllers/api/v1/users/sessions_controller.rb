@@ -26,8 +26,12 @@ module Api
                       [I18n.t("devise_token_auth.sessions.disabled_account")]
                     elsif user && !user.confirmed?
                       [I18n.t("devise.failure.unconfirmed")]
-                    else
+                    elsif user && !user.approved?
                       [I18n.t("devise_token_auth.sessions.unapproved_account")]
+                    elsif user
+                      [I18n.t("devise_token_auth.sessions.bad_credentials")]
+                    else
+                      [I18n.t("devise_token_auth.sessions.user_not_found")]
                     end
           render json: {
               success: false,
