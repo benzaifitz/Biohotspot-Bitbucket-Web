@@ -23,6 +23,10 @@ module Api
       param :latitude, Float, desc:'', required: false
       param :longitude, Float, desc:'', required: false
       param :sub_category_id, Integer, desc:'', required: false
+      param :category_id, Integer, desc:'', required: false
+      param :site_id, Integer, desc:'', required: false
+      param :location_id, Integer, desc:'', required: false
+      param :project_id, Integer, desc:'', required: false
       param :rainfall, String, desc:'', required: false
       param :humidity, String , desc:'', required: false
       param :temperature,String, desc:'', required: false
@@ -129,6 +133,7 @@ module Api
       # Never trust parameters from the scary internet, only allow the white list through.
       def submission_params
         params.require(:submission).permit([:survey_number, :submitted_by, :latitude, :longitude, :sub_category_id,
+                                            :category_id, :site_id, :location_id, :project_id,
                                             :rainfall, :humidity, :temperature, :health_score, :live_leaf_cover, :status,
                                             :live_branch_stem, :stem_diameter, :sample_photo_full_url, :monitoring_photo_full_url,
                                             :dieback, :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes])

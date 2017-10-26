@@ -17,14 +17,12 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       sc = s.try(:sub_category)
       link_to(sc.name, admin_sample_path(sc.id)) if sc
     end
-    column 'Site' do |s|
-      site = s.try(:sub_category).try(:category).try(:site)
-      link_to(site.title, admin_site_path(site.id)) if site
+    column 'Species' do |s|
+      link_to(s.category.name, admin_species_path(s.category.id)) if s.category
     end
-    column 'Project' do |s|
-      project = s.try(:sub_category).try(:category).try(:site).try(:project)
-      link_to(project.title, admin_site_path(project.id)) if project
-    end
+    column :site
+    column :location
+    column :project
     column 'Status' do |p|
       if p.approved?
         status_tag('active', :ok, class: 'green', label: 'APPROVED')
@@ -201,12 +199,9 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column 'Sample' do |s|
       s.try(:sub_category).try(:name)
     end
-    column 'Site' do |s|
-      s.try(:sub_category).try(:category).try(:site).try(:title)
-    end
-    column 'Project' do |s|
-      s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
-    end
+    column :site
+    column :location
+    column :project
     column :stem_diameter
     column :health_score
     column :live_leaf_cover
@@ -230,6 +225,9 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   end
   
   filter :sub_category, label: 'Sample'
+  filter :site
+  filter :location
+  filter :project
   filter :survey_number
   filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
   filter :rainfall
