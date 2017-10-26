@@ -2,11 +2,11 @@ class Category < ApplicationRecord
   # TO access all categories by default use without_default_scope: true
   # Or to get all client use Category.unscoped
   acts_as_paranoid
-  # belongs_to :site
+  belongs_to :site
 
-  has_many :site_categories
-  has_many :sites, :through => :site_categories
-  accepts_nested_attributes_for :site_categories, :allow_destroy => true
+  # has_many :site_categories
+  # has_many :sites, :through => :site_categories
+  # accepts_nested_attributes_for :site_categories, :allow_destroy => true
 
   attr_accessor :file_cache
 
