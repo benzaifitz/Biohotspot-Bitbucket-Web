@@ -2,11 +2,18 @@ class Category < ApplicationRecord
   # TO access all categories by default use without_default_scope: true
   # Or to get all client use Category.unscoped
   acts_as_paranoid
-  belongs_to :site
+  # belongs_to :site
+
+  has_many :site_categories
+  has_many :sites, :through => :site_categories
+  accepts_nested_attributes_for :site_categories, :allow_destroy => true
+
   attr_accessor :file_cache
+
   has_many :sub_categories
   has_many :photos, as: :imageable, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
+
   serialize :tags
   LIMIT = 5
   validates_uniqueness_of :name
@@ -30,6 +37,10 @@ class Category < ApplicationRecord
         map(&:sub_category_id).flatten.compact
     sub_categories_ids = sub_categories_ids + self.sub_categories#.map{|sc| sc.id if sc.submission.blank?}
     self.sub_categories.where(id: sub_categories_ids.uniq)
+  end
+
+  def current_user_site(current_user)
+    self.sites.where(location_id: current_user.location_id).first
   end
 
 end

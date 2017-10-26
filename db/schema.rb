@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171026094911) do
+ActiveRecord::Schema.define(version: 20171026095816) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -294,6 +294,13 @@ ActiveRecord::Schema.define(version: 20171026094911) do
     t.index ["is_admin_notification"], name: "index_rpush_notifications_on_is_admin_notification", using: :btree
     t.index ["sent_by_id"], name: "index_rpush_notifications_on_sent_by_id", using: :btree
     t.index ["user_id"], name: "index_rpush_notifications_on_user_id", using: :btree
+  end
+
+  create_table "site_categories", force: :cascade do |t|
+    t.integer  "site_id"
+    t.integer  "category_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "sites", force: :cascade do |t|

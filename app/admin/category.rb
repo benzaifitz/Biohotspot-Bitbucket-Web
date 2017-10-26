@@ -2,7 +2,9 @@ ActiveAdmin.register Category, as: 'Species' do
 
   menu label: 'Species', parent: 'Species', priority: 1
 
-    permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific, :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :distribution, :location, :url, :site_id,
+    permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
+                  :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
+                  :distribution, :location, :url, site_ids: [],
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
@@ -14,7 +16,6 @@ ActiveAdmin.register Category, as: 'Species' do
     column :description
     column :tags
     column :class_name
-    column :location
     column :url
     column :family_common
     column :family_scientific
@@ -35,7 +36,8 @@ ActiveAdmin.register Category, as: 'Species' do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Species Details' do
-      f.input :site_id, as: :select, collection: Site.all.map{|a| [a.title, a.id]}
+      # f.input :site, as: :select, collection: Site.all.map{|a| [a.title, a.id]}
+      f.input :sites, as: :select, :collection => Site.all.map{ |s|  [s.title, s.id] }
       f.input :name
       f.input :description
       f.input :tags
@@ -49,7 +51,6 @@ ActiveAdmin.register Category, as: 'Species' do
       f.input :habit
       f.input :impact
       f.input :distribution
-      f.input :location
       f.input :url
       f.inputs "Photos", :multipart => true  do
         f.has_many :photos, allow_destroy: true do |pm|
@@ -95,9 +96,14 @@ ActiveAdmin.register Category, as: 'Species' do
       row :habit
       row :impact
       row :distribution
-      row :location
       row :url
-      row :site_id
+      row :sites do |c|
+        sites = ''
+        c.sites.each do |s|
+          sites += "#{link_to(s.title, admin_site_path(s.id), target: '_blank')}<br>"
+        end
+        sites.html_safe
+      end
       row :created_at
       row :updated_at
       row "Images" do
