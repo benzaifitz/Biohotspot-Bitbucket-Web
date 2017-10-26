@@ -3,7 +3,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
   menu label: 'Sample List', parent: 'Species', priority: 3
 
   permit_params do
-    [:name, :category_id]
+    [:name, category_ids: []]
   end
 
   actions :all
@@ -12,7 +12,8 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Sample Details' do
       f.input :name
-      f.input :category_id, label: 'Species', as: :select, collection: Category.all.map{|a| [a.name, a.id]}
+      # f.input :category_id, label: 'Species', as: :select, collection: Category.all.map{|a| [a.name, a.id]}
+      f.input :categories, as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
       # f.input :user_id, label: 'Land Manager', as: :select, collection: User.project_manager.all.map{|a| [a.email, a.id]}
     end
     f.actions do
@@ -29,7 +30,13 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     selectable_column
     id_column
     column :name
-    column 'Species', :category_id
+    column 'Species' do |sc|
+      categories = ''
+      sc.categories.each do |s|
+        categories += "#{link_to(s.name, admin_species_path(s.id), target: '_blank')},"
+      end
+      categories.html_safe
+    end
     # column 'Land Manager',:user_id do |category|
     #   link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
     # end
@@ -42,8 +49,15 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     attributes_table do
       row :id
       row :name
-      row 'Species' do |c|
-        link_to c.category.name, admin_species_path(c.category)
+      # row 'Species' do |c|
+      #   link_to c.category.name, admin_species_path(c.category)
+      # end
+      row 'Species' do |sc|
+        categories = ''
+        sc.categories.each do |s|
+          categories += "#{link_to(s.name, admin_species_path(s.id), target: '_blank')}<br>"
+        end
+        categories.html_safe
       end
       # row :user_id do
       #   link_to category.user.email, admin_user_path(category.user_id) if category.user.present?

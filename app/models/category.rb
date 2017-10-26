@@ -4,13 +4,13 @@ class Category < ApplicationRecord
   acts_as_paranoid
   belongs_to :site
 
-  # has_many :site_categories
-  # has_many :sites, :through => :site_categories
-  # accepts_nested_attributes_for :site_categories, :allow_destroy => true
+  has_many :category_sub_categories
+  has_many :sub_categories, :through => :category_sub_categories
+  accepts_nested_attributes_for :category_sub_categories, :allow_destroy => true
 
   attr_accessor :file_cache
 
-  has_many :sub_categories
+  # has_many :sub_categories
   has_many :photos, as: :imageable, dependent: :destroy
   accepts_nested_attributes_for :photos, allow_destroy: true
 

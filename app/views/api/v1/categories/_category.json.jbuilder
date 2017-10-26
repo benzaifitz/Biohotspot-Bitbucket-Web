@@ -6,7 +6,8 @@ end
 json.project category.site.location.project rescue nil
 json.site category.site rescue nil
 json.location category.site.location rescue nil
-json.surveys category.sub_categories.map{|a| a.submission}.compact.count rescue nil
+# json.surveys category.sub_categories.map{|a| a.submission}.compact.count rescue nil
+json.surveys category.sub_categories.count rescue nil
 json.complete_surveys category.sub_categories.map{|a| 1 if a.submission && a.submission.approved?}.compact.sum
 json.photo category.photos.present? ? category.photos.first.file_url : ""
 json.sub_categories category.sub_categories do |sub_category|
