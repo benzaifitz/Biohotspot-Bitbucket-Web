@@ -53,6 +53,9 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     end
   end
 
+  action_item :only => :show do
+    link_to("New Sample", new_admin_sample_path)
+  end
 
 
   filter :category_id, label: 'Species', as: :select, collection: -> {Category.all.map{|c| [c.name, c.id]}}

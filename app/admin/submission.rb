@@ -9,7 +9,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
                 sample_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ]
   actions :all
-
+  config.per_page = 100
   index do
     selectable_column
     id_column
@@ -72,7 +72,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   member_action :reject_submission, method: :put do
     pn_msg = params[:submission][:reject_comment].to_s.html_safe
     lm = LandManager.find(resource.submitted_by) rescue nil
-    lm.send_pn_and_email_notification('Submission Rejected', pn_msg) if lm
+    msg = "Your survey for sample #{resource.sub_category.name rescue 'N/A'} taken on #{resource.created_at.strftime('%v')} has been rejected."
+    lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
     resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
     Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
     redirect_to admin_sample_lists_path, :notice => 'Submission rejected.' and return
@@ -80,6 +81,22 @@ ActiveAdmin.register Submission, as: 'Sample List' do
 
   member_action :reject, method: :get do
     render template: 'admin/submissions/reject', layout: false
+  end
+
+  batch_action :approve do |ids|
+    Submission.where(id: ids).update_all(status: Submission.statuses[:approved])
+    redirect_to collection_path, notice: 'All selected submissions approved.'
+  end
+
+  batch_action :reject do |ids|
+    Submission.where(id: ids).update_all(status: Submission.statuses[:rejected], reject_comment: 'Batch reject.')
+    batch_action_collection.find(ids).each do |sub|
+        lm = LandManager.find(sub.submitted_by) rescue nil
+        msg = "Your survey for sample #{sub.sub_category.name} taken on #{sub.created_at.strftime('%v')} has been rejected."
+        lm.send_pn_and_email_notification('Submission Rejected', msg) if lm
+        Photo.where(imageable_type: 'Submission',imageable_id: sub.id).delete_all
+    end
+    redirect_to collection_path, alert: 'All selected submissions rejected.'
   end
 
   form do |f|
