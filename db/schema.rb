@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171024115853) do
+ActiveRecord::Schema.define(version: 20171026064946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,6 +162,14 @@ ActiveRecord::Schema.define(version: 20171024115853) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "locations", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.text     "description"
+  end
+
   create_table "photos", force: :cascade do |t|
     t.string   "file"
     t.string   "url"
@@ -292,10 +300,9 @@ ActiveRecord::Schema.define(version: 20171024115853) do
     t.string   "title"
     t.text     "summary"
     t.text     "tags"
-    t.integer  "project_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_sites_on_project_id", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "location_id"
   end
 
   create_table "sub_categories", force: :cascade do |t|

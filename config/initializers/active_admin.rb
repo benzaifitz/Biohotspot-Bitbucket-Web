@@ -5,11 +5,11 @@ ActiveAdmin.setup do |config|
   # for each of the active admin pages.
   #
   config.site_title = "Pilbara Weed Management"
-  config.site_title_image = "dapper-logo-xs.gif"
+  config.site_title_image = "logo.png"
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
-  config.site_title_link = "http://dapperapps.com.au"
+  config.site_title_link = "https://oceanwise.com.au"
 
   # Set an optional image to be displayed for the header
   # instead of a string (overrides :site_title)
@@ -233,24 +233,25 @@ ActiveAdmin.setup do |config|
     admin.root_to = 'projects#index'
     admin.build_menu do |menu|
       menu.add label: 'Projects', priority: 1
-      menu.add label: 'Sites', priority: 2
-      menu.add label: 'Species', priority: 3
-      menu.add label: 'Submissions', priority: 4
-      menu.add label: 'License', priority: 5
-      menu.add label: 'Maps', priority: 5
-      menu.add label: 'Users', priority: 6
-      menu.add label: 'User Content', priority: 7 do |user_content|
+      menu.add label: 'Locations', priority: 2
+      menu.add label: 'Sites', priority: 3
+      menu.add label: 'Species', priority: 4
+      menu.add label: 'Submissions', priority: 5
+      menu.add label: 'License', priority: 6
+      menu.add label: 'Maps', priority: 7
+      menu.add label: 'Users', priority: 8
+      menu.add label: 'User Content', priority: 9 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
-      menu.add label: 'Communicate', priority: 8 do |communicate|
+      menu.add label: 'Communicate', priority: 10 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
-      menu.add label: 'Notifications', priority: 9
-      menu.add label: 'Comments', priority: 10
-      menu.add label: 'License', priority: 11
-      menu.add label: 'Tutorial', priority: 12
-      menu.add label: 'Document', priority: 13
+      menu.add label: 'Notifications', priority: 11
+      menu.add label: 'Comments', priority: 12
+      menu.add label: 'License', priority: 13
+      menu.add label: 'Tutorial', priority: 14
+      menu.add label: 'Document', priority: 15
     end
   end
   config.namespace :pm do |pm|

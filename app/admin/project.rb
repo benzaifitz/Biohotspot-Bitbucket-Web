@@ -19,18 +19,7 @@ ActiveAdmin.register Project do
       p.users.count
     end
     column :client_name
-    #TODO needs to implement this column after establishing sites association.
-    column :sites do |p|
-      table(:style => 'margin-bottom: 0') do
-        p.sites.each do |ps|
-          tr do
-            td(:style =>'border: 0; padding: 2px;') do
-              link_to(ps.title.titleize, admin_site_path(ps))
-            end
-          end
-        end
-      end
-    end
+    column :location
     column :created_at
     column :updated_at
     actions
@@ -48,21 +37,6 @@ ActiveAdmin.register Project do
       f.input :tags
       f.input :client_name
       f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
-      # if params[:action] != "neaw"
-      #   f.inputs do
-      #     f.has_many :project_manager, heading: 'Project Manager', new_record: true do |pm|
-      #       # pm.select ProjectManager.all
-      #       pm.input :id, as: :select, collection: ProjectManager.all.map{|pm| [pm.email, pm.id]}
-      #     end
-      # end
-      # end
-      # f.has_one :project_manager
-      # f.input :project_manager
-      # f.inputs do
-      #   f.has_many :project_manager, heading: 'Project Manager', allow_destroy: true, new_record: false do |a|
-      #     a.input :email
-      #   end
-      # end
       f.actions
     end
   end

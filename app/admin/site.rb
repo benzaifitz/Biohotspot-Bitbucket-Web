@@ -3,7 +3,7 @@ ActiveAdmin.register Site do
   menu label: 'Sites', priority: 2
 
   permit_params do
-    allowed = [:title, :summary, :tags, :project_id]
+    allowed = [:title, :summary, :tags, :location_id]
     allowed.uniq
   end
 
