@@ -13,7 +13,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     f.inputs 'Sample Details' do
       f.input :name
       # f.input :category_id, label: 'Species', as: :select, collection: Category.all.map{|a| [a.name, a.id]}
-      f.input :categories, as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
+      f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
       # f.input :user_id, label: 'Land Manager', as: :select, collection: User.project_manager.all.map{|a| [a.email, a.id]}
     end
     f.actions do
