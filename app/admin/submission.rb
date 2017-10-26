@@ -2,7 +2,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
 
   menu label: 'Sample List', parent: 'Submissions', priority: 1
 
-  permit_params :sub_category_id, :survey_number, :submitted_by, :sub_category, :rainfall, :humidity, :temperature,
+  permit_params :sub_category_id, :category_id, :site_id, :location_id, :project_id, :survey_number, :submitted_by,
+                :sub_category, :rainfall, :humidity, :temperature,
                 :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter, :sample_photo, :monitoring_photo, :dieback,
                 :leaf_tie_month, :seed_borer, :loopers, :grazing, :field_notes, :status,
                 monitoring_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
@@ -18,7 +19,16 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       link_to(sc.name, admin_sample_path(sc.id)) if sc
     end
     column 'Species' do |s|
-      link_to(s.category.name, admin_species_path(s.category.id)) if s.category
+      link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
+    end
+    column 'Site' do |s|
+      link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
+    end
+    column 'Location' do |s|
+      link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
+    end
+    column 'Project' do |s|
+      link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
     end
     column :site
     column :location
@@ -100,7 +110,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-      if f.object.new_record?
+
         f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
           pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
@@ -122,9 +132,9 @@ ActiveAdmin.register Submission, as: 'Sample List' do
 
           pm.input :file_cache, :as => :hidden
         end
-      else
+        if !f.object.new_record?
           render partial: 'admin/submissions/slider'
-      end
+        end
       f.input :stem_diameter, label: 'Stem diameter (trunk)'
       f.input :health_score, :input_html => { :type => "number" }
       f.input :live_leaf_cover, :input_html => { :type => "number" }
@@ -142,6 +152,10 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       end
       f.input :field_notes
       f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
+      f.input :category, label: 'Species'
+      # f.input :site
+      # f.input :location
+      # f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
       actions
     end
@@ -153,11 +167,17 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       row 'Sample' do |s|
         s.try(:sub_category).try(:name)
       end
+      row 'Species' do |s|
+        link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
+      end
       row 'Site' do |s|
-        s.try(:sub_category).try(:category).try(:site).try(:title)
+        link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
+      end
+      row 'Location' do |s|
+        link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
       end
       row 'Project' do |s|
-        s.try(:sub_category).try(:category).try(:site).try(:project).try(:title)
+        link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
       end
       row :sample_photo do |a|
         link_to(image_tag(a.sample_image.file.url(:thumb), height: '100px'),a.sample_image.file.url, target: '_blank') if a.sample_image && a.sample_image.file && a.sample_image.file.url.present?
@@ -199,9 +219,18 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column 'Sample' do |s|
       s.try(:sub_category).try(:name)
     end
-    column :site
-    column :location
-    column :project
+    column 'Species' do |s|
+      link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
+    end
+    column 'Site' do |s|
+      link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
+    end
+    column 'Location' do |s|
+      link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
+    end
+    column 'Project' do |s|
+      link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
+    end
     column :stem_diameter
     column :health_score
     column :live_leaf_cover

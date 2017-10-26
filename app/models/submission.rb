@@ -61,4 +61,13 @@ class Submission < ApplicationRecord
     self.live_branch_stem = self.live_branch_stem.to_f
     self.dieback = self.dieback.to_f
   end
+
+  def self.submission_status(sample, specie)
+
+    Submission.where(sub_category_id: (sample.id rescue nil), category_id: (specie.id rescue nil),
+                     site_id: (specie.site.id rescue nil), location_id: (specie.site.location.id rescue nil),
+                     project_id: (specie.site.location.project.id rescue nil) ).last.status rescue nil
+
+  end
+
 end
