@@ -3,14 +3,16 @@ json.extract! category, "id", "name", "location"
 json.photos category.photos do |photo|
   json.uri photo.file_url
 end
+allowed_sub_cat_ids = category.site.sub_categories.map(&:id)
+allowed_sub_cats = category.sub_categories.where(id: allowed_sub_cat_ids).to_a + [SubCategory.new(name: SubCategory::UNKNOWN_SAMPLE)]
 json.project category.site.location.project rescue nil
 json.site category.site rescue nil
 json.location category.site.location rescue nil
-json.surveys category.sub_categories.count rescue nil
-json.complete_surveys category.sub_categories.map{|a| 1 if Submission.submission_status(a,category) == 'submitted'}.compact.sum
+json.surveys allowed_sub_cats.count rescue nil
+json.complete_surveys allowed_sub_cats.map{|a| 1 if Submission.submission_status(a,category) == 'submitted'}.compact.sum
 json.photo category.photos.present? ? category.photos.first.file_url : ""
-json.sub_categories category.sub_categories do |sub_category|
-  json.extract! sub_category, :id, :name, :category_id, :user_id
+json.sub_categories allowed_sub_cats do |sub_category|
+  json.extract! sub_category, :id, :name, :user_id
   json.last_submission_status Submission.submission_status(sub_category,category)
   json.project_id category.site.location.project.id rescue nil
   json.site_id category.site.id rescue nil

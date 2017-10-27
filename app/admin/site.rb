@@ -3,7 +3,7 @@ ActiveAdmin.register Site do
   menu label: 'Sites', priority: 2
 
   permit_params do
-    allowed = [:title, :summary, :tags, :location_id]
+    allowed = [:title, :summary, :tags, sub_category_ids: []]
     allowed.uniq
   end
 
@@ -33,6 +33,25 @@ ActiveAdmin.register Site do
     column :created_at
     column :updated_at
     actions
+  end
+
+  form do |f|
+    f.semantic_errors *f.object.errors.keys
+    f.inputs 'Site Details' do
+      f.input :title
+      f.input :summary
+      f.input :tags
+      # f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
+      f.input :sub_categories, label: 'Samples', as: :select, collection: SubCategory.all.map{|a| [a.name, a.id]}
+    end
+    f.actions do
+      if f.object.new_record?
+        f.action(:submit, as: :button, label: 'Create Sample' )
+      else
+        f.action(:submit, as: :button, label: 'Update Sample' )
+      end
+      f.cancel_link(collection_path)
+    end
   end
 
   filter :project

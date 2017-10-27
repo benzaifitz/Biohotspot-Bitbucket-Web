@@ -59,7 +59,10 @@ class User < ApplicationRecord
   belongs_to :privacy
   belongs_to :project
   belongs_to :site
-  belongs_to :location
+  # belongs_to :location
+  has_many :location_users
+  has_many :locations, :through => :location_users
+  accepts_nested_attributes_for :location_users, :allow_destroy => true
   has_many :ratings, dependent: :destroy
   has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
   has_many :blocked_users, dependent: :destroy
