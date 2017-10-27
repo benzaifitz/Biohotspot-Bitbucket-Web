@@ -1,7 +1,7 @@
 module Api
   module V1
     class CategoriesController < ApiController
-      # before_action :authenticate_user!
+      before_action :authenticate_user!
       before_action :set_category, only: [:show, :destroy, :update]
 
       api :GET, '/categories.json', 'Return all categories'
@@ -9,9 +9,9 @@ module Api
         @categories = current_user.location.sites.map(&:categories).flatten rescue []
       end
 
-      def current_user
-        User.find(22)
-      end
+      # def current_user
+      #   User.find(22)
+      # end
 
       api :GET, '/categories/:id.json', 'Return single category'
       def show
