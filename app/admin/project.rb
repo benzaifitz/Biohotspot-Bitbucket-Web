@@ -41,47 +41,7 @@ ActiveAdmin.register Project do
     end
   end
 
-  controller do
-    def update(options={}, &block)
-      # You can put your send email code over here
-      begin
-        raise 'Project manager is required' if params[:project][:project_manager_id].blank?
-        project_manager = ProjectManager.find(params[:project].delete(:project_manager_id))
-        Project.transaction do
-          resource.assign_attributes(title: params[:project][:title], summary: params[:project][:summary], tags: params[:project][:tags], client_name: params[:project][:client_name])
-          project_manager.managed_project = resource
-          project_manager.save!
-          resource.save!
-          flash[:notice] = "Project updated successfully."
-          redirect_to admin_projects_path
-        end
-      rescue => e
-        flash[:error] = e.is_a?(String) ? e : e.message
-        redirect_to edit_admin_project_path(resource)
-      end
-    end
-    def new
-      @project = Project.new
-      @project.build_project_manager
-    end
-    def create
-      begin
-        @project = Project.new(permitted_params[:project])
-        raise 'Project manager is required' if params[:project][:project_manager_id].blank?
-        @project_manager = ProjectManager.find(params[:project][:project_manager_id])
-        Project.transaction do
-          @project.save!
-          @project_manager.managed_project = @project
-          @project_manager.save!
-          flash[:notice] = "Project created successfully."
-          redirect_to admin_projects_path
-        end
-      rescue => e
-        flash[:error] = e.is_a?(String) ? e : e.message
-        redirect_to edit_admin_project_path(resource)
-      end
-    end
-  end
+
 
   preserve_default_filters!
   remove_filter :document_projects

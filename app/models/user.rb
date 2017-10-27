@@ -58,7 +58,7 @@ class User < ApplicationRecord
   belongs_to :eula
   belongs_to :privacy
   belongs_to :project
-  # belongs_to :site
+  belongs_to :site
   belongs_to :location
   has_many :ratings, dependent: :destroy
   has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
