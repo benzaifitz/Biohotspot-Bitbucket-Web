@@ -27,8 +27,16 @@ ActiveAdmin.register Site do
       end
     end
     #TODO needs to implement this column after establishing surveys association.
-    column :surveys do |p|
-      "--"
+    column 'Samples' do |p|
+      table(:style => 'margin-bottom: 0') do
+        p.sub_categories.each do |sc|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(sc.name, admin_sample_path(sc.id)) rescue nil
+            end
+          end
+        end
+      end
     end
     column :created_at
     column :updated_at
