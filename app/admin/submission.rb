@@ -11,6 +11,10 @@ ActiveAdmin.register Submission, as: 'Sample List' do
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ]
   actions :all
 
+  # action_item :new, only: [:show,:index], label: 'Manual Entry'
+  config.action_items[0] = ActiveAdmin::ActionItem.new only: [:show,:index] do
+    link_to 'Manual Entry', new_admin_sample_list_path
+  end
   index do
     selectable_column
     id_column
