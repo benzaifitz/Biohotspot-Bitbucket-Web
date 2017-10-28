@@ -13,6 +13,7 @@ ActiveAdmin.register Location do
     selectable_column
     id_column
     column :name
+    column :project
     column :sites do |p|
       table(:style => 'margin-bottom: 0') do
         p.sites.each do |ps|
@@ -34,8 +35,8 @@ ActiveAdmin.register Location do
       f.input :name
       f.input :description
       f.input :project_id, as: :select, collection:  Project.all.map{|p| [p.title, p.id]}
-      f.actions
     end
+    f.actions
   end
 
 

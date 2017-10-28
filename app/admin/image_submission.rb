@@ -23,10 +23,10 @@ ActiveAdmin.register Photo, as: "Sample Image" do
     column :submission do |p|
       link_to(p.imageable.id, admin_sample_list_path(p.imageable.id)) rescue nil
     end
-    column :sub_category do |p|
+    column 'Sample' do |p|
       link_to(p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id)) rescue nil
     end
-    column :category do |p|
+    column 'Species' do |p|
       link_to(p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)) rescue nil
     end
     column 'Reject Comment' do |p|
@@ -86,8 +86,8 @@ ActiveAdmin.register Photo, as: "Sample Image" do
   end
 
   filter :created_at
-  filter :submission_sub_category_in, as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
-  filter :submission_category_in, as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
+  filter :submission_sub_category_in, label: 'Sample', as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
+  filter :submission_category_in, label: 'Species', as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
   filter :imageable_sub_type, label: 'Image Type', as: :select, collection: [Photo::ADDITIONAL_IMAGES,Photo::MONITORING_IMAGE,Photo::SAMPLE_IMAGE]
 
 end

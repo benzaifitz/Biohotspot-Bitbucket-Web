@@ -19,7 +19,17 @@ ActiveAdmin.register Project do
       p.users.count
     end
     column :client_name
-    column :location
+    column :locations do |p|
+      table(:style => 'margin-bottom: 0') do
+        p.locations.each do |loc|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(loc.name.titleize, admin_location_path(loc))
+            end
+          end
+        end
+      end
+    end
     column :created_at
     column :updated_at
     actions
@@ -37,8 +47,8 @@ ActiveAdmin.register Project do
       f.input :tags
       f.input :client_name
       f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
-      f.actions
     end
+    f.actions
   end
 
 

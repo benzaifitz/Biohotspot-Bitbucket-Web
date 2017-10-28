@@ -11,7 +11,7 @@ class SubCategory < ApplicationRecord
   accepts_nested_attributes_for :land_manager_sub_categories, :allow_destroy => true
   has_one :submission
   # validates_presence_of :category_id #, :user_id
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name, scope: :site_id
 
   UNKNOWN_SAMPLE = 'UNKNOWN SAMPLE'
 

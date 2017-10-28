@@ -10,7 +10,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
                 sample_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ]
   actions :all
-  config.per_page = 100
+
   index do
     selectable_column
     id_column
@@ -20,15 +20,6 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     end
     column 'Species' do |s|
       link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
-    end
-    column 'Site' do |s|
-      link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
-    end
-    column 'Location' do |s|
-      link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
-    end
-    column 'Project' do |s|
-      link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
     end
     column :site
     column :location
@@ -110,7 +101,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-
+        # f.object.sample_image.build if f.object.new_record?
+        # f.object.monitoring_image.build if f.object.new_record?
         f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
           pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
@@ -157,8 +149,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       # f.input :location
       # f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
-      actions
     end
+    f.actions
   end
 
   show do |submission|
@@ -170,15 +162,9 @@ ActiveAdmin.register Submission, as: 'Sample List' do
       row 'Species' do |s|
         link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
       end
-      row 'Site' do |s|
-        link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
-      end
-      row 'Location' do |s|
-        link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
-      end
-      row 'Project' do |s|
-        link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
-      end
+      row :site
+      row :location
+      row :project
       row :sample_photo do |a|
         link_to(image_tag(a.sample_image.file.url(:thumb), height: '100px'),a.sample_image.file.url, target: '_blank') if a.sample_image && a.sample_image.file && a.sample_image.file.url.present?
       end
@@ -222,15 +208,9 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column 'Species' do |s|
       link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
     end
-    column 'Site' do |s|
-      link_to(s.category.site.title, admin_site_path(s.category.site.id))  rescue nil
-    end
-    column 'Location' do |s|
-      link_to(s.category.site.location.name, admin_location_path(s.category.site.location.id))  rescue nil
-    end
-    column 'Project' do |s|
-      link_to(s.category.site.location.project.title, admin_location_path(s.category.site.location.project.id))  rescue nil
-    end
+    column :site
+    column :location
+    column :project
     column :stem_diameter
     column :health_score
     column :live_leaf_cover

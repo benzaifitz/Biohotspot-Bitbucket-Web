@@ -9,8 +9,8 @@ ActiveAdmin.register Tutorial do
     f.inputs do
       f.input :avatar, as: :file
       f.input :avatar_text
-      actions
     end
+    f.actions
   end
 
   index do

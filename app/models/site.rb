@@ -10,4 +10,5 @@ class Site < ApplicationRecord
 
   serialize :tags
   validates_presence_of :location, :title
+  validates_uniqueness_of :title, scope: :location_id
 end

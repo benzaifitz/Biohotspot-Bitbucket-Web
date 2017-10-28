@@ -15,6 +15,7 @@ ActiveAdmin.register Site do
     column :title, label: "Project Title"
     column :summary, label: "Project Summary"
     column :tags
+    column :location
     column 'Species' do |s|
       table(:style => 'margin-bottom: 0') do
         s.categories.each do |sc|
@@ -54,9 +55,9 @@ ActiveAdmin.register Site do
     end
     f.actions do
       if f.object.new_record?
-        f.action(:submit, as: :button, label: 'Create Sample' )
+        f.action(:submit, as: :button, label: 'Create Site' )
       else
-        f.action(:submit, as: :button, label: 'Update Sample' )
+        f.action(:submit, as: :button, label: 'Update Site' )
       end
       f.cancel_link(collection_path)
     end

@@ -1,6 +1,6 @@
 ActiveAdmin.register Category, as: 'Species' do
 
-  menu label: 'Species' #, parent: 'Species', priority: 1
+  menu label: 'Species',priority: 5 #, parent: 'Species', priority: 1
 
     permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                   :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
@@ -13,6 +13,21 @@ ActiveAdmin.register Category, as: 'Species' do
     selectable_column
     column :id
     column :name
+    column :site
+
+
+    column 'Samples' do |s|
+      table(:style => 'margin-bottom: 0') do
+        s.sub_categories.each do |sc|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(sc.name.titleize, admin_sample_path(sc))
+            end
+          end
+        end
+      end
+    end
+
     column :description
     column :tags
     column :class_name

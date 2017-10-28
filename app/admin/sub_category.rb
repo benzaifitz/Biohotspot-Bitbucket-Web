@@ -30,6 +30,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     selectable_column
     id_column
     column :name
+    column :site
     column 'Species' do |sc|
       categories = ''
       sc.categories.each do |s|
@@ -49,6 +50,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     attributes_table do
       row :id
       row :name
+      row :site
       # row 'Species' do |c|
       #   link_to c.category.name, admin_species_path(c.category)
       # end
