@@ -104,8 +104,8 @@ ActiveAdmin.register Category, as: 'Species' do
     attributes_table do
       row :id
       row :name
-      row :description
-      row :tags
+      row :description, input_html: {rows: 4}
+      row :tags, input_html: {rows: 3}
       row :class_name
       row :family_scientific
       row :family_common

@@ -11,7 +11,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Sample Details' do
-      f.input :name
+      f.input :name, label: 'Label'
       # f.input :category_id, label: 'Species', as: :select, collection: Category.all.map{|a| [a.name, a.id]}
       f.input :site, as: :select, collection: Site.all.map{|s| [s.project_location_prefix_name, s.id]}
       f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
@@ -30,7 +30,7 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
   index do
     selectable_column
     id_column
-    column :name
+    column 'Label', :name
     column :site
     column 'Species' do |sc|
       categories = ''
@@ -49,7 +49,9 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
   show do
     attributes_table do
       row :id
-      row :name
+      row 'Label' do |sc|
+        sc.name
+      end
       row :site
       # row 'Species' do |c|
       #   link_to c.category.name, admin_species_path(c.category)
@@ -75,6 +77,6 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
 
 
   filter :category_id, label: 'Species', as: :select, collection: -> {Category.all.map{|c| [c.name, c.id]}}
-  filter :name
+  filter :name, label: 'Label'
   filter :created_at
 end

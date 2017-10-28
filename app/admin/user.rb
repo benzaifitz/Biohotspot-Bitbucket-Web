@@ -28,15 +28,40 @@ ActiveAdmin.register User do
     end
     column :first_name
     column :last_name
-    column :user_type
-    column :status
+    column :user_type do |u|
+      if u.land_manager?
+        status_tag('active', :ok, class: 'green', label: u.user_type.humanize.upcase)
+      elsif u.project_manager?
+        status_tag('eactiverror', :ok, class: 'orange', label: u.user_type.humanize.upcase)
+      elsif u.administrator?
+        status_tag('active', :ok, class: 'red', label: u.user_type.humanize.upcase)
+      else
+        status_tag('error', :ok, class: 'important', label: 'UNKNOWN')
+      end
+    end
+    column :status do |u|
+      if u.active?
+        status_tag('active', :ok, class: 'green', label: u.status.humanize.upcase)
+      elsif u.banned?
+        status_tag('eactiverror', :ok, class: 'red', label: u.status.humanize.upcase)
+      else
+        status_tag('active', :ok, class: 'orange', label: (u.user_type.humanize.upcase rescue nil) )
+      end
+    end
     column :last_sign_in_at
     # TODO This will be implemented after adding categories model to system.
     # column :assigned_sub_categories do |c|
     #   "--"
     # end
-    column :site do |u|
-      u.site.title rescue nil
+    column :location do |u|
+      if u.land_manager?
+        link_to(u.site.location.name,admin_location_path(u.site.location.id)) rescue nil
+      end
+    end
+    column :project do |u|
+      if !u.land_manager?
+        link_to(u.project.title,admin_project_path(u.project.id)) rescue nil
+      end
     end
     actions do |user|
       item 'Edit', eval("edit_admin_#{user.user_type}_path(#{user.id})"), class: 'member_link'

@@ -48,8 +48,8 @@ ActiveAdmin.register Project do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
       f.input :title
-      f.input :summary
-      f.input :tags
+      f.input :summary, input_html: {rows: 4}
+      f.input :tags, input_html: {rows: 3}
       f.input :client_name
       f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
     end
