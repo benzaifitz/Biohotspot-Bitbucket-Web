@@ -106,8 +106,8 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs do
-        # f.object.sample_image.build if f.object.new_record?
-        # f.object.monitoring_image.build if f.object.new_record?
+        f.object.sample_image = Photo.new if f.object.new_record?
+        f.object.monitoring_image = Photo.new if f.object.new_record?
         f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
           pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
@@ -147,7 +147,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
         f.input :loopers, as: :boolean
         f.input :grazing, as: :boolean
       end
-      f.input :field_notes
+      f.input :field_notes, input_html: {rows: 4}
       f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
       f.input :category, label: 'Species'
       # f.input :site
