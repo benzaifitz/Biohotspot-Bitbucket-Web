@@ -137,11 +137,30 @@ ActiveAdmin.register Category, as: 'Species' do
     end
   end
 
-  preserve_default_filters!
-  remove_filter :deleted_at
-  remove_filter :updated_at
-  remove_filter :photos
-  remove_filter :sub_categories
+  # preserve_default_filters!
+  # remove_filter :deleted_at
+  # remove_filter :updated_at
+  # remove_filter :photos
+  # remove_filter :sub_categories
+  # remove_filter :category_sub_categories
+
+  filter :name
+  filter :site, multiple: true
+  filter :sub_categories, label: 'Samples', multiple: true
+  filter :description
+  filter :tags
+  filter :class_name
+  filter :url
+  filter :family_scientific
+  filter :family_common
+  filter :species_scientific
+  filter :species_common
+  filter :status
+  filter :growth
+  filter :habit
+  filter :impact
+  filter :distribution
+  filter :created_at
 
   member_action :clone, method: :get do
     @resource = resource.dup
