@@ -234,10 +234,10 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :updated_at
   end
   
-  filter :sub_category, label: 'Sample'
-  filter :site
-  filter :location
-  filter :project
+  filter :sub_category, label: 'Sample', as: :select, multiple: true
+  filter :site, as: :select, multiple: true
+  filter :location, as: :select, multiple: true
+  filter :project, as: :select, multiple: true
   filter :survey_number
   filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
   filter :rainfall

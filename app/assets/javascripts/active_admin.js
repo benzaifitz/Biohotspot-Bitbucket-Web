@@ -90,6 +90,24 @@ $(document).ready(function() {
     };
 });
 
+$(document).ready(function() {
+    //option A
+    $(".submission_map_filter_form").submit(function(e){
+        e.preventDefault(e);
+        if (!$('body').hasClass("loading")) {
+            $('body').addClass("loading");
+        }
+        return $.ajax({
+            url: "/admin/submission_map/search_submissions",
+            data: $('form').serializeArray(),
+            complete: function(jqxhr, response) {
+                $('body').removeClass("loading");
+                return $(".map").html(jqxhr.responseText);
+            }
+        });
+    });
+});
+
 
 
 //
