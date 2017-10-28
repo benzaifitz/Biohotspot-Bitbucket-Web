@@ -19,4 +19,8 @@ class SubCategory < ApplicationRecord
     Submission.where(submitted_by: current_user_id, sub_category_id: self.id).first
   end
 
+  def project_location_site_prefix_name
+    "#{self.site.location.project.title rescue 'N/A'} - #{self.site.location.name rescue 'N/A'} - #{self.site.title rescue 'N/A'} - #{self.name}"
+  end
+
 end

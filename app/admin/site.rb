@@ -3,7 +3,7 @@ ActiveAdmin.register Site do
   menu label: 'Sites', priority: 2
 
   permit_params do
-    allowed = [:title, :summary, :tags, sub_category_ids: []]
+    allowed = [:title, :summary, :tags, :location_id, sub_category_ids: [],]
     allowed.uniq
   end
 
@@ -12,8 +12,8 @@ ActiveAdmin.register Site do
   index do
     selectable_column
     id_column
-    column :title, label: "Project Title"
-    column :summary, label: "Project Summary"
+    column :title
+    column :summary
     column :tags
     column :location
     column 'Species' do |s|
@@ -33,7 +33,7 @@ ActiveAdmin.register Site do
         p.sub_categories.each do |sc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(sc.name, admin_sample_path(sc.id)) rescue nil
+              link_to(sc.project_location_site_prefix_name, admin_sample_path(sc.id)) rescue nil
             end
           end
         end
@@ -51,7 +51,8 @@ ActiveAdmin.register Site do
       f.input :summary
       f.input :tags
       # f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
-      f.input :sub_categories, label: 'Samples', as: :select, collection: SubCategory.all.map{|a| [a.name, a.id]}
+      f.input :location, as: :select, collection: Location.all.map{|a| [a.project_prefix_name, a.id]}
+      # f.input :sub_categories, label: 'Samples', as: :select, collection: SubCategory.all.map{|a| [a.name, a.id]}
     end
     f.actions do
       if f.object.new_record?
