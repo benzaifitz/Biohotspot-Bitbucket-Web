@@ -13,8 +13,14 @@ ActiveAdmin.register Project do
     selectable_column
     id_column
     column :title, label: "Project Title"
-    column :summary, label: "Project Summary"
-    column :tags
+    column :summary do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.summary}')\"> View More</a>"
+      p.summary.length > 100 ? (p.summary[0..100] + omision).html_safe : p.summary
+    end
+    column :tags do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.tags}')\"> View More</a>"
+      p.tags.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
+    end
     column "Number of users" do |p|
       p.users.count
     end
@@ -31,7 +37,6 @@ ActiveAdmin.register Project do
       end
     end
     column :created_at
-    column :updated_at
     actions
   end
 
@@ -56,6 +61,7 @@ ActiveAdmin.register Project do
   preserve_default_filters!
   remove_filter :document_projects
   remove_filter :feedbacks
+  remove_filter :updated_at
   # remove_filter :sub_categories
 
 end

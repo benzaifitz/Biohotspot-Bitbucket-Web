@@ -28,8 +28,14 @@ ActiveAdmin.register Category, as: 'Species' do
       end
     end
 
-    column :description
-    column :tags
+    column :description do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.description}')\"> View More</a>"
+      p.description.length > 100 ? (p.description[0..100] + omision).html_safe : p.description
+    end
+    column :tags do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.tags}')\"> View More</a>"
+      p.tags.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
+    end
     column :class_name
     column :url
     column :family_common
@@ -42,7 +48,6 @@ ActiveAdmin.register Category, as: 'Species' do
     column :impact
     column :distribution
     column :created_at
-    column :updated_at
     actions do |c|
       link_to("Clone", clone_admin_species_path(id: c.id))
     end
@@ -134,6 +139,7 @@ ActiveAdmin.register Category, as: 'Species' do
 
   preserve_default_filters!
   remove_filter :deleted_at
+  remove_filter :updated_at
   remove_filter :photos
   remove_filter :sub_categories
 

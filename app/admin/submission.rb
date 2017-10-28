@@ -57,6 +57,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :latitude
     column :longitude
     column :created_at
+    column :updated_at
     actions do |p|
       (item 'Approve', approve_admin_sample_list_path(p), method: :put)
       (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
@@ -256,5 +257,6 @@ ActiveAdmin.register Submission, as: 'Sample List' do
   filter :longitude
   # filter :approved
   filter :created_at
+  filter :updated_at
 
 end

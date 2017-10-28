@@ -13,8 +13,14 @@ ActiveAdmin.register Site do
     selectable_column
     id_column
     column :title
-    column :summary
-    column :tags
+    column :summary do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.summary}')\"> View More</a>"
+      p.summary.length > 100 ? (p.summary[0..100] + omision).html_safe : p.summary
+    end
+    column :tags do |p|
+      omision = "<a href='#' onclick=\"$.fancybox('#{p.tags}')\"> View More</a>"
+      p.tags.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
+    end
     column :location
     column 'Species' do |s|
       table(:style => 'margin-bottom: 0') do
@@ -40,7 +46,6 @@ ActiveAdmin.register Site do
       end
     end
     column :created_at
-    column :updated_at
     actions
   end
 

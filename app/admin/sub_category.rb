@@ -43,7 +43,6 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     #   link_to category.user.email, admin_user_path(category.user_id) if category.user.present?
     # end
     column :created_at
-    column :updated_at
     actions
   end
 
