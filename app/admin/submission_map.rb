@@ -1,5 +1,5 @@
-ActiveAdmin.register_page 'Submission map' do
-  menu label: 'Submission map', parent: 'Maps', priority: 5
+ActiveAdmin.register_page 'Maps' do
+  menu label: 'Maps', priority: 8
 
   content do
     @categories = Category.all.map{|c| [c.name, c.id]}

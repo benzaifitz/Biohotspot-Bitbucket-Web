@@ -20,6 +20,8 @@ gem 'gmaps4rails'
 gem 'gibbon'
 # The push notification service.
 gem 'rpush', github: 'rpush/rpush'
+# The authorization Gem for Ruby on Rails.
+gem 'cancancan', '~> 1.10'
 group :development, :test do
   gem 'byebug'
 end

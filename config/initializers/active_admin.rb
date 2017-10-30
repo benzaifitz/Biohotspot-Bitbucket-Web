@@ -238,21 +238,22 @@ ActiveAdmin.setup do |config|
       menu.add label: 'Samples', priority: 4
       menu.add label: 'Species', priority: 5
       menu.add label: 'Submissions', priority: 6
-      menu.add label: 'License', priority: 7
-      menu.add label: 'Maps', priority: 8
-      menu.add label: 'Users', priority: 9
-      menu.add label: 'User Content', priority: 10 do |user_content|
+      menu.add label: 'Images', priority: 7
+      menu.add label: 'License', priority: 8
+      menu.add label: 'Maps', priority: 9
+      menu.add label: 'Users', priority: 10
+      menu.add label: 'User Content', priority: 11 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
-      menu.add label: 'Communicate', priority: 11 do |communicate|
+      menu.add label: 'Communicate', priority: 12 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
       end
-      menu.add label: 'Notifications', priority: 12
-      menu.add label: 'Comments', priority: 13
-      menu.add label: 'License', priority: 14
-      menu.add label: 'Tutorial', priority: 15
-      menu.add label: 'Document', priority: 16
+      menu.add label: 'Notifications', priority: 13
+      menu.add label: 'Comments', priority: 14
+      menu.add label: 'License', priority: 15
+      menu.add label: 'Tutorial', priority: 16
+      menu.add label: 'Document', priority: 17
     end
   end
   config.namespace :pm do |pm|

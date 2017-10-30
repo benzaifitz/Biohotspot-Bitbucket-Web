@@ -1,6 +1,6 @@
 ActiveAdmin.register Submission, as: 'Sample List' do
 
-  menu label: 'Sample List', parent: 'Submissions', priority: 1
+  menu label: 'Submissions' #, parent: 'Submissions', priority: 1
 
   permit_params :sub_category_id, :category_id, :site_id, :location_id, :project_id, :survey_number, :submitted_by,
                 :sub_category, :rainfall, :humidity, :temperature,
