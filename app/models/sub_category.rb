@@ -23,4 +23,8 @@ class SubCategory < ApplicationRecord
     "#{self.site.location.project.title rescue 'N/A'} - #{self.site.location.name rescue 'N/A'} - #{self.site.title rescue 'N/A'} - #{self.name}"
   end
 
+  def site_title
+    self.site.title rescue 'UNKNOWN'
+  end
+
 end
