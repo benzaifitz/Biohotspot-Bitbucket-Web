@@ -55,7 +55,7 @@ Rails.application.routes.draw do
        resources :documents
        resources :categories
        resources :sub_categories, only: [:index]
-       resources :submissions
+       resources :submissions, only: [:create]
      end
    end
   ActiveAdmin.routes(self)
