@@ -6,9 +6,9 @@ end
 # allowed_sub_cat_ids = category.site.sub_categories.map(&:id)
 site_ids = current_user.locations.map(&:site_ids).flatten.uniq rescue []
 allowed_sub_cats = [SubCategory.new(name: SubCategory::UNKNOWN_SAMPLE)] + category.sub_categories.where(site_id: site_ids).to_a
-json.project category.site.location.project rescue nil
+json.project current_user.locations.first.project rescue nil
 json.site category.site rescue nil
-json.location category.site.location rescue nil
+json.location Location.new rescue nil
 json.surveys allowed_sub_cats.count rescue nil
 json.complete_surveys allowed_sub_cats.map{|a| 1 if Submission.submission_status(a,category) == 'submitted'}.compact.sum
 json.photo category.photos.present? ? category.photos.first.file_url : ""
