@@ -3,8 +3,9 @@ json.extract! category, "id", "name", "location"
 json.photos category.photos do |photo|
   json.uri photo.file_url
 end
-allowed_sub_cat_ids = category.site.sub_categories.map(&:id)
-allowed_sub_cats = category.sub_categories.where(id: allowed_sub_cat_ids).to_a + [SubCategory.new(name: SubCategory::UNKNOWN_SAMPLE)]
+# allowed_sub_cat_ids = category.site.sub_categories.map(&:id)
+site_ids = current_user.locations.map(&:site_ids).flatten.uniq rescue []
+allowed_sub_cats = category.sub_categories.where(site_id: site_ids).to_a + [SubCategory.new(name: SubCategory::UNKNOWN_SAMPLE)]
 json.project category.site.location.project rescue nil
 json.site category.site rescue nil
 json.location category.site.location rescue nil
