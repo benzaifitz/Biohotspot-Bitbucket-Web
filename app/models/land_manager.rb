@@ -3,7 +3,7 @@ class LandManager < User
   has_many :feedbacks
   has_many :land_manager_sub_categories
   has_many :sub_categories, :through => :land_manager_sub_categories
-  accepts_nested_attributes_for :land_manager_sub_categories, :allow_destroy => true
+  accepts_nested_attributes_for :land_manager_sub_categories #, :allow_destroy => true
 
   include PushNotification
   default_scope -> { where(user_type: User.user_types['land_manager']) }

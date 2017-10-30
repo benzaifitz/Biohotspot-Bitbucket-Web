@@ -9,7 +9,7 @@ class Project < ApplicationRecord
 
   has_many :project_categories
   has_many :categories, :through => :project_categories
-  accepts_nested_attributes_for :project_categories, :allow_destroy => true
+  accepts_nested_attributes_for :project_categories #, :allow_destroy => true
 
   validates_presence_of :project_manager_id
   serialize :tags

@@ -62,7 +62,7 @@ class User < ApplicationRecord
   # belongs_to :location
   has_many :location_users
   has_many :locations, :through => :location_users
-  accepts_nested_attributes_for :location_users, :allow_destroy => true
+  accepts_nested_attributes_for :location_users#, :allow_destroy => true
   has_many :ratings, dependent: :destroy
   has_many :rated_on_ratings, class_name: 'Rating', foreign_key: 'rated_on_id', dependent: :destroy
   has_many :blocked_users, dependent: :destroy
@@ -74,8 +74,8 @@ class User < ApplicationRecord
   has_many :recipient_conversations, ->{ where conversation_type: Conversation.conversation_types[:direct]}, class_name: 'Conversation', foreign_key: 'user_id', dependent: :destroy
   has_many :conversation_participants, dependent: :destroy
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
-  has_many :rpush_notifications, dependent: :destroy
-  has_many :sub_categories, dependent: :destroy
+  has_many :rpush_notifications#, dependent: :destroy
+  has_many :sub_categories#, dependent: :destroy
 
   validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }
