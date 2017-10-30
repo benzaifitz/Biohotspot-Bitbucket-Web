@@ -6,11 +6,11 @@ class Category < ApplicationRecord
 
   has_many :category_sub_categories
   has_many :sub_categories, :through => :category_sub_categories
-  accepts_nested_attributes_for :category_sub_categories, :allow_destroy => true
+  accepts_nested_attributes_for :category_sub_categories #, :allow_destroy => true
 
   has_many :project_categories
   has_many :projects, :through => :project_categories
-  accepts_nested_attributes_for :project_categories, :allow_destroy => true
+  accepts_nested_attributes_for :project_categories #, :allow_destroy => true
 
   attr_accessor :file_cache
 
