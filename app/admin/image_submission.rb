@@ -1,6 +1,6 @@
 ActiveAdmin.register Photo, as: "Sample Image" do
 
-  menu label: 'Images' #, parent: 'Submissions', priority: 4
+  menu label: ' Sample Images', priority: 7
 
   actions :index
 
@@ -21,7 +21,7 @@ ActiveAdmin.register Photo, as: "Sample Image" do
       end
     end
     column :submission do |p|
-      link_to(p.imageable.id, admin_sample_list_path(p.imageable.id)) rescue nil
+      link_to(p.imageable.id, admin_submission_path(p.imageable.id)) rescue nil
     end
     column 'Sample' do |p|
       link_to(p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id)) rescue nil

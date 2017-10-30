@@ -98,7 +98,7 @@ $(document).ready(function() {
             $('body').addClass("loading");
         }
         return $.ajax({
-            url: "/admin/submission_map/search_submissions",
+            url: "/admin/maps/search_submissions",
             data: $('form').serializeArray(),
             complete: function(jqxhr, response) {
                 $('body').removeClass("loading");

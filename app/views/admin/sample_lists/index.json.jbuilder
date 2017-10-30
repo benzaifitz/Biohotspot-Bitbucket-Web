@@ -1,5 +1,5 @@
-if @sample_lists.present?
-  json.submissions @sample_lists do |submission|
+if @submisions.present?
+  json.submissions @submisions do |submission|
     json.extract! submission, :id, :survey_number, :submitted_by, :latitude, :longitude, :rainfall, :humidity,
                   :temperature, :health_score, :live_leaf_cover, :live_branch_stem, :stem_diameter,
                   :sample_photo, :monitoring_photo,:dieback, :leaf_tie_month, :seed_borer,

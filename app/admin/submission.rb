@@ -1,6 +1,6 @@
-ActiveAdmin.register Submission, as: 'Sample List' do
+ActiveAdmin.register Submission do
 
-  menu label: 'Submissions' #, parent: 'Submissions', priority: 1
+  menu label: 'Submissions', priority: 6
 
   permit_params :sub_category_id, :category_id, :site_id, :location_id, :project_id, :survey_number, :submitted_by,
                 :sub_category, :rainfall, :humidity, :temperature,
@@ -13,7 +13,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
 
   # action_item :new, only: [:show,:index], label: 'Manual Entry'
   config.action_items[0] = ActiveAdmin::ActionItem.new only: [:show,:index] do
-    link_to 'Manual Entry', new_admin_sample_list_path
+    link_to 'Manual Entry', new_admin_submission_path
   end
   index do
     selectable_column
@@ -63,14 +63,14 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     column :created_at
     column :updated_at
     actions do |p|
-      (item 'Approve', approve_admin_sample_list_path(p), method: :put)
-      (item 'Reject', reject_admin_sample_list_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
+      (item 'Approve', approve_admin_submision_path(p), method: :put)
+      (item 'Reject', reject_admin_submision_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
     end
   end
 
   member_action :approve, method: :put do
     resource.approved!
-    redirect_to admin_sample_lists_path, :notice => 'Submission approved.' and return
+    redirect_to admin_submisions_path, :notice => 'Submission approved.' and return
   end
 
   member_action :reject_submission, method: :put do
@@ -80,7 +80,7 @@ ActiveAdmin.register Submission, as: 'Sample List' do
     lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
     resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
     Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
-    redirect_to admin_sample_lists_path, :notice => 'Submission rejected.' and return
+    redirect_to admin_submisions_path, :notice => 'Submission rejected.' and return
   end
 
   member_action :reject, method: :get do

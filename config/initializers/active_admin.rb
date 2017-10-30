@@ -238,7 +238,7 @@ ActiveAdmin.setup do |config|
       menu.add label: 'Samples', priority: 4
       menu.add label: 'Species', priority: 5
       menu.add label: 'Submissions', priority: 6
-      menu.add label: 'Images', priority: 7
+      menu.add label: 'Sample Images', priority: 7
       menu.add label: 'License', priority: 8
       menu.add label: 'Maps', priority: 9
       menu.add label: 'Users', priority: 10
