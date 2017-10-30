@@ -13,7 +13,7 @@ class SubCategory < ApplicationRecord
   # validates_presence_of :category_id #, :user_id
   validates_uniqueness_of :name, scope: :site_id
 
-  UNKNOWN_SAMPLE = 'UNKNOWN SAMPLE'
+  UNKNOWN_SAMPLE = 'New Sample'
 
   def current_user_submission(current_user_id)
     Submission.where(submitted_by: current_user_id, sub_category_id: self.id).first
