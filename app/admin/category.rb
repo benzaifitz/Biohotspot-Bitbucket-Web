@@ -4,7 +4,7 @@ ActiveAdmin.register Category, as: 'Species' do
 
     permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                   :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
-                  :distribution, :location, :url, :site_id,
+                  :distribution, :location, :url, project_ids: [],
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
@@ -13,7 +13,17 @@ ActiveAdmin.register Category, as: 'Species' do
     selectable_column
     column :id
     column :name
-    column :site
+    column 'Projects' do |s|
+      table(:style => 'margin-bottom: 0') do
+        s.projects.each do |sc|
+          tr do
+            td(:style =>'border: 0; padding: 2px;') do
+              link_to(sc.title.titleize, admin_project_path(sc))
+            end
+          end
+        end
+      end
+    end
 
 
     column 'Samples' do |s|
@@ -56,7 +66,7 @@ ActiveAdmin.register Category, as: 'Species' do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Species Details' do
-      f.input :site, as: :select, collection: Site.all.map{|a| [a.title, a.id]}
+      f.input :projects, as: :select, multiple: true, collection: Project.all.map{|a| [a.title, a.id]}
       # f.input :sites, as: :select, :collection => Site.all.map{ |s|  [s.title, s.id] }
       f.input :name
       f.input :description
@@ -117,7 +127,17 @@ ActiveAdmin.register Category, as: 'Species' do
       row :impact
       row :distribution
       row :url
-      row :site
+      row 'Projects' do |s|
+        table(:style => 'margin-bottom: 0') do
+          s.projects.each do |sc|
+            tr do
+              td(:style =>'border: 0; padding: 2px;') do
+                link_to(sc.title.titleize, admin_project_path(sc))
+              end
+            end
+          end
+        end
+      end
       # row :sites do |c|
       #   sites = ''
       #   c.sites.each do |s|
