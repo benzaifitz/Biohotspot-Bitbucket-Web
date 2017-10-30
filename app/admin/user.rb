@@ -55,12 +55,20 @@ ActiveAdmin.register User do
     # end
     column :location do |u|
       if u.land_manager?
-        link_to(u.site.location.name,admin_location_path(u.site.location.id)) rescue nil
+        locations = u.locations.map do |l|
+          link_to(l.name,admin_location_path(l.id)) rescue nil
+        end
+        locations.compact.join("  ").html_safe
+
       end
     end
     column :project do |u|
       if !u.land_manager?
-        link_to(u.project.title,admin_project_path(u.project.id)) rescue nil
+        pm = ProjectManager.find(u.id)
+        projects = pm.managed_projects.map do |p|
+          link_to(p.title,admin_project_path(p.id)) rescue nil
+        end
+        projects.compact.join("  ").html_safe
       end
     end
     actions do |user|
