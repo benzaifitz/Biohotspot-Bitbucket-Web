@@ -9,7 +9,8 @@ ActiveAdmin.register Submission do
                 monitoring_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
                 sample_image_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ],
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :imageable_sub_type, :_destroy ]
-  actions :all
+
+  actions :all, except: [:destroy, :delete]
 
   # action_item :new, only: [:show,:index], label: 'Manual Entry'
   config.action_items[0] = ActiveAdmin::ActionItem.new only: [:show,:index] do
@@ -63,14 +64,14 @@ ActiveAdmin.register Submission do
     column :created_at
     column :updated_at
     actions do |p|
-      (item 'Approve', approve_admin_submision_path(p), method: :put)
-      (item 'Reject', reject_admin_submision_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
+      (item 'Approve', approve_admin_submission_path(p), method: :put)
+      (item 'Reject', reject_admin_submission_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
     end
   end
 
   member_action :approve, method: :put do
     resource.approved!
-    redirect_to admin_submisions_path, :notice => 'Submission approved.' and return
+    redirect_to admin_submissions_path, :notice => 'Submission approved.' and return
   end
 
   member_action :reject_submission, method: :put do
@@ -80,7 +81,7 @@ ActiveAdmin.register Submission do
     lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
     resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
     Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
-    redirect_to admin_submisions_path, :notice => 'Submission rejected.' and return
+    redirect_to admin_submissions_path, :notice => 'Submission rejected.' and return
   end
 
   member_action :reject, method: :get do
