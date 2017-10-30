@@ -6,7 +6,9 @@ module Api
 
       api :GET, '/categories.json', 'Return all categories'
       def index
-        @categories = current_user.locations.map(&:sites).flatten.map(&:categories).flatten rescue []
+        # @categories = current_user.locations.map(&:sites).flatten.map(&:categories).flatten rescue []
+        category_ids = current_user.locations.map(&:sites).flatten.map(&:sub_categories).flatten.map(&:categories).flatten.map(&:id).uniq rescue []
+        @categories = Category.where(id: category_ids) rescue []
       end
 
       api :GET, '/categories/:id.json', 'Return single category'
