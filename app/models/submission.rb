@@ -65,8 +65,8 @@ class Submission < ApplicationRecord
   def self.submission_status(sample, specie)
     return nil if (sample.blank? || sample.id.blank?)
     Submission.where(sub_category_id: (sample.id rescue nil), category_id: (specie.id rescue nil),
-                     site_id: (specie.site.id rescue nil), location_id: (specie.site.location.id rescue nil),
-                     project_id: (specie.site.location.project.id rescue nil) ).last.status rescue nil
+                     site_id: (sample.site.id rescue nil), location_id: (sample.site.location.id rescue nil),
+                     project_id: (sample.site.location.project.id rescue nil) ).last.status rescue nil
 
   end
 
