@@ -1,3 +1,11 @@
+# Trigger added to database to prevent submission deletion
+# CREATE FUNCTION prevent_submission_delete() RETURNS trigger AS $prevent_submission_delete$
+# BEGIN
+#   RAISE EXCEPTION 'submission cannot be deleted';
+#   END;
+#   $prevent_submission_delete$ LANGUAGE plpgsql;
+#   create trigger club_trigger_0 before delete on submissions
+#   FOR EACH ROW EXECUTE PROCEDURE prevent_submission_delete();
 ActiveAdmin.register Submission do
 
   menu label: 'Submissions', priority: 6

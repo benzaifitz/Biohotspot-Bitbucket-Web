@@ -1,3 +1,10 @@
+# CREATE FUNCTION prevent_photo_delete() RETURNS trigger AS $prevent_photo_delete$
+# BEGIN
+#   RAISE EXCEPTION 'photo cannot be deleted';
+#   END;
+#   $prevent_photo_delete$ LANGUAGE plpgsql;
+#   create trigger prevent_photo_delete_trigger_0 before delete on photos
+#   FOR EACH ROW EXECUTE PROCEDURE prevent_photo_delete();
 class Photo < ApplicationRecord
   belongs_to :imageable, polymorphic: true
   belongs_to :submission, -> { where( photos: { imageable_type: 'Submission' } ).includes( :photos ) }, foreign_key: 'imageable_id'
