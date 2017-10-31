@@ -59,6 +59,12 @@ Rails.application.routes.draw do
      end
    end
   ActiveAdmin.routes(self)
+  devise_scope :user do
+    get '/land_manager/confirmation', to: 'users/confirmations#show', as: :land_manager_confirmation
+    get '/land_manager_confirmed', to: 'users#land_manager_confirmed', as: :land_manager_confirmed
+  end
+
+
   root 'admin/dashboard#index'
   resources :users
 end
