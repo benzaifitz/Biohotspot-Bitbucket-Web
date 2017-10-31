@@ -24,10 +24,10 @@ ActiveAdmin.register Photo, as: "Sample Image" do
       link_to(p.imageable.id, admin_submission_path(p.imageable.id)) rescue nil
     end
     column 'Sample' do |p|
-      link_to(p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category.id)) rescue nil
+      link_to(p.imageable.sub_category.name, admin_sample_path(p.imageable.sub_category_id)) rescue nil
     end
     column 'Species' do |p|
-      link_to(p.imageable.sub_category.category.name, admin_category_path(p.imageable.sub_category.category.id)) rescue nil
+      link_to(p.imageable.category.name, admin_species_path(p.imageable.category_id)) rescue nil
     end
     column 'Reject Comment' do |p|
       p.reject_comment if !p.approved?
