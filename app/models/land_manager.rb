@@ -1,5 +1,9 @@
 class LandManager < User
 
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable, :omniauthable
+
   has_many :feedbacks
   has_many :land_manager_sub_categories
   has_many :sub_categories, :through => :land_manager_sub_categories
