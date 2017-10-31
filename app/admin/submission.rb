@@ -88,7 +88,6 @@ ActiveAdmin.register Submission do
     msg = "Your survey for sample #{resource.sub_category.name rescue 'N/A'} taken on #{resource.created_at.strftime('%v')} has been rejected."
     lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
     resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
-    Photo.where(imageable_type: 'Submission',imageable_id: resource.id).delete_all
     redirect_to admin_submissions_path, :notice => 'Submission rejected.' and return
   end
 
@@ -107,7 +106,7 @@ ActiveAdmin.register Submission do
         lm = LandManager.find(sub.submitted_by) rescue nil
         msg = "Your survey for sample #{sub.sub_category.name} taken on #{sub.created_at.strftime('%v')} has been rejected."
         lm.send_pn_and_email_notification('Submission Rejected', msg) if lm
-        Photo.where(imageable_type: 'Submission',imageable_id: sub.id).delete_all
+        # Photo.where(imageable_type: 'Submission',imageable_id: sub.id).delete_all
     end
     redirect_to collection_path, alert: 'All selected submissions rejected.'
   end
