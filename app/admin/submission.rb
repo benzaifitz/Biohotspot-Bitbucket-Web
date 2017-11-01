@@ -6,6 +6,8 @@
 #   $prevent_submission_delete$ LANGUAGE plpgsql;
 #   create trigger club_trigger_0 before delete on submissions
 #   FOR EACH ROW EXECUTE PROCEDURE prevent_submission_delete();
+
+# DROP TRIGGER club_trigger_0 ON submissions;
 ActiveAdmin.register Submission do
 
   menu label: 'Submissions', priority: 6
