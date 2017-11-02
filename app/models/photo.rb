@@ -18,10 +18,10 @@ class Photo < ApplicationRecord
   SAMPLE_IMAGE = 'sample'
   MONITORING_IMAGE = 'monitoring'
 
-  validates :file,
-            :file_size => {
-                :maximum => 2.0.megabytes.to_i
-            }
+  # validates :file,
+  #           :file_size => {
+  #               :maximum => 2.0.megabytes.to_i
+  #           }
   # belongs_to :category
 
   after_save :save_images_from_api, if: 'url && url_changed?'
