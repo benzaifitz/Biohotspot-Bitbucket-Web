@@ -16,7 +16,8 @@ class Submission < ApplicationRecord
   accepts_nested_attributes_for :sample_image#, allow_destroy: true
   accepts_nested_attributes_for :monitoring_image#, allow_destroy: true
   # validates_presence_of :monitoring_photo, :sample_photo, :sub_category
-  validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :dieback, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
+  validates_numericality_of :health_score,:live_leaf_cover, :live_branch_stem, :greater_than_or_equal_to => 1, :less_than_or_equal_to => 5, :message => "Value must be between 1-5", :allow_blank => true
+  validates_numericality_of :dieback, :greater_than_or_equal_to => 0, :less_than_or_equal_to => 5, :message => "Value must be between 0-5", :allow_blank => true
 
   enum status: [ :submitted, :approved, :rejected ]
 
