@@ -9,7 +9,7 @@ module Api
         # @categories = current_user.locations.map(&:sites).flatten.map(&:categories).flatten rescue []
         # category_ids = current_user.locations.map(&:sites).flatten.map(&:sub_categories).flatten.map(&:categories).flatten.map(&:id).uniq rescue []
 
-        @categories = current_user.locations.first.project.categories rescue []
+        @categories = current_user.locations.first.project.categories rescue Category.all
       end
 
       # def current_user
