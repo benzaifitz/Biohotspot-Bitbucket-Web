@@ -49,14 +49,6 @@ module Api
         @land_manager = current_user
         existing_email = @land_manager.email
         begin
-=begin
-          if params[:land_manager][:device_token].present?
-            @users = User.where(device_token: params[:land_manager][:device_token])
-            @users.each do |u|
-              u.update_attributes!(device_token: nil, device_type: nil)
-            end
-          end
-=end
           if params[:land_manager][:email] && (params[:land_manager][:email] != existing_email)
             params[:land_manager][:unconfirmed_email] = params[:land_manager][:email]
             params[:land_manager].delete :email
@@ -67,15 +59,10 @@ module Api
           if params[:land_manager][:unconfirmed_email]
             @land_manager.send_reconfirmation_instructions if @land_manager.pending_reconfirmation?
           end
-          render json: @land_manager
+          render :show
         rescue *RecoverableExceptions => e
           error(E_INTERNAL, @land_manager.errors.full_messages[0])
         end
-        # if @land_manager.update(land_manager_params)
-        #   render :show
-        # else
-        #   render json: @land_manager.errors, status: :unprocessable_entity
-        # end
       end
 
       private
