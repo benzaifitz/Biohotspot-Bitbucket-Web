@@ -13,7 +13,7 @@ ActiveAdmin.register_page 'Maps' do
   end
 
   page_action :search_submissions, method: :get do
-    @submissions = Submission.ransack(params[:q]).result.to_a
+    @submissions = Submission.ransack(params[:q]).result.where.not(latitude: [nil,0.0]).where.not(longitude: [nil,0.0]).to_a
     # submission_ids = Category.where(id: params[:category_ids]).map(&:sub_categories).flatten.map(&:submission).compact.flatten.map(&:id) rescue []
     # @submissions = Submission.where(id: submission_ids).where.not(latitude: nil, longitude: nil) rescue []
     render partial: 'populate_map', locals: {submissions: @submissions}
