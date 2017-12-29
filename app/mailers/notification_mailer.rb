@@ -4,7 +4,7 @@ class NotificationMailer < ApplicationMailer
     sender = notification.sender
     recipient = notification.user
     @message = notification.alert
-    mail(from: sender.email, to: recipient.email, subject: notification.category)
+    mail(to: recipient.email, subject: notification.category)
   end
 
   def notify_admin_for_account_approval(account_id)
