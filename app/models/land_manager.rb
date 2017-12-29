@@ -59,13 +59,14 @@ class LandManager < User
   def send_email(title, message)
     sent_by = User.where(user_type: User.user_types[:administrator]).first
     n = RpushNotification.new
-    n.app = FCM_APP
+    # n.app_id = FCM_APP.id
     n.category = title
     n.alert = "#{sent_by.full_name} sent you a message: #{message}"
     n.data = { data: { message: message } }
     n.user_id = self.id
     n.sent_by_id = sent_by.id
-    n.save(validate: false)
+    NotificationMailer.notification_email(n).deliver_now
+    # n.save(validate: false)
   end
 
   def send_pn_and_email_notification(title, message)
