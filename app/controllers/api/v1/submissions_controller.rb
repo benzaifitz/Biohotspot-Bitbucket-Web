@@ -1,7 +1,7 @@
 module Api
   module V1
     class SubmissionsController < ApiController
-      before_action :authenticate_user!
+      # before_action :authenticate_user!
       before_action :set_submission, only: [:show, :destroy, :update]
 
       api :GET, '/submissions.json', 'Return all submissions. Send params (unknown_submission= true) to get all unknown submissions'
@@ -11,6 +11,10 @@ module Api
         else
           @submissions = Submission.where.not(sub_category_id: nil).where(submitted_by: current_user.id)
         end
+      end
+
+      def current_user
+        User.find_by_email(request.headers['uid'])
       end
 
       api :GET, '/submissions/:id.json', 'Return single submission'
