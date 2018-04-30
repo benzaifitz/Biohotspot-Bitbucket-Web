@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     Rails.logger.info(params)
   end
 
+  def route_not_found
+    render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
+  end
+
   def authenticate_active_admin_user!
     authenticate_user!
     unless current_user.administrator?

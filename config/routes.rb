@@ -71,4 +71,5 @@ Rails.application.routes.draw do
 
   root 'admin/dashboard#index'
   resources :users
+  match '*unmatched', to: 'application#route_not_found', via: :all
 end
