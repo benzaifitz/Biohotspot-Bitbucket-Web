@@ -50,18 +50,18 @@ ActiveAdmin.register Submission do
         status_tag('error', :ok, class: 'important', label: 'UNKNOWN')
       end
     end
-    column :stem_diameter
-    column :health_score
-    column :live_leaf_cover
-    column :live_branch_stem
-    column :dieback
+    column "Number", :stem_diameter
+    column "Length", :health_score
+    column "Percent Cover Live", :live_leaf_cover
+    column "Percent Cover Dead", :live_branch_stem
+    column "Percent bleached", :dieback
     column :temperature
-    column :rainfall
-    column :humidity
-    column :leaf_tie_month
-    column :seed_borer
-    column :loopers
-    column :grazing
+    column "Wind", :rainfall
+    column "Seastate", :humidity
+    column "Low", :leaf_tie_month
+    column "Rising", :seed_borer
+    column "High", :loopers
+    column "Falling", :grazing
     column :field_notes
     column :survey_number
     column :submitted_by do |s|
@@ -142,20 +142,20 @@ ActiveAdmin.register Submission do
         if !f.object.new_record?
           render partial: 'admin/submissions/slider'
         end
-      f.input :stem_diameter, label: 'Stem diameter (trunk)'
-      f.input :health_score, :input_html => { :type => "number" }
-      f.input :live_leaf_cover, :input_html => { :type => "number" }
-      f.input :live_branch_stem, :input_html => { :type => "number" }
-      f.input :dieback, :input_html => { :type => "number" }
-      f.input :temperature, label: 'Temperature (ave for previous month)'
-      f.input :rainfall
-      f.input :humidity, label: 'Temperature (ave for previous month)'
+      f.input :stem_diameter, label: 'Number'
+      f.input :health_score,label: "Length", :input_html => { :type => "number" }
+      f.input :live_leaf_cover,label:"Percent Cover Live", :input_html => { :type => "number" }
+      f.input :live_branch_stem, label: "Percent Cover Dead", :input_html => { :type => "number" }
+      f.input :dieback, label: "Percent bleached", :input_html => { :type => "number" }
+      f.input :temperature, label: 'Temperature'
+      f.input :rainfall, label: "Wind"
+      f.input :humidity, label: 'Seastate'
       f.input :status
-      f.inputs "IS THE FOLLOWING ON THE PLANT?"  do
-        f.input :leaf_tie_month, as: :boolean
-        f.input :seed_borer, as: :boolean
-        f.input :loopers, as: :boolean
-        f.input :grazing, as: :boolean
+      f.inputs "Tide"  do
+        f.input :leaf_tie_month, as: :boolean, label: "Low"
+        f.input :seed_borer, as: :boolean, label: "Rising"
+        f.input :loopers, as: :boolean, label: "High"
+        f.input :grazing, as: :boolean, label: "Falling"
       end
       f.input :field_notes, input_html: {rows: 4}
       f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
@@ -192,18 +192,41 @@ ActiveAdmin.register Submission do
         end
         images.join("<br><br>").html_safe
       end
-      row :stem_diameter
-      row :health_score
-      row :live_leaf_cover
-      row :live_branch_stem
-      row :dieback
+      row "Number" do |o|
+        o.stem_diameter
+      end
+      row "Length" do |o|
+        o.health_score
+      end
+      row "Percent Cover Live" do |s|
+        s.live_leaf_cover
+      end
+      row "Percent Cover Dead" do |s|
+        s.live_branch_stem
+      end
+      row "Percent bleached" do |s|
+        s.dieback
+      end
+
       row :temperature
-      row :rainfall
-      row :humidity
-      row :leaf_tie_month
-      row :seed_borer
-      row :loopers
-      row :grazing
+      row "Wind" do |s|
+        s.rainfall
+      end
+      row "Seastate" do |s|
+        s.humidity
+      end
+      row "Low" do |s|
+        s.leaf_tie_month
+      end
+      row "Rising" do |s|
+        s.seed_borer
+      end
+      row "High" do |s|
+        s.loopers
+      end
+      row "Falling" do |s|
+        s.grazing
+      end
       row :field_notes
       row :survey_number
       row :submitted_by
@@ -226,18 +249,40 @@ ActiveAdmin.register Submission do
     column :site
     column :location
     column :project
-    column :stem_diameter
-    column :health_score
-    column :live_leaf_cover
-    column :live_branch_stem
-    column :dieback
+    column "Number" do |s|
+      s.stem_diameter
+    end
+    column "Length" do |s|
+      s.health_score
+    end
+    column "Percent Cover Live" do |s|
+      s.live_leaf_cover
+    end
+    column "Percent Cover Dead" do |s|
+      s.live_branch_stem
+    end
+    column "Percent bleached" do |s|
+      s.dieback
+    end
     column :temperature
-    column :rainfall
-    column :humidity
-    column :leaf_tie_month
-    column :seed_borer
-    column :loopers
-    column :grazing
+    column "Wind" do |s|
+      s.rainfall
+    end
+    column "Seastate" do |s|
+      s.humidity
+    end
+    column "Low" do |s|
+      s.leaf_tie_month
+    end
+    column "Rising" do |s|
+      s.seed_borer
+    end
+    column "High" do |s|
+      s.loopers
+    end
+    column "Falling" do |s|
+      s.grazing
+    end
     column :field_notes
     column :survey_number
     column :submitted_by
@@ -254,18 +299,18 @@ ActiveAdmin.register Submission do
   filter :project, as: :select, multiple: true
   filter :survey_number
   filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
-  filter :rainfall
-  filter :humidity
+  filter :rainfall, label: "Wind"
+  filter :humidity, label: "Seastate"
   filter :temperature
-  filter :health_score
-  filter :live_branch_stem
-  filter :live_leaf_cover
-  filter :stem_diameter
-  filter :dieback
-  filter :leaf_tie_month
-  filter :loopers
-  filter :seed_borer
-  filter :grazing
+  filter :health_score, label: "Length"
+  filter :live_branch_stem, label: "Percent Cover Dead"
+  filter :live_leaf_cover, label: "Percent Cover Live"
+  filter :stem_diameter, label: "Number"
+  filter :dieback, label: "Percent Bleached"
+  filter :leaf_tie_month, label: "Low"
+  filter :loopers, label: "Rising"
+  filter :seed_borer, label: "Rising"
+  filter :grazing, label: "Falling"
   filter :field_notes
   filter :latitude
   filter :longitude
