@@ -1,28 +1,29 @@
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rvm'
-require 'mina/whenever'
+#require 'mina/whenever'
 require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-set :domain, '13.54.208.193' # production
+set :domain, '13.211.119.19' # production
 # set :domain, '52.64.75.81'  # staging
-set :deploy_to, '/home/ubuntu/pilbara-weed-management-web'
-set :repository, 'git@bitbucket.org:applabsservice/pilbara-weed-management-web.git'
+set :deploy_to, '/home/ubuntu/biohotspot'
+set :repository, 'git@bitbucket.org:applabsservice/biohotspot-web.git'
 set :branch, 'develop'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true
-set :identity_file, '~/.ssh/pwm.pem' #staging
+set :identity_file, '~/pwm.pem' #staging
 # set :identity_file, '~/.ssh/pwm-production.pem' #production
 # Basic settings:
 #   domain       - The hostname to SSH to.
 #   deploy_to    - Path to deploy into.
 #   repository   - Git repo to clone from. (needed by mina/git)
 #   branch       - Branch name to deploy. (needed by mina/git)
-set :application_name, 'pilbara-weed-management-web'
-set :shared_files, fetch(:shared_files, []).push('config/certs/distribution.pem', 'config/database.yml', 'config/secrets.yml', '.env')
+set :application_name, 'biohotspot'
+set :shared_files, fetch(:shared_files, []).push( 'config/database.yml', 'config/secrets.yml', '.env')
+#set :shared_files, fetch(:shared_files, []).push('config/certs/distribution.pem', 'config/database.yml', 'config/secrets.yml', '.env')
 set :shared_paths, fetch(:shared_paths, []).push('log','tmp', 'config/certs')
 
 # Optional settings:
@@ -65,7 +66,7 @@ task :'deploy' do
         invoke :'rvm:use', 'ruby-2.3.0@default'
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
-        invoke :'whenever:update'
+        #invoke :'whenever:update'
         invoke 'redis:restart'
         invoke 'rpush:start'
         invoke 'sidekiq:stop'

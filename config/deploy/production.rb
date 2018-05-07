@@ -14,7 +14,7 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server '54.206.115.78', user: 'ubuntu', roles: %w{web app db}
+server '13.211.119.19', user: 'ubuntu', roles: %w{web app db}
 
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
@@ -25,7 +25,7 @@ server '54.206.115.78', user: 'ubuntu', roles: %w{web app db}
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/pwm.pem) }
+set :ssh_options, { :forward_agent => true, :keys => %w(~/pwm.pem) }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',
