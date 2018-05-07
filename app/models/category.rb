@@ -3,6 +3,7 @@ class Category < ApplicationRecord
   # Or to get all client use Category.unscoped
   acts_as_paranoid
   # belongs_to :site
+  belongs_to :specie_type
 
   has_many :category_sub_categories
   has_many :sub_categories, :through => :category_sub_categories
