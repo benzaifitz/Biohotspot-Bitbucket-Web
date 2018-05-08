@@ -8,8 +8,9 @@ module Api
       def index
         # @categories = current_user.locations.map(&:sites).flatten.map(&:categories).flatten rescue []
         # category_ids = current_user.locations.map(&:sites).flatten.map(&:sub_categories).flatten.map(&:categories).flatten.map(&:id).uniq rescue []
-
-        @categories = current_user.locations.first.project.categories rescue Category.all
+        query = ""
+        query << "tags ILIKE '%#{params[:q]}%'" if params[:q].present?
+        @categories = current_user.locations.first.project.categories.where(query) rescue Category.where(query)
       end
 
       # def current_user

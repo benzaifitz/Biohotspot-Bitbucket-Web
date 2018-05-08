@@ -24,6 +24,7 @@ gem 'rpush', github: 'rpush/rpush'
 gem 'cancancan', '~> 1.10'
 group :development, :test do
   gem 'byebug'
+  gem 'pry'
 end
 group :development do
   #gem 'web-console', '~> 2.0' # Dont and caused Rails 5 problem
