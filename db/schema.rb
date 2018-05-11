@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171030091356) do
+ActiveRecord::Schema.define(version: 20180507055101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,8 +57,10 @@ ActiveRecord::Schema.define(version: 20171030091356) do
     t.string   "habit"
     t.string   "impact"
     t.string   "distribution"
+    t.integer  "specie_type_id"
     t.index ["deleted_at"], name: "index_categories_on_deleted_at", using: :btree
     t.index ["site_id"], name: "index_categories_on_site_id", using: :btree
+    t.index ["specie_type_id"], name: "index_categories_on_specie_type_id", using: :btree
   end
 
   create_table "category_documents", force: :cascade do |t|
@@ -341,6 +343,12 @@ ActiveRecord::Schema.define(version: 20171030091356) do
     t.integer  "location_id"
   end
 
+  create_table "specie_types", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sub_categories", force: :cascade do |t|
     t.string   "name"
     t.integer  "category_id"
@@ -458,6 +466,7 @@ ActiveRecord::Schema.define(version: 20171030091356) do
   end
 
   add_foreign_key "blocked_users", "users"
+  add_foreign_key "categories", "specie_types"
   add_foreign_key "chats", "conversations"
   add_foreign_key "conversations", "users"
   add_foreign_key "deleted_conversations", "conversations"
