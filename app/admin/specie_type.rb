@@ -33,20 +33,6 @@ ActiveAdmin.register SpecieType do
       row :updated_at
     end
   end
-
-  controller do
-    def destroy
-      if resource.categories.blank?
-        resource.destroy
-        flash[:notice] = 'You have successfully deleted this specie type'
-        redirect_to admin_specie_types_path
-      else
-        flash[:alert] = 'You can not delete this record as there are some records depending on this!'
-        redirect_to admin_specie_types_path
-      end
-    end  
-  end
-
   filter :name
   filter :created_at
 
