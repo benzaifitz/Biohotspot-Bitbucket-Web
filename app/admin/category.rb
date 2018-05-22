@@ -4,7 +4,7 @@ ActiveAdmin.register Category, as: 'Species' do
 
     permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                   :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
-                  :distribution, :location, :url, project_ids: [],
+                  :distribution, :location, :url, :specie_type_id, project_ids: [],
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
@@ -13,6 +13,7 @@ ActiveAdmin.register Category, as: 'Species' do
     selectable_column
     column :id
     column :name
+    column :specie_type
     column 'Projects' do |s|
       table(:style => 'margin-bottom: 0') do
         s.projects.each do |sc|
@@ -69,6 +70,7 @@ ActiveAdmin.register Category, as: 'Species' do
       f.input :projects, as: :select, multiple: true, collection: Project.all.map{|a| [a.title, a.id]}
       # f.input :sites, as: :select, :collection => Site.all.map{ |s|  [s.title, s.id] }
       f.input :name
+      f.input :specie_type
       f.input :description
       f.input :tags
       f.input :class_name
@@ -114,6 +116,7 @@ ActiveAdmin.register Category, as: 'Species' do
     attributes_table do
       row :id
       row :name
+      row :specie_type
       row :description, input_html: {rows: 4}
       row :tags, input_html: {rows: 3}
       row :class_name
@@ -170,6 +173,7 @@ ActiveAdmin.register Category, as: 'Species' do
   filter :description
   filter :tags
   filter :class_name
+  filter :specie_type
   filter :url
   filter :family_scientific
   filter :family_common
