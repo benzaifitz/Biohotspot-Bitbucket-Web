@@ -8,9 +8,10 @@ module Api
       def index
         # @categories = current_user.locations.map(&:sites).flatten.map(&:categories).flatten rescue []
         # category_ids = current_user.locations.map(&:sites).flatten.map(&:sub_categories).flatten.map(&:categories).flatten.map(&:id).uniq rescue []
-        query = ""
-        query << "tags ILIKE '%#{params[:q]}%'" if params[:q].present?
-        @categories = current_user.locations.first.project.categories.where(query) rescue Category.where(query)
+        @query = ""
+        @query << "categories.tags ILIKE '%#{params[:q]}%'" if params[:q].present?
+        # @categories = current_user.locations.first.project.categories.where(query) rescue Category.where(query)
+        @specie_types = get_grouped_categories
       end
 
       # def current_user
@@ -65,7 +66,25 @@ module Api
         @category.destroy
         render json: {success: true, status: 200}
       end
-
+    
+      def get_grouped_categories
+        category_types = []
+        SpecieType.joins(:categories).where(@query).order("name asc").uniq.each do |st|
+          categories = st.categories.where(@query).order("name asc").group_by { |d| d[:family_common] }
+          categories.each do |family, categories_group|
+            type_hash = {
+              type: [st.name, family].join(", "),
+              categories: []
+            }
+            categories_group.each do |category|
+              type_hash[:categories] << category
+            end
+            category_types << type_hash
+          end
+        end
+        category_types
+      end
+    
       private
 
       def set_category
