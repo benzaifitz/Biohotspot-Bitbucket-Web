@@ -86,7 +86,10 @@ ActiveAdmin.register Category, as: 'Species' do
       f.input :url
       f.inputs "Photos", :multipart => true  do
         f.has_many :photos, allow_destroy: true do |pm|
-          pm.input :file, :as => :file#, :hint => pm.object.file.present? ? image_tag(pm.object.file.url(:thumb)) : content_tag(:span, 'no image selected')
+          pm.input :file, :as => :file, :hint => pm.object.file.present? \
+                        ? image_tag(pm.object.file.url(:thumb))
+                        : content_tag(:span, 'no image selected')
+
           pm.input :file_cache, :as => :hidden
           # for attribute in [:crop_x, :crop_y, :crop_w, :crop_h]
           #   pm.input attribute, :id => attribute, as: :hidden

@@ -80,8 +80,11 @@ ActiveAdmin.register Submission do
   end
 
   member_action :approve, method: :put do
-    resource.approved!
-    redirect_to admin_submissions_path, :notice => 'Submission approved.' and return
+    if resource.update_attributes(status: Submission.statuses[:approved])
+      redirect_to admin_submissions_path, :notice => 'Submission approved.' and return
+    else
+      redirect_to admin_submissions_path, :alert => resource.errors.full_messages.first and return
+    end
   end
 
   member_action :reject_submission, method: :put do
