@@ -153,7 +153,7 @@ ActiveAdmin.register Category, as: 'Species' do
       row "Images" do
         images = ''
         category.photos.map(&:file).compact.each do |p|
-          images += "#{link_to(image_tag(p.url(:thumb)), p.url, target: '_blank')}<br><br>"
+          images += "#{link_to(image_tag(p.url(:thumb)), p.url, target: '_blank')}<br><br>" rescue next
         end
         images.html_safe
       end

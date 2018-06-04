@@ -17,7 +17,7 @@ class Category < ApplicationRecord
 
   # has_many :sub_categories
   has_many :photos, as: :imageable #, dependent: :destroy
-  accepts_nested_attributes_for :photos #, allow_destroy: true
+  accepts_nested_attributes_for :photos , allow_destroy: true
 
   serialize :tags
   LIMIT = 5
