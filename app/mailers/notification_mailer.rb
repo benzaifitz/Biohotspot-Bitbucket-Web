@@ -11,7 +11,7 @@ class NotificationMailer < ApplicationMailer
     @user = User.find(account_id) rescue nil
     if @user
       pm_emails = ProjectManager.all.map(&:email)
-      mail(to: pm_emails.join(','), subject: 'PWM: Approve new user.')
+      mail(to: pm_emails.join(','), subject: 'Biohotspot: Approve new user.')
     end
   end
 
