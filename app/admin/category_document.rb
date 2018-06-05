@@ -7,7 +7,9 @@ ActiveAdmin.register CategoryDocument, as: 'Document Category' do
   end
 
   actions :all
-
+  show do
+    attributes_table :id, :name, :updated_at, :created_at
+  end
 
 
 end

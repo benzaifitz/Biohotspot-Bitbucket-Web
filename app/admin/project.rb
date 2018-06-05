@@ -63,5 +63,7 @@ ActiveAdmin.register Project do
   remove_filter :feedbacks
   remove_filter :updated_at
   # remove_filter :sub_categories
-
+  show do
+    attributes_table :id, :title, :summary, :tags, :client_name, :project_manager, :updated_at, :created_at
+  end
 end

@@ -38,7 +38,9 @@ ActiveAdmin.register Location do
     end
     f.actions
   end
-
+  show do
+    attributes_table :id, :name, :description, :updated_at, :created_at
+  end
 
   filter :name
 

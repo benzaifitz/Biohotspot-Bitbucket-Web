@@ -25,7 +25,7 @@ ActiveAdmin.register Eula, as: 'Terms And Condition' do
       row :is_latest
       row :created_at
     end
-    active_admin_comments
+    # active_admin_comments
   end
 
   index do
