@@ -11,7 +11,6 @@ ActiveAdmin.register Project, namespace: :pm do
 
   index do
     selectable_column
-    id_column
     column :title, label: "Project Title"
     column :summary do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.summary}')\"> View More</a>"
@@ -62,6 +61,11 @@ ActiveAdmin.register Project, namespace: :pm do
 
   preserve_default_filters!
   remove_filter :document_projects
+  remove_filter :users
+  remove_filter :documents
+  remove_filter :project_manager
+  remove_filter :project_categories
+  remove_filter :categories
   remove_filter :feedbacks
   remove_filter :updated_at
   # remove_filter :sub_categories
