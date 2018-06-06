@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     if resource.administrator?
       admin_root_path
     elsif resource.project_manager?
-      pm_sites_path
+      pm_root_path
     else
       root_path
     end

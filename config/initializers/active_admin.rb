@@ -261,7 +261,7 @@ ActiveAdmin.setup do |config|
     pm.current_user_method   = :current_project_manager
     pm.logout_link_path      = :destroy_project_manager_session_path
     pm.logout_link_method    = :delete
-    pm.root_to               = 'sites#index'
+    pm.root_to               = 'projects#index'
 
 
     pm.build_menu do |p_menu|
