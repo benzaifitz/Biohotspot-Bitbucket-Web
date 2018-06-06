@@ -9,6 +9,7 @@ class Ability
       can :manage, :all
     elsif user.project_manager?
       can :manage, Project, id: user.managed_projects.map(&:id) rescue []
+      can :create, Project
       can :manage, Location, id: user.managed_projects.map(&:locations).flatten.map(&:id)
     end
     #
