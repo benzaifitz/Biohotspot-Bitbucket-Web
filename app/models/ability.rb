@@ -16,6 +16,8 @@ class Ability
       can :create, Site
       can :manage, SubCategory, id: user.sub_categories.pluck(:id)
       can :create, SubCategory
+      can :manage, Category, id: user.categories.pluck(:id)
+      can :create, Category
     end
     #
     # The first argument to `can` is the action you are giving the user
