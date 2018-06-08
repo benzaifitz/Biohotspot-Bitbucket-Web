@@ -7,6 +7,8 @@ class ProjectManager < User
   has_many :sites, through: :locations
   # belongs_to :managed_project, class_name: 'Project', foreign_key: :managed_project_id
   before_update :check_duplicate_email
+  has_many :sub_categories, through: :sites
+  has_many :categories, through: :managed_projects
   # accepts_nested_attributes_for :managed_project
 
   def self.search(options = {})
