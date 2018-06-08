@@ -4,6 +4,7 @@ class ProjectManager < User
   scope :without_blocked_users, -> (blocked_by_id) { where("#{Project Manager.table_name}.id NOT IN(SELECT user_id FROM blocked_users where blocked_by_id = ?)", blocked_by_id) }
   has_many :managed_projects, class_name: 'Project', foreign_key: :project_manager_id
   has_many :locations, through: :managed_projects
+  has_many :sites, through: :locations
   # belongs_to :managed_project, class_name: 'Project', foreign_key: :managed_project_id
   before_update :check_duplicate_email
   # accepts_nested_attributes_for :managed_project

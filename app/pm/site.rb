@@ -49,12 +49,21 @@ ActiveAdmin.register Site, namespace: :pm do
   end
   form do |f|
     f.semantic_errors *f.object.errors.keys
-    f.inputs do
+    f.inputs 'Site Details' do
+      f.input :title, label: 'Name'
+      f.input :summary, input_html: {rows: 4}
+      f.input :tags, input_html: {rows: 3}
+      # f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
       f.input :location, as: :select, collection: current_project_manager.locations.all.map{|p| [p.name, p.id]}
-      f.input :title
-      f.input :summary
-      f.input :tags
+      # f.input :sub_categories, label: 'Samples', as: :select, collection: SubCategory.all.map{|a| [a.name, a.id]}
     end
-    f.actions
+    f.actions do
+      if f.object.new_record?
+        f.action(:submit, as: :button, label: 'Create Site' )
+      else
+        f.action(:submit, as: :button, label: 'Update Site' )
+      end
+      f.cancel_link(collection_path)
+    end
   end
 end
