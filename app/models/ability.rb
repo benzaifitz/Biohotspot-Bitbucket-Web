@@ -8,17 +8,20 @@ class Ability
     if user.administrator?
       can :manage, :all
     elsif user.project_manager?
-      can :manage, Project, id: user.managed_projects.map(&:id) rescue []
-      can :create, Project
-      can :manage, Location, id: user.locations.pluck(:id)
-      can :create, Location
-      can :manage, Site, id: user.sites.pluck(:id)
-      can :create, Site
-      can :manage, SubCategory, id: user.sub_categories.pluck(:id)
-      can :create, SubCategory
-      can :manage, Category, id: user.categories.pluck(:id)
-      can :create, Category
+      can :read, Project, id: user.managed_projects.map(&:id) rescue []
+      # can :create, Project
+      can :read, Location, id: user.locations.pluck(:id)
+      # can :create, Location
+      can :read, Site, id: user.sites.pluck(:id)
+      # can :create, Site
+      can :read, SubCategory, id: user.sub_categories.pluck(:id)
+      # can :create, SubCategory
+      can :read, Category, id: user.categories.pluck(:id)
+      # can :create, Category
       can :read, SpecieType
+      can :read, Submission, id: user.managed_submissions.pluck(:id)
+      can :read, Photo
+      # can :create, Submission
     end
     #
     # The first argument to `can` is the action you are giving the user

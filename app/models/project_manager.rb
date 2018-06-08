@@ -8,6 +8,7 @@ class ProjectManager < User
   # belongs_to :managed_project, class_name: 'Project', foreign_key: :managed_project_id
   before_update :check_duplicate_email
   has_many :sub_categories, through: :sites
+  has_many :managed_submissions, through: :sub_categories, source: :submission
   has_many :categories, through: :managed_projects
   # accepts_nested_attributes_for :managed_project
 

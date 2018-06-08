@@ -7,8 +7,6 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
                   :distribution, :location, :url, :specie_type_id, project_ids: [],
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
-  actions :all
-
   index do
     selectable_column
     column :id
@@ -59,9 +57,10 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
     column :impact
     column :distribution
     column :created_at
-    actions do |c|
-      link_to("Clone", clone_pm_species_path(id: c.id))
-    end
+    actions
+    # actions do |c|
+    #   link_to("Clone", clone_pm_species_path(id: c.id))
+    # end
   end
 
   form :html => { :enctype => "multipart/form-data" } do |f|
@@ -186,15 +185,15 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
   filter :distribution
   filter :created_at
 
-  member_action :clone, method: :get do
-    @resource = resource.dup
-    # @resource.photos = resource.photos.dup
-    render :new, :layout => false
-  end
+  # member_action :clone, method: :get do
+  #   @resource = resource.dup
+  #   # @resource.photos = resource.photos.dup
+  #   render :new, :layout => false
+  # end
 
-  action_item :only => :show do
-    link_to("Make a Copy", clone_pm_species_path(id: resource.id))
-  end
+  # action_item :only => :show do
+  #   link_to("Make a Copy", clone_pm_species_path(id: resource.id))
+  # end
 
 
 end
