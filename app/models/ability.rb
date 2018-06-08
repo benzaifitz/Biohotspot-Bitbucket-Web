@@ -21,6 +21,7 @@ class Ability
       can :read, SpecieType
       can :read, Submission, id: user.managed_submissions.pluck(:id)
       can :read, Photo
+      can :manage, ActiveAdmin::Page, name: 'Maps'
       # can :create, Submission
     end
     #
