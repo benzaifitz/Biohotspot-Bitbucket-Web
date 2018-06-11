@@ -265,7 +265,9 @@ ActiveAdmin.setup do |config|
 
 
     pm.build_menu do |p_menu|
-      p_menu.add label: 'Sites', priority: 1
+      p_menu.add label: 'Notifications', priority: 14
+      p_menu.add label: 'Users', priority: 11
+      p_menu.add label: 'Documents', priority: 17
     end
 
   end

@@ -1,6 +1,6 @@
 ActiveAdmin.register Submission, namespace: :pm do
 
-  menu label: 'Submissions', priority: 6
+  menu label: 'Submissions', priority: 7
 
   permit_params :sub_category_id, :category_id, :site_id, :location_id, :project_id, :survey_number, :submitted_by,
                 :sub_category, :rainfall, :humidity, :temperature,

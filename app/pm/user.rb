@@ -1,7 +1,7 @@
 ActiveAdmin.register User, namespace: :pm do
   include SharedAdmin
 
-  menu label: 'User List', parent: 'Users', priority: 1
+  menu label: 'User List', parent: 'Users'
 
   actions :index, :show, :destroy
 

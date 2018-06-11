@@ -24,6 +24,7 @@ class Ability
       can :manage, ActiveAdmin::Page, name: 'Maps'
       can :read, User, id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
+      can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
     end
     #
     # The first argument to `can` is the action you are giving the user
