@@ -22,7 +22,7 @@ class Ability
       can :read, Submission, id: user.managed_submissions.pluck(:id)
       can :read, Photo
       can :manage, ActiveAdmin::Page, name: 'Maps'
-      can :read, User, id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
+      can :read, User, id: user.land_managers.pluck(:id)
       can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
     end

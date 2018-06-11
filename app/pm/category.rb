@@ -168,7 +168,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
 
   filter :name
   filter :site, multiple: true
-  filter :sub_categories, label: 'Samples', multiple: true
+  filter :sub_categories,as: :select,collection: proc{current_project_manager.sub_categories.pluck(:name, :id)}, label: 'Samples', multiple: true
   filter :description
   filter :tags
   filter :class_name

@@ -126,7 +126,7 @@ ActiveAdmin.register User, namespace: :pm do
   filter :last_name
   filter :email
   filter :username
-  filter :user_type, as: :select, collection: -> { User.user_types }
+  # filter :user_type, as: :select, collection: -> { User.user_types }
   filter :company
   filter :last_sign_in_at
   filter :status, as: :select, collection: -> { User.statuses }

@@ -73,7 +73,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
   end
 
 
-  filter :category_id, label: 'Species', as: :select, collection: -> {Category.all.map{|c| [c.name, c.id]}}
+  filter :category_id, label: 'Species', as: :select, collection: -> {current_project_manager.categories.pluck(:name, :id)}
   filter :name, label: 'Label'
   filter :created_at
 end

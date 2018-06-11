@@ -84,8 +84,8 @@ ActiveAdmin.register Photo, as: "Sample Image", namespace: :pm do
   end
 
   filter :created_at
-  filter :submission_sub_category_in, label: 'Sample', as: :select, collection: -> {SubCategory.all.map{|s| [s.name, s.id]}}
-  filter :submission_category_in, label: 'Species', as: :select, collection: -> {Category.all.map{|s| [s.name, s.id]}}
+  filter :submission_sub_category_in, label: 'Sample', as: :select,collection: proc{current_project_manager.sub_categories.pluck(:name, :id)}
+  filter :submission_category_in, label: 'Species', as: :select,collection: proc{current_project_manager.categories.pluck(:name, :id)}
   filter :imageable_sub_type, label: 'Image Type', as: :select, collection: [Photo::ADDITIONAL_IMAGES,Photo::MONITORING_IMAGE,Photo::SAMPLE_IMAGE]
 
 end

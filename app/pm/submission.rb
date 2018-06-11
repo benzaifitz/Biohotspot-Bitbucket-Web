@@ -286,12 +286,12 @@ ActiveAdmin.register Submission, namespace: :pm do
     column :updated_at
   end
   
-  filter :sub_category, label: 'Sample', as: :select, multiple: true
-  filter :site, as: :select, multiple: true
-  filter :location, as: :select, multiple: true
-  filter :project, as: :select, multiple: true
+  filter :sub_category, label: 'Sample', as: :select,collection: proc {current_project_manager.sub_categories.pluck(:name, :id)}, multiple: true
+  filter :site, as: :select, multiple: true,collection: proc{current_project_manager.sites.pluck(:name, :id)}
+  filter :location, as: :select, multiple: true,collection: proc{current_project_manager.locations.pluck(:name, :id)}
+  filter :project, as: :select, multiple: true,collection: proc{current_project_manager.managed_projects.pluck(:title, :id)}
   filter :survey_number
-  filter :submitted_by, as: :select, collection: ->{LandManager.all.map{|lm| [lm.full_name, lm.id]}}
+  filter :submitted_by, as: :select, collection: proc{current_project_manager.land_managers.map{|lm| [lm.full_name, lm.id]}}
   filter :rainfall, label: "Wind"
   filter :humidity, label: "Seastate"
   filter :temperature
