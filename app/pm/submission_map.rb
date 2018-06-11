@@ -2,11 +2,11 @@ ActiveAdmin.register_page 'Maps', namespace: :pm do
   menu label: 'Maps', priority: 9
 
   content do
-    @categories = Category.all.map{|c| [c.name, c.id]}
-    @sub_categories = SubCategory.all.map{|c| [c.project_location_site_prefix_name, c.id]}
-    @sites = Site.all.map{|c| [c.project_location_prefix_name, c.id]}
-    @locations = Location.all.map{|c| [c.project_prefix_name, c.id]}
-    @projects = Project.all.map{|c| [c.title, c.id]}
+    @categories = current_project_manager.categories.pluck(:name, :id)
+    @sub_categories = current_project_manager.sub_categories.map{|c| [c.project_location_site_prefix_name, c.id]}
+    @sites = current_project_manager.sites.map{|c| [c.project_location_prefix_name, c.id]}
+    @locations = current_project_manager.locations.map{|c| [c.project_prefix_name, c.id]}
+    @projects = current_project_manager.managed_projects.pluck(:title, :id)
     render partial: 'index', locals: {categories: @categories, sites: @sites, locations: @locations,
                                       projects: @projects,
                                       sub_categories: @sub_categories}

@@ -77,8 +77,13 @@ $(document).ready(function() {
             selected[$(this).val()]=$(this).val();
         });
         console.log(selected);
+        n = window.location.pathname.indexOf("admin")
+        if(n < 0)
+          path = "/pm/maps/search_submissions"
+        else
+          path = "/admin/maps/search_submissions"
         return $.ajax({
-            url: "/admin/submission_map/search_submissions",
+            url: path,
             data: {
                 category_ids: selected
             },
@@ -97,8 +102,13 @@ $(document).ready(function() {
         if (!$('body').hasClass("loading")) {
             $('body').addClass("loading");
         }
+        n = window.location.pathname.indexOf("admin")
+        if(n < 0)
+          path = "/pm/maps/search_submissions"
+        else
+          path = "/admin/maps/search_submissions"
         return $.ajax({
-            url: "/admin/maps/search_submissions",
+            url: path,
             data: $('form').serializeArray(),
             complete: function(jqxhr, response) {
                 $('body').removeClass("loading");
@@ -107,7 +117,7 @@ $(document).ready(function() {
         });
     });
 });
-
+reg = /[A-E]/gi
 
 
 //
