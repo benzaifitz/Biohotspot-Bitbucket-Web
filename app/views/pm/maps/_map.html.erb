@@ -1,0 +1,3 @@
+<script>
+    $('.col-lg-12 .map').html("<%= escape_javascript render partial: 'populate_map', locals: {submissions: (submissions.nil? ? [] : submissions)} %>")
+</script>

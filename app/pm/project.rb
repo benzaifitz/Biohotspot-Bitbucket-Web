@@ -11,6 +11,7 @@ ActiveAdmin.register Project, namespace: :pm do
 
   index do
     selectable_column
+    id_column
     column :title, label: "Project Title"
     column :summary do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.summary}')\"> View More</a>"

@@ -5,7 +5,7 @@ ActiveAdmin.setup do |config|
   # for each of the active admin pages.
   #
   config.site_title = "Biohotspot"
-  config.site_title_image = "logo.png"
+  config.site_title_image = "bio_logo@3x.png"
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
   #
@@ -265,7 +265,9 @@ ActiveAdmin.setup do |config|
 
 
     pm.build_menu do |p_menu|
-      p_menu.add label: 'Sites', priority: 1
+      p_menu.add label: 'Notifications', priority: 14
+      p_menu.add label: 'Users', priority: 11
+      p_menu.add label: 'Documents', priority: 17
     end
 
   end
