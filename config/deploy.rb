@@ -6,7 +6,7 @@ require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-set :domain, '13.211.119.19' # production
+set :domain, '52.64.75.81' # production
 # set :domain, '52.64.75.81'  # staging
 set :deploy_to, '/home/ubuntu/biohotspot'
 set :repository, 'git@bitbucket.org:applabsservice/biohotspot-web.git'
