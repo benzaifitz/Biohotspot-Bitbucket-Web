@@ -12,6 +12,7 @@ class ProjectManager < User
   has_many :categories, through: :managed_projects
   has_many :locations, through: :managed_projects
   has_many :land_managers, through: :locations, source: :users
+  has_many :category_documents, through: :managed_projects
   # accepts_nested_attributes_for :managed_project
 
   def self.search(options = {})

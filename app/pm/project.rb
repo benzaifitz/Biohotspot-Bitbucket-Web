@@ -60,6 +60,7 @@ ActiveAdmin.register Project, namespace: :pm do
     record.project_manager = current_project_manager
   end
 
+  filter :locations, as: :select, collection: proc{current_project_manager.locations.pluck(:name, :id)}
   preserve_default_filters!
   remove_filter :document_projects
   remove_filter :users

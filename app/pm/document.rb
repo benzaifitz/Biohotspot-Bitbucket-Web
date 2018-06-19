@@ -45,6 +45,9 @@ ActiveAdmin.register Document, namespace: :pm do
     end
   end
 
+  filter :projects, as: :select, collection: proc{current_project_manager.managed_projects.pluck(:title, :id)}
+  filter :category_document, as: :select, collection: proc{current_project_manager.category_documents.pluck(:name, :id)}
+  
   preserve_default_filters!
   remove_filter :document_projects
 
