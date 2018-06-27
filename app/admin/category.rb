@@ -2,13 +2,15 @@ ActiveAdmin.register Category, as: 'Species' do
 
   menu label: 'Species',priority: 5 #, parent: 'Species', priority: 1
 
-    permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
-                  :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
-                  :distribution, :location, :url, :specie_type_id, project_ids: [],
-                  photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
+  permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
+                :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
+                :distribution, :location, :url, :specie_type_id, project_ids: [],
+                photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   actions :all
-
+  action_item :view, only: :index do
+    link_to 'Import Species', import_species_admin_species_index_path
+  end
   index do
     selectable_column
     column :id
@@ -191,10 +193,26 @@ ActiveAdmin.register Category, as: 'Species' do
     # @resource.photos = resource.photos.dup
     render :new, :layout => false
   end
-
+  collection_action :import_species do
+  end
+  collection_action :import, method: 'post' do
+    begin
+      CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+        category_hash = row.to_hash
+        category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
+        if category.update_attributes(category_hash)
+        else
+          redirect_to :back, alert: category.errors.full_messages.first
+          return
+        end
+      end
+      redirect_to "/admin/species", notice: "successfully created all records"
+    rescue ActiveModel::UnknownAttributeError => error
+      redirect_to :back, alert: error.message
+    end
+  end
   action_item :only => :show do
     link_to("Make a Copy", clone_admin_species_path(id: resource.id))
   end
-
 
 end
