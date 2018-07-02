@@ -196,19 +196,23 @@ ActiveAdmin.register Category, as: 'Species' do
   collection_action :import_species do
   end
   collection_action :import, method: 'post' do
-    begin
-      CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
-        category_hash = row.to_hash
-        category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
-        if category.update_attributes(category_hash)
-        else
-          redirect_to :back, alert: category.errors.full_messages.first
-          return
+    if params[:species].blank? || params[:species].content_type != "text/csv"
+      redirect_to :back, alert: "Please select a csv file"
+    else
+      begin
+        CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+          category_hash = row.to_hash
+          category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
+          if category.update_attributes(category_hash)
+          else
+            redirect_to :back, alert: category.errors.full_messages.first
+            return
+          end
         end
+        redirect_to "/admin/species", notice: "successfully created all records"
+      rescue => error
+        redirect_to :back, alert: error.message
       end
-      redirect_to "/admin/species", notice: "successfully created all records"
-    rescue ActiveModel::UnknownAttributeError => error
-      redirect_to :back, alert: error.message
     end
   end
   action_item :only => :show do
