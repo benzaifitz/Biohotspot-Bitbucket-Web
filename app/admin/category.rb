@@ -214,5 +214,26 @@ ActiveAdmin.register Category, as: 'Species' do
   action_item :only => :show do
     link_to("Make a Copy", clone_admin_species_path(id: resource.id))
   end
+  csv do
+    column :name, humanize_name: false
+    column :description, humanize_name: false
+    column :tags, humanize_name: false
+    column :class_name, humanize_name: false
+    column :family_common, humanize_name: false
+    column :location, humanize_name: false
+    column :url, humanize_name: false
+    column :family_scientific, humanize_name: false
+    column :species_scientific, humanize_name: false
+    column :species_common, humanize_name: false
+    column :status, humanize_name: false
+    column :growth, humanize_name: false
+    column :habit, humanize_name: false
+    column :impact, humanize_name: false
+    column :distribution, humanize_name: false
+    column :specie_type_id, humanize_name: false
+    column :created_at, humanize_name: false
+    column :updated_at, humanize_name: false
+
+  end
 
 end
