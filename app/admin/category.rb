@@ -43,11 +43,11 @@ ActiveAdmin.register Category, as: 'Species' do
 
     column :description do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.description}')\"> View More</a>"
-      p.description.length > 100 ? (p.description[0..100] + omision).html_safe : p.description
+      p.description.to_s.length > 100 ? (p.description[0..100] + omision).html_safe : p.description
     end
     column :tags do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.tags}')\"> View More</a>"
-      p.tags.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
+      p.tags.to_s.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
     end
     column :class_name
     column :url
