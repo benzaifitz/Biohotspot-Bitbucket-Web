@@ -196,7 +196,6 @@ ActiveAdmin.register Category, as: 'Species' do
   collection_action :import_species do
   end
   collection_action :import, method: 'post' do
-    binding.pry
     if params[:species].blank? || params[:species].original_filename.split(".").last != "csv"
       redirect_to :back, alert: "Please select a csv file"
     else
