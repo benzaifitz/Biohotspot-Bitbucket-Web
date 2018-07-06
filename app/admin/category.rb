@@ -3,7 +3,7 @@ ActiveAdmin.register Category, as: 'Species' do
   menu label: 'Species',priority: 5 #, parent: 'Species', priority: 1
 
   permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
-                :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
+                :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :photographer,
                 :distribution, :location, :url, :specie_type_id, project_ids: [],
                 photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
@@ -79,7 +79,7 @@ ActiveAdmin.register Category, as: 'Species' do
       f.input :family_scientific
       f.input :family_common
       f.input :species_scientific
-      f.input :species_common
+      f.input :photographer
       f.input :status
       f.input :growth
       f.input :habit
@@ -125,7 +125,8 @@ ActiveAdmin.register Category, as: 'Species' do
       row :family_scientific
       row :family_common
       row :species_scientific
-      row :species_common
+      row :photographer
+      # row :species_common
       row :status
       row :growth
       row :habit
@@ -180,7 +181,8 @@ ActiveAdmin.register Category, as: 'Species' do
   filter :family_scientific
   filter :family_common
   filter :species_scientific
-  filter :species_common
+  # filter :species_common
+  filter :photographer
   filter :status
   filter :growth
   filter :habit
@@ -228,7 +230,8 @@ ActiveAdmin.register Category, as: 'Species' do
     column :url, humanize_name: false
     column :family_scientific, humanize_name: false
     column :species_scientific, humanize_name: false
-    column :species_common, humanize_name: false
+    # column :species_common, humanize_name: false
+    column :photographer, humanize_name: false
     column :status, humanize_name: false
     column :growth, humanize_name: false
     column :habit, humanize_name: false

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180507055101) do
+ActiveRecord::Schema.define(version: 20180705101513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 20180507055101) do
     t.string   "impact"
     t.string   "distribution"
     t.integer  "specie_type_id"
+    t.string   "photographer"
     t.index ["deleted_at"], name: "index_categories_on_deleted_at", using: :btree
     t.index ["site_id"], name: "index_categories_on_site_id", using: :btree
     t.index ["specie_type_id"], name: "index_categories_on_specie_type_id", using: :btree
