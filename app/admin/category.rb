@@ -55,6 +55,7 @@ ActiveAdmin.register Category, as: 'Species' do
     column :family_scientific
     column :species_common
     column :species_scientific
+    column :photographer
     column :status
     column :growth
     column :habit

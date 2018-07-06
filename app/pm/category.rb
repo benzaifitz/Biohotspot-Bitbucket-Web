@@ -4,7 +4,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
 
     permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                   :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
-                  :distribution, :location, :url, :specie_type_id, project_ids: [],
+                  :distribution, :location, :url, :specie_type_id, :photographer, project_ids: [],
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   index do
@@ -39,11 +39,11 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
 
     column :description do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.description}')\"> View More</a>"
-      p.description.length > 100 ? (p.description[0..100] + omision).html_safe : p.description
+      p.description.to_s.length > 100 ? (p.description[0..100] + omision).html_safe : p.description
     end
     column :tags do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.tags}')\"> View More</a>"
-      p.tags.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
+      p.tags.to_s.length > 100 ? (p.tags[0..100] + omision).html_safe : p.tags
     end
     column :class_name
     column :url
@@ -51,6 +51,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
     column :family_scientific
     column :species_common
     column :species_scientific
+    column :photographer
     column :status
     column :growth
     column :habit
@@ -76,6 +77,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
       f.input :family_scientific
       f.input :family_common
       f.input :species_scientific
+      f.input :photographer
       f.input :species_common
       f.input :status
       f.input :growth
@@ -122,6 +124,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
       row :family_scientific
       row :family_common
       row :species_scientific
+      row :photographer
       row :species_common
       row :status
       row :growth
@@ -177,6 +180,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
   filter :family_scientific
   filter :family_common
   filter :species_scientific
+  filter :photographer
   filter :species_common
   filter :status
   filter :growth
