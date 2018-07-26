@@ -49,7 +49,7 @@ class Photo < ApplicationRecord
                 if photo.imageable_type == "Category"
                   ids << photo.id if photo.imageable_id == id
                 else
-                  ids << photo.id if photo.imageable.category.id == id
+                  ids << photo.id if photo.imageable.category.present? && photo.imageable.category.id == id 
                 end
               end
               data = ids.present? ? ids : nil
