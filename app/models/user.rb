@@ -106,6 +106,14 @@ class User < ApplicationRecord
       PaperTrail::Version.create(attr.merge(event: 'Logout'))
     elsif self.changed_attributes.keys.include?('status')
       PaperTrail::Version.create(attr.merge({event: self.status.humanize, whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
+    elsif self.changed_attributes.keys.include?('approved')
+      if self.approved?
+        PaperTrail::Version.create(attr.merge({event: 'Approved', whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
+      else
+        PaperTrail::Version.create(attr.merge({event: 'Rejected', whodunnit: PaperTrail.whodunnit, comment: self.status_change_comment}))
+      end
+    elsif self.changed_attributes.keys.include?('confirmed_at')
+      PaperTrail::Version.create(attr.merge(event: 'Confirmed'))
     end
   end
 
