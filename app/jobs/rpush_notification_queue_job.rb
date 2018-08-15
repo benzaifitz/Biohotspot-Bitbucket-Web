@@ -29,7 +29,7 @@ class RpushNotificationQueueJob < ApplicationJob
   def create_email_notification(attrs)
     sent_by = User.where(user_type: User.user_types[:administrator]).first
     n = RpushNotification.new
-    n.app = Rpush::Gcm::App.find_by_name(Rails.application.secrets.app_name)
+    n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.category = attrs['category']
     n.alert = attrs['alert']
     n.data = { data: { title: 'Message from PWM Admin', message: attrs['alert'] } }
