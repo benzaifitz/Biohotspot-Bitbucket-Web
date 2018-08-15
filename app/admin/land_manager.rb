@@ -19,7 +19,7 @@ ActiveAdmin.register LandManager, as: 'Land Manager' do
     f.inputs 'Land Manager Details' do
       f.input :email
       f.input :mobile_number
-      f.input :password
+      f.input :password, input_html: {autocomplete: 'new-password'}
       f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       # f.input :company
       f.input :first_name

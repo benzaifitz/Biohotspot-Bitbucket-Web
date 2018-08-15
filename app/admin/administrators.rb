@@ -12,7 +12,7 @@ ActiveAdmin.register User, as: 'Administrator' do
   form do |f|
     f.inputs 'Administrator Details' do
       f.input :email
-      f.input :password
+      f.input :password, input_html: {autocomplete: 'new-password'}
       f.input :username, hint: 'Allowed characters are A to Z, a to z, 0 to 9 and _(underscore)'
       f.input :company
       f.input :first_name
