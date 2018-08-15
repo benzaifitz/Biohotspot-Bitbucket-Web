@@ -93,6 +93,13 @@ $(document).ready(function() {
             }
         });
     };
+
+    window.remove_blank_slate_from_notification = function() {
+        if($('.admin_notifications .blank_slate').length > 0) {
+            $('.admin_notifications .blank_slate a').remove();
+        }
+    }
+    remove_blank_slate_from_notification();
 });
 
 $(document).ready(function() {
