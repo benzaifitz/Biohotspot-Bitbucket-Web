@@ -37,23 +37,13 @@ Rails.application.configure do
   # Raise an error on page load if there are pending migrations.
   config.active_record.migration_error = :page_load
 
-  # config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.smtp_settings = {
-      address:              ENV['EMAIL_SERVER_ADDRESS'],
-      port:                 ENV['EMAIL_PORT'],
-      domain:               ENV['EMAIL_DOMAIN'],
-      user_name:            ENV['EMAIL_USERNAME'],
-      password:             ENV['EMAIL_PASSWORD'],
-      authentication:       :login,
-      enable_starttls_auto: true,
-      :tls  => ActiveRecord::Type::Boolean.new.cast(ENV['EMAIL_TLS'])
-  }
-  config.action_mailer.default_url_options = { :host => Rails.application.secrets.domain_name, :protocol => 'http' }
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = true
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  # config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.raise_delivery_errors = true
+  # Send email in development mode?
+  config.action_mailer.perform_deliveries = true
   config.action_mailer.logger = Logger.new('log/email.log')
-  config.action_mailer.perform_caching = false
   # config.action_mailer.default_url_options = { host: 'local.pwm.com', port: 3000 }
 
   # Debug mode disables concatenation and preprocessing of assets.
