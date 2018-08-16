@@ -1,9 +1,9 @@
-ActiveAdmin.register SpecieType do
+ActiveAdmin.register SpecieType, as: 'Species Types' do
 
   menu label: 'Species Types', priority: 6
 
   permit_params do
-    allowed = [:name]
+    allowed = [:id, :name]
     allowed.uniq
   end
 
@@ -19,7 +19,7 @@ ActiveAdmin.register SpecieType do
 
   form do |f|
     f.semantic_errors *f.object.errors.keys
-    f.inputs 'Specie type details' do
+    f.inputs 'Species Type Details' do
       f.input :name
     end
     f.actions
