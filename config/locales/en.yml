@@ -36,3 +36,16 @@ en:
 
   active_admin:
     clone_model: "Clone %{model}"
+
+  activerecord:
+    models:
+      species_type:
+        one: "Species Type"
+        other: "Species Types"
+      species_types:
+        one: "Species Type"
+        other: "Species Types"
+      specie_type:
+        one: "Species Type"
+        other: "Species Types"
+
