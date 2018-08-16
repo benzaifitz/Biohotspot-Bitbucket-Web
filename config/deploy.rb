@@ -14,7 +14,7 @@ set :branch, 'develop'
 set :rails_env, 'production'
 set :user, 'ubuntu'
 set :forward_agent, true
-set :identity_file, '~/pwm.pem' #staging
+set :identity_file, '~/.ssh/pwm.pem' #staging
 # set :identity_file, '~/.ssh/pwm-production.pem' #production
 # Basic settings:
 #   domain       - The hostname to SSH to.

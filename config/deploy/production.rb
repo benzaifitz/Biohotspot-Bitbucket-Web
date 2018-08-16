@@ -25,7 +25,7 @@ server '52.64.75.81', user: 'ubuntu', roles: %w{web app db}
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, { :forward_agent => true, :keys => %w(~/pwm.pem) }
+set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/pwm.pem) }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',
