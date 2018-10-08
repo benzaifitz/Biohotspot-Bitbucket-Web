@@ -1,20 +1,24 @@
+# require 'mina/rails'
+# require 'mina/git'
+# require 'mina/rvm'
+#require 'mina/whenever'
+require 'mina/multistage'
+require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
-require 'mina/rvm'
-#require 'mina/whenever'
 require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-set :domain, '52.64.75.81' # production
+# set :domain, '52.64.75.81' # production
 # set :domain, '52.64.75.81'  # staging
 set :deploy_to, '/home/ubuntu/biohotspot'
 set :repository, 'git@bitbucket.org:applabsservice/biohotspot-web.git'
-set :branch, 'develop'
-set :rails_env, 'production'
-set :user, 'ubuntu'
-set :forward_agent, true
-set :identity_file, '~/.ssh/pwm.pem' #staging
+# set :branch, 'develop'
+# set :rails_env, 'production'
+# set :user, 'ubuntu'
+# set :forward_agent, true
+# set :identity_file, '~/.ssh/pwm.pem' #staging
 # set :identity_file, '~/.ssh/pwm-production.pem' #production
 # Basic settings:
 #   domain       - The hostname to SSH to.
