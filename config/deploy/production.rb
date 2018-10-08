@@ -14,12 +14,10 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server '52.64.75.81', user: 'ubuntu', roles: %w{web app db}
+# server '52.64.75.81', user: 'ubuntu', roles: %w{web app db}
 set :domain, '52.64.75.81' # production
 set :branch, 'master'
 set :rails_env, 'production'
-set :user, 'ubuntu'
-set :forward_agent, true
 set :identity_file, '~/.ssh/pwm.pem'
 
 # you can set custom ssh options
@@ -31,7 +29,7 @@ set :identity_file, '~/.ssh/pwm.pem'
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/pwm.pem) }
+# set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/pwm.pem) }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',

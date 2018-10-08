@@ -14,12 +14,10 @@
 # definition into the server list. The second argument
 # something that quacks like a hash can be used to set
 # extended properties on the server.
-server '13.210.32.64', user: 'ubuntu', roles: %w{web app db}
+# server '13.210.32.64', user: 'ubuntu', roles: %w{web app db}
 set :domain, '13.210.32.64' #staging
 set :branch, 'develop'
 set :rails_env, 'staging'
-set :user, 'ubuntu'
-set :forward_agent, true
 set :identity_file, '~/.ssh/biohotspot-staging.pem' #staging
 
 
@@ -32,7 +30,7 @@ set :identity_file, '~/.ssh/biohotspot-staging.pem' #staging
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/biohotspot-staging.pem) }
+# set :ssh_options, { :forward_agent => true, :keys => %w(~/.ssh/biohotspot-staging.pem) }
 # and/or per server
 # server 'example.com',
 #   user: 'user_name',

@@ -1,23 +1,18 @@
-# require 'mina/rails'
-# require 'mina/git'
-# require 'mina/rvm'
-#require 'mina/whenever'
 require 'mina/multistage'
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
+require 'mina/rvm'
 require_relative 'deploy/recipes/redis'
 require_relative 'deploy/recipes/rpush'
 require_relative 'deploy/recipes/sidekiq'
 
-# set :domain, '52.64.75.81' # production
-# set :domain, '52.64.75.81'  # staging
 set :deploy_to, '/home/ubuntu/biohotspot'
 set :repository, 'git@bitbucket.org:applabsservice/biohotspot-web.git'
 # set :branch, 'develop'
 # set :rails_env, 'production'
-# set :user, 'ubuntu'
-# set :forward_agent, true
+set :user, 'ubuntu'
+set :forward_agent, true
 # set :identity_file, '~/.ssh/pwm.pem' #staging
 # set :identity_file, '~/.ssh/pwm-production.pem' #production
 # Basic settings:
@@ -42,7 +37,7 @@ set :shared_paths, fetch(:shared_paths, []).push('log','tmp', 'config/certs')
 # This task is the environment that is loaded for all remote run commands, such as
 # `mina deploy` or `mina rake`.
 task :environment do
-  invoke :'rvm:use', 'ruby-2.3.0@default'
+  invoke :'rvm:use', 'ruby-2.3.0@biohotspot'
 end
 
 # Put any custom commands you need to run at setup
@@ -67,7 +62,7 @@ task :'deploy' do
     invoke 'rpush:stop'
     on :launch do
       in_path(fetch(:current_path)) do
-        invoke :'rvm:use', 'ruby-2.3.0@default'
+        invoke :'rvm:use', 'ruby-2.3.0@biohotspot'
         command %{mkdir -p tmp/}
         command %{touch tmp/restart.txt}
         #invoke :'whenever:update'
