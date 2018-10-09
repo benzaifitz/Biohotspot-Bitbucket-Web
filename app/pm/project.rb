@@ -3,7 +3,7 @@ ActiveAdmin.register Project, namespace: :pm do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name]
+    allowed = [:title, :summary, :tags, :client_name, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit]]
     allowed.uniq
   end
 
@@ -51,21 +51,28 @@ ActiveAdmin.register Project, namespace: :pm do
       f.input :summary, input_html: {rows: 4}
       f.input :tags, input_html: {rows: 3}
       f.input :client_name
+      f.inputs do
+        f.has_many :project_manager_projects, heading: 'Project Managers', new_record: "Add new Project Manager", allow_destroy: true do |pmp|
+          pmp.input :project_manager_id, as: :select, collection: ProjectManager.all.map{|pm| ["#{pm.email}", pm.id]}
+          pmp.input :is_admin,as: :boolean
+        end
+      end
       # f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
     end
     f.actions
   end
 
-  before_build do |record|
-    record.project_manager = current_project_manager
-  end
+  # before_build do |record|
+  #   record.project_manager = current_project_manager
+  # end
 
-  filter :locations, as: :select, collection: proc{current_project_manager.locations.pluck(:name, :id)}
+  filter :locations, as: :select, collection: proc{Location.where(project_id: (current_project_manager.project_manager_projects.where(is_admin: true).pluck(:project_id))).pluck(:name, :id)}
   preserve_default_filters!
   remove_filter :document_projects
   remove_filter :users
   remove_filter :documents
   remove_filter :project_manager
+  remove_filter :project_manager_projects
   remove_filter :project_categories
   remove_filter :categories
   remove_filter :feedbacks

@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name, :project_manager_id]
+    allowed = [:title, :summary, :tags, :client_name, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit]]
     allowed.uniq
   end
 
@@ -51,7 +51,12 @@ ActiveAdmin.register Project do
       f.input :summary, input_html: {rows: 4}
       f.input :tags, input_html: {rows: 3}
       f.input :client_name
-      f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
+      f.inputs do
+        f.has_many :project_manager_projects, heading: 'Project Managers', new_record: "Add new Project Manager", allow_destroy: true do |pmp|
+          pmp.input :project_manager_id, as: :select, collection: ProjectManager.all.map{|pm| ["#{pm.email}", pm.id]}
+          pmp.input :is_admin,as: :boolean
+        end
+      end
     end
     f.actions
   end

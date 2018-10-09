@@ -8,8 +8,9 @@ class Ability
     if user.administrator?
       can :manage, :all
     elsif user.project_manager?
-      can :read, Project, id: user.managed_projects.map(&:id) rescue []
-      # can :create, Project
+      can :read, Project, id: user.project_manager_projects.where(is_admin: true).map(&:project_id) rescue []
+      can :update, Project, id: user.project_manager_projects.where(is_admin: true).map(&:project_id) rescue []
+      can :create, Project
       can :read, Location, id: user.locations.pluck(:id)
       # can :create, Location
       can :read, Site, id: user.sites.pluck(:id)
