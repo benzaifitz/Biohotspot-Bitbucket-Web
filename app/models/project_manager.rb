@@ -3,19 +3,15 @@ class ProjectManager < User
   default_scope -> { where("user_type IN (?,?)", User.user_types['project_manager'],User.user_types['administrator']) }
   scope :without_blocked_users, -> (blocked_by_id) { where("#{Project Manager.table_name}.id NOT IN(SELECT user_id FROM blocked_users where blocked_by_id = ?)", blocked_by_id) }
   has_many :project_manager_projects
-  has_many :projects, :through => :project_manager_projects
-  has_many :managed_projects, class_name: 'Project' #, foreign_key: :project_manager_id
-  has_many :locations, through: :managed_projects
+  has_many :projects, -> {ProjectManagerProject.where(is_admin: true)}, :through => :project_manager_projects
+  has_many :locations, through: :projects
   has_many :sites, through: :locations
-  # belongs_to :managed_project, class_name: 'Project', foreign_key: :managed_project_id
   before_update :check_duplicate_email
   has_many :sub_categories, through: :sites
   has_many :managed_submissions, through: :sub_categories, source: :submission
-  has_many :categories, through: :managed_projects
-  has_many :locations, through: :managed_projects
+  has_many :categories, through: :projects
   has_many :land_managers, through: :locations, source: :users
-  has_many :category_documents, through: :managed_projects
-  # accepts_nested_attributes_for :managed_project
+  has_many :category_documents, through: :projects
 
   def self.search(options = {})
     if options.present?

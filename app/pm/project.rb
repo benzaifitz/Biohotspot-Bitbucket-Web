@@ -57,7 +57,6 @@ ActiveAdmin.register Project, namespace: :pm do
           pmp.input :is_admin,as: :boolean
         end
       end
-      # f.input :project_manager_id, as: :select, collection: options_for_select(ProjectManager.all.map{|pm| [pm.email, pm.id]}, f.object.project_manager ? f.object.project_manager.id : '')
     end
     f.actions
   end
@@ -66,7 +65,7 @@ ActiveAdmin.register Project, namespace: :pm do
   #   record.project_manager = current_project_manager
   # end
 
-  filter :locations, as: :select, collection: proc{Location.where(project_id: (current_project_manager.project_manager_projects.where(is_admin: true).pluck(:project_id))).pluck(:name, :id)}
+  filter :locations, as: :select, collection: proc{current_project_manager.locations.pluck(:name, :id)}
   preserve_default_filters!
   remove_filter :document_projects
   remove_filter :users

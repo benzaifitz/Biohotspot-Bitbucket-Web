@@ -8,8 +8,8 @@ class Ability
     if user.administrator?
       can :manage, :all
     elsif user.project_manager?
-      can :read, Project, id: user.project_manager_projects.where(is_admin: true).map(&:project_id) rescue []
-      can :update, Project, id: user.project_manager_projects.where(is_admin: true).map(&:project_id) rescue []
+      can :read, Project, id: user.projects.pluck(:id)
+      can :update, Project, id: user.projects.pluck(:id)
       can :create, Project
       can :read, Location, id: user.locations.pluck(:id)
       # can :create, Location
@@ -25,7 +25,7 @@ class Ability
       can :manage, ActiveAdmin::Page, name: 'Maps'
       can :read, User, id: user.land_managers.pluck(:id)
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
-      can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
+      can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)
     end
     #
     # The first argument to `can` is the action you are giving the user
