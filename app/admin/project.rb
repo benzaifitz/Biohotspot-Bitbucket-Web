@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit]]
+    allowed = [:title, :summary, :tags, :client_name, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit]]
     allowed.uniq
   end
 
@@ -60,7 +60,10 @@ ActiveAdmin.register Project do
       end
     end
     column :created_at
-    actions
+    actions do |p|
+      (item 'Open', change_project_status_admin_project_path(p), class: 'member_link', method: :put) if p.closed?
+      (item 'Close', change_project_status_admin_project_path(p), class: 'member_link', method: :put) if p.open?
+    end
   end
 
   form do |f|
@@ -74,6 +77,7 @@ ActiveAdmin.register Project do
       f.input :summary, input_html: {rows: 4}
       f.input :tags, input_html: {rows: 3}
       f.input :client_name
+      f.input :status
       f.inputs do
         f.has_many :project_manager_projects, heading: 'Project Managers', new_record: "Add new Project Manager", allow_destroy: true do |pmp|
           pmp.input :project_manager_id, as: :select, collection: ProjectManager.all.map{|pm| ["#{pm.email}", pm.id]}
@@ -85,6 +89,20 @@ ActiveAdmin.register Project do
   end
 
 
+  member_action :change_project_status, method: :put do
+    begin
+      if resource.closed?
+        resource.update_attributes({status: 'open'})
+        flash[:notice] = 'Project opened'
+      elsif resource.open?
+        resource.update_attributes({status: 'closed'})
+        flash[:notice] = 'Project closed'
+      end
+    rescue
+      flash[:alert] = resource.errors.full_messages.to_sentence
+    end
+    redirect_to admin_projects_path
+  end
 
   preserve_default_filters!
   remove_filter :document_projects
@@ -94,6 +112,38 @@ ActiveAdmin.register Project do
   remove_filter :updated_at
   # remove_filter :sub_categories
   show do
-    attributes_table :id, :title, :summary, :tags, :client_name, :project_manager, :updated_at, :created_at
+    attributes_table do
+      row :id
+      row :title
+      row :summary
+      row :tags
+      row :client_name
+      row :status
+      row :project_managers do |p|
+        table(:style => 'margin-bottom: 0') do
+          p.project_managers.each do |pm|
+            tr do
+              td(:style =>'border: 0; padding: 2px;') do
+                link_to(pm.email, admin_user_path(pm))
+              end
+            end
+          end
+        end
+      end
+      row :admins do |p|
+        admins = p.project_manager_projects.where(is_admin: true).map(&:project_manager_id)
+        table(:style => 'margin-bottom: 0') do
+          ProjectManager.where(id: admins).each do |pa|
+            tr do
+              td(:style =>'border: 0; padding: 2px;') do
+                link_to(pa.email, admin_user_path(pa))
+              end
+            end
+          end
+        end
+      end
+      row :updated_at
+      row :created_at
+    end
   end
 end

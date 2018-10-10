@@ -65,7 +65,7 @@ ActiveAdmin.register User do
     column :project do |u|
       if !u.land_manager?
         pm = ProjectManager.find(u.id)
-        projects = pm.managed_projects.map do |p|
+        projects = pm.projects.map do |p|
           link_to(p.title,admin_project_path(p.id)) rescue nil
         end
         projects.compact.join("  ").html_safe
