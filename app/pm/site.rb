@@ -68,7 +68,7 @@ ActiveAdmin.register Site, namespace: :pm do
   end
   filter :location, as: :select,collection: proc{current_project_manager.locations.pluck(:name, :id)}
   filter :sub_categories, as: :select,collection: proc{current_project_manager.sub_categories.pluck(:name, :id)}
-  filter :users, as: :select, collection: proc{LandManager.joins(locations:[:project]).where("projects.id in (?)", current_project_manager.managed_projects.pluck(:id)).pluck(:username, :id)}
+  filter :users, as: :select, collection: proc{LandManager.joins(locations:[:project]).where("projects.id in (?)", current_project_manager.projects.pluck(:id)).pluck(:username, :id)}
   filter :title
   filter :summary
   filter :tags

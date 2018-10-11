@@ -10,12 +10,12 @@ class Ability
     elsif user.project_manager?
       can [:read, :update, :change_project_status], Project, id: user.projects.pluck(:id)
       can :create, Project
-      can :read, Location, id: user.locations.pluck(:id)
-      # can :create, Location
-      can :read, Site, id: user.sites.pluck(:id)
-      # can :create, Site
-      can :read, SubCategory, id: user.sub_categories.pluck(:id)
-      # can :create, SubCategory
+      can [:read, :update], Location, id: user.locations.pluck(:id)
+      can :create, Location
+      can [:read, :update], Site, id: user.sites.pluck(:id)
+      can :create, Site
+      can [:read, :update], SubCategory, id: user.sub_categories.pluck(:id)
+      can :create, SubCategory
       can :read, Category, id: user.categories.pluck(:id)
       # can :create, Category
       can :read, SpecieType

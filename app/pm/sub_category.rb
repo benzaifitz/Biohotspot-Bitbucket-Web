@@ -22,7 +22,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
     f.inputs 'Sample Details' do
       f.input :name, label: 'Label'
       f.input :site, as: :select, collection: current_project_manager.sites.map{|s| [s.project_location_prefix_name, s.id]}
-      f.input :categories, label: 'Species', as: :select, multiple: true, :collection => current_project_manager.categories.pluck(:name, :id)
+      f.input :categories, label: 'Species', as: :select, multiple: true, :collection => current_project_manager.categories.distinct.pluck(:name, :id)
     end
     f.actions do
       if f.object.new_record?

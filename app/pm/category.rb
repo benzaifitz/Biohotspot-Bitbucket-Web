@@ -67,7 +67,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Species Details' do
-      f.input :projects, as: :select, multiple: true, collection: current_project_manager.managed_projects.pluck(:title, :id)
+      f.input :projects, as: :select, multiple: true, collection: current_project_manager.projects.pluck(:title, :id)
       # f.input :sites, as: :select, :collection => Site.all.map{ |s|  [s.title, s.id] }
       f.input :name
       f.input :specie_type

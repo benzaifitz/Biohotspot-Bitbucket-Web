@@ -34,7 +34,7 @@ ActiveAdmin.register Location, namespace: :pm do
     f.inputs 'Location Details' do
       f.input :name
       f.input :description
-      f.input :project_id, as: :select, collection: current_project_manager.managed_projects.all.map{|p| [p.title, p.id]}
+      f.input :project_id, as: :select, collection: current_project_manager.projects.all.map{|p| [p.title, p.id]}
     end
     f.actions
   end
