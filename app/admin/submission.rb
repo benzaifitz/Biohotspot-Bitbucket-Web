@@ -166,7 +166,7 @@ ActiveAdmin.register Submission do
       f.input :category, label: 'Species'
       # f.input :site
       # f.input :location
-      # f.input :project
+      f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
     end
     f.actions

@@ -155,7 +155,7 @@ ActiveAdmin.register Submission, namespace: :pm do
       f.input :category, label: 'Species'
       # f.input :site
       # f.input :location
-      # f.input :project
+      f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
     end
     f.actions
@@ -289,7 +289,7 @@ ActiveAdmin.register Submission, namespace: :pm do
   filter :sub_category, label: 'Sample', as: :select,collection: proc {current_project_manager.sub_categories.pluck(:name, :id)}, multiple: true
   filter :site, as: :select, multiple: true,collection: proc{current_project_manager.sites.pluck(:name, :id)}
   filter :location, as: :select, multiple: true,collection: proc{current_project_manager.locations.pluck(:name, :id)}
-  filter :project, as: :select, multiple: true,collection: proc{current_project_manager.managed_projects.pluck(:title, :id)}
+  filter :project, as: :select, multiple: true,collection: proc{current_project_manager.projects.pluck(:title, :id)}
   filter :survey_number
   filter :submitted_by, as: :select, collection: proc{current_project_manager.land_managers.map{|lm| [lm.full_name, lm.id]}}
   filter :rainfall, label: "Wind"
