@@ -1,6 +1,12 @@
 ActiveAdmin.register SpecieType, namespace: :pm do
 
   menu label: 'Species Types', priority: 6
+
+  permit_params do
+    allowed = [:id, :name]
+    allowed.uniq
+  end
+
   actions :all
 
   index do

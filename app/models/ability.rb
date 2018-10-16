@@ -18,7 +18,7 @@ class Ability
       can :create, SubCategory
       can :read, Category, id: user.categories.pluck(:id)
       # can :create, Category
-      can :read, SpecieType
+      can [:read, :create, :update], SpecieType
       # can :read, Submission, id: user.managed_submissions.pluck(:id)
       # can :read, Photo
       can :manage, ActiveAdmin::Page, name: 'Maps'
