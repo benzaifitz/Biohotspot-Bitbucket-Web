@@ -18,6 +18,16 @@ class Project < ApplicationRecord
   # validates_presence_of :project_manager_id
   serialize :tags
 
+  after_save :has_project_managers
+
+  def has_project_managers
+    errors.add(:base, 'There should be atleast one project admin') if self.project_manager_projects.where(is_admin: true).empty?
+    errors.add(:base, 'There could be maximum three project managers') if self.project_manager_projects.length > 3
+    if errors.count > 0
+      raise ActiveRecord::RecordInvalid.new(self)
+    end
+  end
+
   # attr_accessor :project_manager_id
 
   # validates_presence_of :project_manager

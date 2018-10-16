@@ -44,6 +44,9 @@ ActiveAdmin.register Project, namespace: :pm do
   end
 
   form do |f|
+    if f.object.project_manager_projects.empty?
+      f.object.project_manager_projects << ProjectManagerProject.new(is_admin: true, project_manager_id: current_project_manager.id)
+    end
     # f.inputs 'Project Details', for: [:project_manager, f.object.project_manager || ProjectManager.new] do |f|
     if params[:project_manager_blank] == ''
       f.object.errors[:project_manager_id] = 'field is required'
