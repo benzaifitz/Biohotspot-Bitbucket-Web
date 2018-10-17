@@ -151,11 +151,11 @@ ActiveAdmin.register Submission, namespace: :pm do
         f.input :grazing, as: :boolean, label: "Falling"
       end
       f.input :field_notes, input_html: {rows: 4}
-      f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
-      f.input :category, label: 'Species'
+      f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}, as: :select, collection: current_project_manager.sub_categories
+      f.input :category, label: 'Species', as: :select, collection: current_project_manager.categories.uniq
       # f.input :site
       # f.input :location
-      f.input :project
+      # f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
     end
     f.actions
