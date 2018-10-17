@@ -61,34 +61,33 @@ ActiveAdmin.register Submission, namespace: :pm do
     column :longitude
     column :created_at
     column :updated_at
-    actions
-    # actions do |p|
-    #   (item 'Approve', approve_pm_submission_path(p), method: :put)
-    #   (item 'Reject', reject_pm_submission_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
-    # end
+    actions do |p|
+      (item 'Approve', approve_pm_submission_path(p), method: :put)
+      (item 'Reject', reject_pm_submission_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
+    end
   end
 
-  # member_action :approve, method: :put do
-  #   if resource.valid?
-  #     resource.update_attribute(:status, Submission.statuses[:approved])
-  #     redirect_to pm_submissions_path, :notice => 'Submission approved.' and return
-  #   else
-  #     redirect_to pm_submissions_path, :alert => resource.errors.full_messages.first and return
-  #   end
-  # end
+  member_action :approve, method: :put do
+    if resource.valid?
+      resource.update_attribute(:status, Submission.statuses[:approved])
+      redirect_to pm_submissions_path, :notice => 'Submission approved.' and return
+    else
+      redirect_to pm_submissions_path, :alert => resource.errors.full_messages.first and return
+    end
+  end
 
-  # member_action :reject_submission, method: :put do
-  #   pn_msg = params[:submission][:reject_comment].to_s.html_safe
-  #   lm = LandManager.find(resource.submitted_by) rescue nil
-  #   msg = "Your survey for sample #{resource.sub_category.name rescue 'N/A'} taken on #{resource.created_at.strftime('%v')} has been rejected."
-  #   lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
-  #   resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
-  #   redirect_to pm_submissions_path, :notice => 'Submission rejected.' and return
-  # end
+  member_action :reject_submission, method: :put do
+    pn_msg = params[:submission][:reject_comment].to_s.html_safe
+    lm = LandManager.find(resource.submitted_by) rescue nil
+    msg = "Your survey for sample #{resource.sub_category.name rescue 'N/A'} taken on #{resource.created_at.strftime('%v')} has been rejected."
+    lm.send_pn_and_email_notification('Submission Rejected', "#{msg}, Comments:#{pn_msg}") if lm
+    resource.update_columns(status: Submission.statuses[:rejected], reject_comment: pn_msg)
+    redirect_to pm_submissions_path, :notice => 'Submission rejected.' and return
+  end
 
-  # member_action :reject, method: :get do
-  #   render template: 'admin/submissions/reject', layout: false
-  # end
+  member_action :reject, method: :get do
+    render template: 'pm/submissions/reject', layout: false
+  end
 
   # batch_action :approve do |ids|
   #   Submission.where(id: ids).update_all(status: Submission.statuses[:approved])
