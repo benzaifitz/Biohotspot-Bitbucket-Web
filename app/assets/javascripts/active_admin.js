@@ -124,6 +124,28 @@ $(document).ready(function() {
         });
     });
 });
+
+$(document).ready(function() {
+    if($('input.project_category_checkbox:checked').length == $('input.project_category_checkbox').length-1){
+        $($('input.project_category_checkbox')[0]).prop('checked', true);
+    }
+    $('input.project_category_checkbox').on('change', function(){
+        if(this.checked){
+            if($(this).val()==''){
+                $('input.project_category_checkbox').prop('checked', true);
+            }else{
+                if($('input.project_category_checkbox:checked').length == $('input.project_category_checkbox').length-1){
+                    $($('input.project_category_checkbox')[0]).prop('checked', true);
+                }
+            }
+        }else{
+            if($(this).val()==''){
+                $('input.project_category_checkbox').prop('checked', false);
+            }
+            $($('input.project_category_checkbox')[0]).prop('checked', false);
+        }
+    });
+});
 reg = /[A-E]/gi
 
 

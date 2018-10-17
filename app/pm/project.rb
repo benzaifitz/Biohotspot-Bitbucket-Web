@@ -3,7 +3,7 @@ ActiveAdmin.register Project, namespace: :pm do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit]]
+    allowed = [:title, :summary, :tags, :client_name, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]
     allowed.uniq
   end
 
@@ -64,6 +64,7 @@ ActiveAdmin.register Project, namespace: :pm do
           pmp.input :is_admin,as: :boolean
         end
       end
+      f.input :categories, as: :check_boxes, collection: Category.all.map{|cat| [cat.name, cat.id]}.unshift(['All*', '']), label: 'Species', input_html: {class: 'project_category_checkbox'}
     end
     f.actions
   end
