@@ -4,7 +4,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
 
     permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                   :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact,
-                  :distribution, :location, :url, :specie_type_id, :photographer, project_ids: [],
+                  :distribution, :location, :url, :specie_type_id, :photographer,
                   photos_attributes: [ :id, :file, :url, :imageable_id, :imageable_type, :_destroy ]
 
   index do
@@ -67,7 +67,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
   form :html => { :enctype => "multipart/form-data" } do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Species Details' do
-      f.input :projects, as: :select, multiple: true, collection: current_project_manager.projects.pluck(:title, :id)
+      # f.input :projects, as: :select, multiple: true, collection: current_project_manager.projects.pluck(:title, :id)
       # f.input :sites, as: :select, :collection => Site.all.map{ |s|  [s.title, s.id] }
       f.input :name
       f.input :specie_type
