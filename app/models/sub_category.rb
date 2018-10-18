@@ -12,6 +12,7 @@ class SubCategory < ApplicationRecord
   has_one :submission
   # validates_presence_of :category_id #, :user_id
   validates_uniqueness_of :name, scope: :site_id
+  validates :site, presence: true
 
   UNKNOWN_SAMPLE = 'New Sample'
 
