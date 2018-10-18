@@ -39,9 +39,9 @@
 
 class User < ApplicationRecord
   # Include default devise modules.
-  devise :database_authenticatable,
+  devise :invitable, :database_authenticatable,
           :recoverable, :rememberable, :trackable, :validatable,
-          :confirmable, :omniauthable
+          :confirmable, :omniauthable, :invitable
   include DeviseTokenAuth::Concerns::User
 
   mount_uploader :profile_picture, ProfilePictureUploader

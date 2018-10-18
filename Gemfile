@@ -33,6 +33,7 @@ group :development do
 end
 gem 'apipie-rails'
 gem 'devise'
+gem 'devise_invitable', '~> 1.7.0'
 gem 'high_voltage', github: 'thoughtbot/high_voltage'
 gem 'simple_form','>= 3.3.1'
 gem 'rack-cors', :require => 'rack/cors'
