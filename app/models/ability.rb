@@ -16,8 +16,7 @@ class Ability
       can :create, Site
       can [:read, :update], SubCategory, id: user.sub_categories.pluck(:id)
       can :create, SubCategory
-      can [:read, :update], Category, id: user.categories.pluck(:id)
-      can :create, Category
+      can [:create, :read, :update], Category
       can [:read, :create, :update], SpecieType
       can [:read, :update, :approve, :reject_submission, :reject], Submission, id: user.managed_submissions.pluck(:id)
       can :create, Submission
