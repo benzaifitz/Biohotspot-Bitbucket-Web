@@ -47,6 +47,29 @@ ActiveAdmin.register Site, namespace: :pm do
     column :created_at
     actions
   end
+
+  show do
+    attributes_table do
+      row :id
+      row :title
+      row :summary
+      row :tags
+      row :location
+      row :created_at
+      row :updated_at
+      row 'Samples' do |s|
+        table(:style => 'margin-bottom: 0') do
+          s.sub_categories.each do |sc|
+            tr do
+              td(:style =>'border: 0; padding: 2px;') do
+                link_to(sc.project_location_site_prefix_name, admin_sample_path(sc.id)) rescue nil
+              end
+            end
+          end
+        end
+      end
+    end
+  end
   form do |f|
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Site Details' do
@@ -68,7 +91,7 @@ ActiveAdmin.register Site, namespace: :pm do
   end
   filter :location, as: :select,collection: proc{current_project_manager.locations.pluck(:name, :id)}
   filter :sub_categories, as: :select,collection: proc{current_project_manager.sub_categories.pluck(:name, :id)}
-  filter :users, as: :select, collection: proc{LandManager.joins(locations:[:project]).where("projects.id in (?)", current_project_manager.projects.pluck(:id)).pluck(:username, :id)}
+  # filter :users, as: :select, collection: proc{LandManager.joins(locations:[:project]).where("projects.id in (?)", current_project_manager.projects.pluck(:id)).pluck(:username, :id)}
   filter :title
   filter :summary
   filter :tags
