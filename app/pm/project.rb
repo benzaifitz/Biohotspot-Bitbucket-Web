@@ -100,6 +100,7 @@ ActiveAdmin.register Project, namespace: :pm do
   remove_filter :categories
   remove_filter :feedbacks
   remove_filter :updated_at
+  remove_filter :submissions
   # remove_filter :sub_categories
   show do
     attributes_table do
