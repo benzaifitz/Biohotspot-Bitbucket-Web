@@ -17,7 +17,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
         s.projects.each do |sc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(sc.title.titleize, admin_project_path(sc))
+              link_to(sc.title.titleize, pm_project_path(sc))
             end
           end
         end
@@ -30,7 +30,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
         s.sub_categories.each do |sc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(sc.name.titleize, admin_sample_path(sc))
+              link_to(sc.name.titleize, pm_sample_path(sc))
             end
           end
         end
@@ -137,7 +137,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
           s.projects.each do |sc|
             tr do
               td(:style =>'border: 0; padding: 2px;') do
-                link_to(sc.title.titleize, admin_project_path(sc))
+                link_to(sc.title.titleize, pm_project_path(sc))
               end
             end
           end

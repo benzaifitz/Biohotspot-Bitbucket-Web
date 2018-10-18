@@ -42,7 +42,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
     column 'Species' do |sc|
       categories = ''
       sc.categories.each do |s|
-        categories += "#{link_to(s.name, admin_species_path(s.id), target: '_blank')},"
+        categories += "#{link_to(s.name, pm_species_path(s.id), target: '_blank')},"
       end
       categories.html_safe
     end
@@ -60,7 +60,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
       row 'Species' do |sc|
         categories = ''
         sc.categories.each do |s|
-          categories += "#{link_to(s.name, admin_species_path(s.id), target: '_blank')}<br>"
+          categories += "#{link_to(s.name, pm_species_path(s.id), target: '_blank')}<br>"
         end
         categories.html_safe
       end
@@ -69,7 +69,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
   end
 
   action_item :only => :show do
-    link_to("New Sample", new_admin_sample_path)
+    link_to("New Sample", new_pm_sample_path)
   end
 
 

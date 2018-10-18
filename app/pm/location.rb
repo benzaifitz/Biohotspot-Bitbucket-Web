@@ -19,7 +19,7 @@ ActiveAdmin.register Location, namespace: :pm do
         p.sites.each do |ps|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(ps.title.titleize, admin_site_path(ps))
+              link_to(ps.title.titleize, pm_site_path(ps))
             end
           end
         end

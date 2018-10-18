@@ -30,7 +30,7 @@ ActiveAdmin.register Project, namespace: :pm do
         p.locations.each do |loc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(loc.name.titleize, admin_location_path(loc))
+              link_to(loc.name.titleize, pm_location_path(loc))
             end
           end
         end

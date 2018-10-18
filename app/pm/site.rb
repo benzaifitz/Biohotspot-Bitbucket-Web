@@ -38,7 +38,7 @@ ActiveAdmin.register Site, namespace: :pm do
         p.sub_categories.each do |sc|
           tr do
             td(:style =>'border: 0; padding: 2px;') do
-              link_to(sc.project_location_site_prefix_name, admin_sample_path(sc.id)) rescue nil
+              link_to(sc.project_location_site_prefix_name, pm_sample_path(sc.id)) rescue nil
             end
           end
         end
@@ -62,7 +62,7 @@ ActiveAdmin.register Site, namespace: :pm do
           s.sub_categories.each do |sc|
             tr do
               td(:style =>'border: 0; padding: 2px;') do
-                link_to(sc.project_location_site_prefix_name, admin_sample_path(sc.id)) rescue nil
+                link_to(sc.project_location_site_prefix_name, pm_sample_path(sc.id)) rescue nil
               end
             end
           end
