@@ -68,6 +68,11 @@ Rails.application.routes.draw do
     get '/land_manager_confirmed', to: 'users#land_manager_confirmed', as: :land_manager_confirmed
   end
 
+  scope :pm, :controller => 'invitations'  do
+    get 'accept_invitation', as: :pm_accept_invitation
+    get 'reject_invitation', as: :pm_reject_invitation
+  end
+
 
   root 'admin/dashboard#index'
   resources :users
