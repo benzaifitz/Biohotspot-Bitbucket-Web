@@ -114,10 +114,19 @@ ActiveAdmin.register Project, namespace: :pm do
   end
 
   member_action :remove_user, method: :post do
+    notice = 'User can\'t be removed'
     pmp_id = params[:id]
     pmp = ProjectManagerProject.find_by_id(pmp_id)
-    pmp.destroy if pmp
-    redirect_to pm_project_users_path, :notice => 'User has been invited' and return
+    if pmp
+      all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, project_manager_id: pmp.project_manager_id, is_admin: true, status: 'accepted').pluck(:id)
+      all_pmp.delete(pmp.id)
+      if all_pmp.length > 0
+        pmp.destroy
+        notice = 'User has been removed'
+      end
+    end
+
+    redirect_to pm_project_users_path, :notice => notice and return
   end
 
   member_action :invite, method: :get do

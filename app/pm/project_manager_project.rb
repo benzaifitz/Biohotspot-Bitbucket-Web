@@ -10,7 +10,8 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm 
     column :status
 
     actions do |pmp|
-      (item 'Invite', re_invite_user_pm_project_path(pmp), class: 'member_link', method: :post) if pmp.status == 'pending'
+      (item 'Remove', remove_user_pm_project_path(pmp), class: 'member_link', method: :post) if pmp.project_manager != current_project_manager
+      (item 'Re Invite', re_invite_user_pm_project_path(pmp), class: 'member_link', method: :post) if pmp.status == 'pending'
     end
   end
 
@@ -20,6 +21,4 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm 
   filter :project, as: :select, collection: -> {current_project_manager.projects}
   filter :is_admin
   filter :status, as: :select, collection: -> { ProjectManagerProject.statuses }
-  # remove_filter :token
-  # filter :status, as: :select
 end
