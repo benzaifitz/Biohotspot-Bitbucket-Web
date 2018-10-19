@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   scope :pm, :controller => 'invitations'  do
     get 'accept_invitation', as: :pm_accept_invitation
     get 'reject_invitation', as: :pm_reject_invitation
-    get 'accept', as: :pm_accept
+    post 'accept', as: :pm_accept
   end
 
 
