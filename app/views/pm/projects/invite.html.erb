@@ -1,0 +1,9 @@
+<div class="panel">
+  <h3><%= "Invite users to this project" %></h3>
+  <div class="panel-contents">
+    <%= form_for resource, url: { action: "invite_user" }, method: :post do |f| %>
+        <%= text_field_tag :emails, '', placeholder: 'Please enter comma separated email' %>
+        <%= f.submit 'Send Invitation' %>
+    <% end %>
+  </div>
+</div>

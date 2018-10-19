@@ -8,7 +8,7 @@ class Ability
     if user.administrator?
       can :manage, :all
     elsif user.project_manager?
-      can [:read, :update, :change_project_status], Project, id: user.projects.pluck(:id)
+      can [:read, :update, :change_project_status, :invite], Project, id: user.projects.pluck(:id)
       can :create, Project
       can [:read, :update], Location, id: user.locations.pluck(:id)
       can :create, Location

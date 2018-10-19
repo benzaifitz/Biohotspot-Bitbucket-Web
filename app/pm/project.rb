@@ -40,6 +40,7 @@ ActiveAdmin.register Project, namespace: :pm do
     actions do |p|
       (item 'Open', change_project_status_pm_project_path(p), class: 'member_link', method: :put) if p.closed?
       (item 'Close', change_project_status_pm_project_path(p), class: 'member_link', method: :put) if p.open?
+      (item 'Invite', invite_pm_project_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
     end
   end
 
@@ -82,6 +83,30 @@ ActiveAdmin.register Project, namespace: :pm do
       flash[:alert] = resource.errors.full_messages.to_sentence
     end
     redirect_to pm_projects_path
+  end
+
+  member_action :invite_user, method: :post do
+    entered_emails = params[:emails].to_s.html_safe
+    project_id = params[:id]
+    emails = entered_emails.split(',')
+
+    emails.each do |email|
+      user = User.find_by_email(email)
+      unless user
+        user = User.new(email: email, password: 12345678, password_confirmation: 12345678)
+        user.save
+      end
+      if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
+        project_invitation_token = SecureRandom.hex(10)
+        pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: true, token: project_invitation_token, status: 2)
+        NotificationMailer.invite_user(pmp).deliver
+      end
+    end
+    redirect_to pm_projects_path, :notice => params and return
+  end
+
+  member_action :invite, method: :get do
+    render template: 'pm/projects/invite', layout: false
   end
 
   # before_build do |record|

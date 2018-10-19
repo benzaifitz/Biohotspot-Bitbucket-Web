@@ -25,11 +25,11 @@ class NotificationMailer < ApplicationMailer
 
   def invite_user(object=nil)
     return if object.nil?
-    @project = object
+    @project_manager_project = object
     #logic to encrypt token is above
-    token = Base64.encode64([SecureRandom.hex(10), object.project_id, object.project_manager_id].join("_"))
+    token = Base64.urlsafe_encode64([object.token, object.project_id, object.project_manager_id].join("_"))
     @token = token
-    mail(to: object.user.email, subject: "You’ve Been Invited To Join Project as Project Manager!")
+    mail(to: object.project_manager.email, subject: "You’ve Been Invited To Join Project as Project Manager!")
   end
 
 end
