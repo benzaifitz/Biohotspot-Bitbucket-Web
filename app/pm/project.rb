@@ -93,7 +93,8 @@ ActiveAdmin.register Project, namespace: :pm do
     emails.each do |email|
       user = User.find_by_email(email)
       unless user
-        user = User.new(email: email, password: 12345678, password_confirmation: 12345678)
+        password = SecureRandom.hex(10)
+        user = User.new(email: email, password: password, password_confirmation: password, pm_invited: true)
         user.save
       end
       if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
@@ -102,7 +103,21 @@ ActiveAdmin.register Project, namespace: :pm do
         NotificationMailer.invite_user(pmp).deliver
       end
     end
-    redirect_to pm_projects_path, :notice => params and return
+    redirect_to pm_projects_path, :notice => 'Users have been invited' and return
+  end
+
+  member_action :re_invite_user, method: :post do
+    pmp_id = params[:id]
+    pmp = ProjectManagerProject.find_by_id(pmp_id)
+    NotificationMailer.invite_user(pmp).deliver if pmp
+    redirect_to pm_project_users_path, :notice => 'User has been invited' and return
+  end
+
+  member_action :remove_user, method: :post do
+    pmp_id = params[:id]
+    pmp = ProjectManagerProject.find_by_id(pmp_id)
+    pmp.destroy if pmp
+    redirect_to pm_project_users_path, :notice => 'User has been invited' and return
   end
 
   member_action :invite, method: :get do
