@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181019090815) do
+ActiveRecord::Schema.define(version: 20181019115532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -452,6 +452,7 @@ ActiveRecord::Schema.define(version: 20181019090815) do
     t.integer  "managed_project_id"
     t.integer  "site_id"
     t.integer  "location_id"
+    t.boolean  "pm_invited",             default: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["managed_project_id"], name: "index_users_on_managed_project_id", using: :btree
     t.index ["project_id"], name: "index_users_on_project_id", using: :btree
