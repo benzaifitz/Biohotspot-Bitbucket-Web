@@ -63,6 +63,7 @@ ActiveAdmin.register Project do
     actions do |p|
       (item 'Open', change_project_status_admin_project_path(p), class: 'member_link', method: :put) if p.closed?
       (item 'Close', change_project_status_admin_project_path(p), class: 'member_link', method: :put) if p.open?
+      (item 'Invite', invite_admin_project_path(p), class: 'fancybox member_link', style: 'padding-left: 5px', data: { 'fancybox-type' => 'ajax' })
     end
   end
 
@@ -103,6 +104,54 @@ ActiveAdmin.register Project do
       flash[:alert] = resource.errors.full_messages.to_sentence
     end
     redirect_to admin_projects_path
+  end
+
+  member_action :invite_user, method: :post do
+    entered_emails = params[:emails].to_s.html_safe
+    project_id = params[:id]
+    emails = entered_emails.split(',')
+
+    emails.each do |email|
+      user = User.find_by_email(email)
+      unless user
+        password = SecureRandom.hex(10)
+        user = User.new(email: email, password: password, password_confirmation: password, pm_invited: true)
+        user.save
+      end
+      if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
+        project_invitation_token = SecureRandom.hex(10)
+        pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: params[:is_admin] == '1' ? true : false, token: project_invitation_token, status: 2)
+        NotificationMailer.invite_user(pmp).deliver
+      end
+    end
+    redirect_to admin_projects_path, :notice => 'Users have been invited' and return
+  end
+
+  member_action :re_invite_user, method: :post do
+    pmp_id = params[:id]
+    pmp = ProjectManagerProject.find_by_id(pmp_id)
+    NotificationMailer.invite_user(pmp).deliver if pmp
+    redirect_to admin_project_users_path, :notice => 'User has been invited' and return
+  end
+
+  member_action :remove_user, method: :post do
+    notice = 'User can\'t be removed'
+    pmp_id = params[:id]
+    pmp = ProjectManagerProject.find_by_id(pmp_id)
+    if pmp
+      all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, is_admin: true, status: 'accepted').pluck(:id)
+      all_pmp.delete(pmp.id)
+      if all_pmp.length > 0
+        pmp.destroy
+        notice = 'User has been removed'
+      end
+    end
+
+    redirect_to admin_project_users_path, :notice => notice and return
+  end
+
+  member_action :invite, method: :get do
+    render template: 'admin/projects/invite', layout: false
   end
 
   preserve_default_filters!

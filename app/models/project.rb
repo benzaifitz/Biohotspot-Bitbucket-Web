@@ -23,7 +23,8 @@ class Project < ApplicationRecord
 
   def has_project_managers
     errors.add(:base, 'There should be atleast one project admin') if self.project_manager_projects.where(is_admin: true).empty?
-    errors.add(:base, 'There could be maximum three project managers') if self.project_manager_projects.length > 3
+    # uncomment below line if max 3 project managers are required.
+    # errors.add(:base, 'There could be maximum three project managers') if self.project_manager_projects.length > 3
     if errors.count > 0
       raise ActiveRecord::RecordInvalid.new(self)
     end

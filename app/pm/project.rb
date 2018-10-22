@@ -99,7 +99,7 @@ ActiveAdmin.register Project, namespace: :pm do
       end
       if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
         project_invitation_token = SecureRandom.hex(10)
-        pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: true, token: project_invitation_token, status: 2)
+        pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: params[:is_admin] == '1' ? true : false, token: project_invitation_token, status: 2)
         NotificationMailer.invite_user(pmp).deliver
       end
     end
@@ -118,7 +118,7 @@ ActiveAdmin.register Project, namespace: :pm do
     pmp_id = params[:id]
     pmp = ProjectManagerProject.find_by_id(pmp_id)
     if pmp
-      all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, project_manager_id: pmp.project_manager_id, is_admin: true, status: 'accepted').pluck(:id)
+      all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, is_admin: true, status: 'accepted').pluck(:id)
       all_pmp.delete(pmp.id)
       if all_pmp.length > 0
         pmp.destroy
