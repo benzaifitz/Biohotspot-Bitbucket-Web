@@ -4,16 +4,19 @@ class InvitationsController < ApplicationController
   def accept_invitation
     if params[:token]
       token, project, user = Base64.urlsafe_decode64(params[:token]).split('_')
-      @user = ProjectManager.find(user)
+      @user = User.find(user)
+      pmp = ProjectManagerProject.where(project_id: project, project_manager_id: user, token: token).first
+      if pmp.present?
+        pmp.update_attributes!(status: 'accepted')
+        @project = Project.find(project)
+      end
       if @user.pm_invited? && !@user.confirmed?
-        pmp = ProjectManagerProject.where(project_id: project, project_manager_id: user, token: token).first
-        if pmp.present?
-          pmp.update_attributes!(status: 'accepted')
-          @project = Project.find(project)
-          if @user.save
-            render 'invitations/accept_invitation', :user => @user
-          end
+        if @user.save
+          render 'invitations/accept_invitation', :user => @user
         end
+      elsif @user.land_manager?
+        @user.update_attributes!(user_type: 'project_manager')
+        redirect_to pm_root_path
       else
         flash[:error] = 'Please login, you are already part of the system'
         redirect_to pm_root_path

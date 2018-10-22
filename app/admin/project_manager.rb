@@ -23,7 +23,7 @@ ActiveAdmin.register ProjectManager, as: 'Project Manager' do
 
       #TODO use managed_project association
       # f.input :project
-      f.input :projects, multiple: true
+      # f.input :projects, multiple: true
       # f.inputs :managed_project do |proj|
       #   unless proj.blank?
       #     link_to proj.managed_project.name, admin_project_path(proj.managed_project)

@@ -29,7 +29,7 @@ class NotificationMailer < ApplicationMailer
     #logic to encrypt token is above
     token = Base64.urlsafe_encode64([object.token, object.project_id, object.project_manager_id].join("_"))
     @token = token
-    mail(to: object.project_manager.email, subject: "You’ve Been Invited To Join Project as Project Manager!")
+    mail(to: User.find_by_id(object.project_manager_id).email, subject: "You’ve Been Invited To Join Project as Project Manager!")
   end
 
 end

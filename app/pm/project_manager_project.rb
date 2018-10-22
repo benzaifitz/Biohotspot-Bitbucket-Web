@@ -4,7 +4,9 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm 
 
   index do
     selectable_column
-    column 'User', :project_manager_id
+    column 'User' do |pmp|
+      User.find_by_id(pmp.project_manager_id).full_name
+    end
     column :project_id
     column :is_admin
     column :status
