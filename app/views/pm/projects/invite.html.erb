@@ -4,7 +4,7 @@
     <%= form_for resource, url: { action: "invite_user" }, method: :post do |f| %>
         <label>Please enter comma separated email</label><br>
         <%= text_field_tag :emails, '', style: 'width: 300px'%><br><br>
-        <label><%= check_box_tag :is_admin %>Is admin?</label><br><br>
+        <label><%= check_box_tag :is_admin %> Is admin?</label><br><br>
         <%= f.submit 'Send Invitation' %>
     <% end %>
   </div>
