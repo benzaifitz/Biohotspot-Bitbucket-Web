@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   }
   namespace :api, defaults: {format: 'json'} do
      namespace :v1 do
-       mount_devise_token_auth_for 'LandManager', at: 'auth', :controllers => { registrations: "api/v1/users/registrations",
+       mount_devise_token_auth_for 'User', at: 'auth', :controllers => { registrations: "api/v1/users/registrations",
                                                                          sessions: "api/v1/users/sessions"}
        resources :conversations, only: [:index, :create, :destroy] do
          resources :messages, only: [:index, :create, :update, :destroy]
@@ -60,6 +60,9 @@ Rails.application.routes.draw do
        resources :categories
        resources :sub_categories, only: [:index]
        resources :submissions, only: [:create, :show]
+       resources :projects, only: [:index, :species] do
+         get :species
+       end
      end
    end
   ActiveAdmin.routes(self)
