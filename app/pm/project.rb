@@ -164,7 +164,7 @@ ActiveAdmin.register Project, namespace: :pm do
           p.project_managers.each do |pm|
             tr do
               td(:style =>'border: 0; padding: 2px;') do
-                link_to(pm.email, pm_user_path(pm))
+                pm.email
               end
             end
           end
@@ -176,7 +176,7 @@ ActiveAdmin.register Project, namespace: :pm do
           ProjectManager.where(id: admins).each do |pa|
             tr do
               td(:style =>'border: 0; padding: 2px;') do
-                link_to(pa.email, pm_user_path(pa))
+                pa.email
               end
             end
           end
