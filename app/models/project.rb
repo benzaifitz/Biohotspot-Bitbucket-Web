@@ -1,4 +1,5 @@
 class Project < ApplicationRecord
+  attr_accessor :access_status
   has_many :users
   has_many :locations
   has_many :document_projects
