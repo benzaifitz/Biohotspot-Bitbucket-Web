@@ -5,7 +5,7 @@ module Api
       #GET /api/v1/project.json
       api :GET, '/projects.json', 'Return a list of associated and open projects'
       def index
-        if params[:assignedProjects] && params[:assignedProjects] == true
+        if params[:assignedProjects] && params[:assignedProjects] == true.to_s
           pm = ProjectManager.find_by_id(current_user.id)
           @projects = pm ? pm.projects.where(status: 'open') : []
           @projects.each do |project|
