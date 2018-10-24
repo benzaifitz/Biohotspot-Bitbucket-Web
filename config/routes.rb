@@ -60,8 +60,11 @@ Rails.application.routes.draw do
        resources :categories
        resources :sub_categories, only: [:index]
        resources :submissions, only: [:create, :show]
-       resources :projects, only: [:index, :species] do
+       resources :projects, only: [:index, :species, :leave] do
          get :species
+         collection do
+           post :leave
+         end
        end
      end
    end

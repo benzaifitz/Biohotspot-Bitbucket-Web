@@ -27,6 +27,29 @@ module Api
         project = Project.find_by_id(params[:project_id])
         @species = project ? project.categories : []
       end
+
+      api :POST, '/projects/leave', 'Leave project'
+      # param :project_id, Integer, desc: 'Id will be of that project which user want to leave'
+      def leave
+        project = Project.find_by_id(params[:project_id])
+        if project
+          @msg = 'No other project manager is for this project, so you can\'t leave.'
+          pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id, is_admin: true, status: 'accepted').first
+          if pmp
+            all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, is_admin: true, status: 'accepted').pluck(:id)
+            all_pmp.delete(pmp.id)
+            if all_pmp.length > 0
+              pmp.destroy
+              @msg = 'You have left this project successfuly.'
+            end
+          else
+            @msg = 'You are not project admin of this project.'
+          end
+        else
+          @msg = 'Project doesn\'t exist.'
+        end
+
+      end
     end
   end
 end
