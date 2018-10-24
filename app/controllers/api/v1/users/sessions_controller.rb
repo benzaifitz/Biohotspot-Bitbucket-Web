@@ -7,11 +7,13 @@ module Api
           # @resource will have been set by set_user_by_token concern
           user = User.find_by(email: params[:email])
           user_by_mobile = User.find_by(mobile_number: params[:email]) if params[:email].length > 0
-          if user && user.active_for_authentication?
+          if user && user.administrator?
+            render_error_banned_user(user)
+          elsif user && user.active_for_authentication?
             user.device_token = params[:device_token]
             user.device_type = params[:device_type]
             super
-          elsif user_by_mobile && user_by_mobile.active? && user_by_mobile.land_manager?
+          elsif user_by_mobile && user_by_mobile.active?
             params[:email] = user_by_mobile.email
             super
           else
@@ -28,6 +30,8 @@ module Api
                       [I18n.t("devise.failure.unconfirmed")]
                     elsif user && !user.approved?
                       [I18n.t("devise_token_auth.sessions.unapproved_account")]
+                    elsif user.administrator?
+                      [I18n.t("devise_token_auth.sessions.disable_admin_on_app")]
                     elsif user
                       [I18n.t("devise_token_auth.sessions.bad_credentials")]
                     else

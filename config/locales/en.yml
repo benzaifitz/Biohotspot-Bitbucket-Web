@@ -24,6 +24,7 @@ en:
       sessions:
         unapproved_account: "Your account has not been approved. Please contact your Administrator."
         disabled_account: "Your account requires activation by the software administrator"
+        disable_admin_on_app: "Admin can't login on app"
         bad_credentials: "The current password you have entered is incorrect"
         user_not_found: "User with provided credentials not found."
   errors:

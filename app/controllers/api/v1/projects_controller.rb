@@ -6,8 +6,8 @@ module Api
       api :GET, '/projects.json', 'Return a list of associated and open projects'
       def index
         if params[:assignedProjects]
-          pm = ProjectManager&.find(current_user.id)
-          @projects = pm.projects.where(status: 'open')
+          pm = ProjectManager.find_by_id(current_user.id)
+          @projects = pm ? pm.projects.where(status: 'open') : []
           @projects.each do |project|
             project.access_status = 'accepted'
           end
@@ -22,10 +22,10 @@ module Api
         end
       end
 
-      api :GET, '/projects/1.json', 'Returns species data'
+      api :GET, '/projects/1/species.json', 'Returns species data'
       def species
-        project = Project&.find(params[:project_id])
-        @species = project.categories
+        project = Project.find_by_id(params[:project_id])
+        @species = project ? project.categories : []
       end
     end
   end
