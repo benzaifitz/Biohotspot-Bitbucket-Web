@@ -8,6 +8,7 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
       pr.user.email
     end
     column :project_id
+    column :reason
     column :status
 
     actions do |pr|
@@ -15,7 +16,7 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
       # (item 'Re Invite', re_invite_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.status == 'pending'
     end
   end
-
+  remove_filter :reason
   filter :user, as: :select, collection: -> {User.where(id: ProjectRequest.where(project_id: current_project_manager.projects.pluck(:id)).pluck(:user_id)).collect{|user| [user.email, user.id]}}
   filter :project, as: :select, collection: -> {current_project_manager.projects}
   filter :status, as: :select, collection: -> { ProjectRequest.statuses }

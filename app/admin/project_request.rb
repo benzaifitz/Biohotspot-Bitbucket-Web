@@ -8,6 +8,7 @@ ActiveAdmin.register ProjectRequest do
       pr.user.email
     end
     column :project_id
+    column :reason
     column :status
 
     actions do |pr|
@@ -17,7 +18,7 @@ ActiveAdmin.register ProjectRequest do
   end
 
 
-
+  remove_filter :reason
   filter :user, as: :select, collection: -> {User.all.collect{|user| [user.email, user.id]}}
   filter :project
   filter :status, as: :select, collection: -> { ProjectRequest.statuses }

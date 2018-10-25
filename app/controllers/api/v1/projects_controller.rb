@@ -59,12 +59,12 @@ module Api
           pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id).first
           if (pmp && pmp.status == 'rejected')
             pmp.update_attributes(status: 'pending')
-            pr = project.project_requests.create!(user_id: current_user.id)
+            pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
             @msg = 'You have applied for this project'
           end
           unless pmp
             project.project_manager_projects.create!(project_manager_id: current_user.id, is_admin: true, status: 'pending')
-            pr = project.project_requests.create!(user_id: current_user.id)
+            pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
             @msg = 'You have applied for this project'
           end
         else
