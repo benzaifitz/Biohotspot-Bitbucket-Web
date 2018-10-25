@@ -64,6 +64,7 @@ Rails.application.routes.draw do
          get :species
          collection do
            post :leave
+           post :join
          end
        end
      end

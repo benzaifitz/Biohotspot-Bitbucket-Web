@@ -76,6 +76,7 @@ class User < ApplicationRecord
   has_many :community_conversations, through: :conversation_participants, foreign_key: 'user_id'
   has_many :rpush_notifications#, dependent: :destroy
   has_many :sub_categories#, dependent: :destroy
+  has_many :project_requests
 
   validates_presence_of :email
   # validates_presence_of :company, if: Proc.new { |user| user.project_manager? }

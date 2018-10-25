@@ -14,6 +14,7 @@ class Project < ApplicationRecord
   has_many :categories, :through => :project_categories
   accepts_nested_attributes_for :project_categories , :allow_destroy => true
   has_many :submissions
+  has_many :project_requests
   validates :title, presence: true
 
   enum status: [:closed, :open]
