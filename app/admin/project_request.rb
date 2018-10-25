@@ -1,6 +1,6 @@
 ActiveAdmin.register ProjectRequest do
   menu label: 'Project Requests', priority: 10
-  actions :index, :destroy
+  actions :index
 
   index do
     selectable_column
@@ -12,9 +12,33 @@ ActiveAdmin.register ProjectRequest do
     column :status
 
     actions do |pr|
-      # (item 'Remove', remove_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.project_manager.id != current_user.id
-      # (item 'Re Invite', re_invite_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.status == 'pending'
+      (item 'Accept', accept_join_request_admin_project_request_path(pr), class: 'member_link', method: :post) if pr.status == 'pending'
+      (item 'Reject', reject_join_request_admin_project_request_path(pr), class: 'member_link', method: :post) if pr.status == 'pending'
     end
+  end
+
+  member_action :accept_join_request, method: :post do
+    pr = ProjectRequest.find_by_id(params[:id])
+    if pr && pr.status == 'pending'
+      pmp = ProjectManagerProject.where(project_id: pr.project_id, project_manager_id: pr.user_id, status: 'pending').last
+      if pmp
+        pr.update_attributes({status: 'accepted'})
+        pmp.update_attributes({status: 'accepted'})
+      end
+    end
+    redirect_to admin_project_requests_path, :notice => 'Project joining request accepted' and return
+  end
+
+  member_action :reject_join_request, method: :post do
+    pr = ProjectRequest.find_by_id(params[:id])
+    if pr && pr.status == 'pending'
+      pmp = ProjectManagerProject.where(project_id: pr.project_id, project_manager_id: pr.user_id, status: 'pending').last
+      if pmp
+        pr.update_attributes({status: 'rejected'})
+        pmp.update_attributes({status: 'rejected'})
+      end
+    end
+    redirect_to admin_project_requests_path, :notice => 'Project joining request rejected' and return
   end
 
 

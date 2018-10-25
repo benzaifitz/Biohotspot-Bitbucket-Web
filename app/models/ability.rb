@@ -22,7 +22,7 @@ class Ability
       can :create, Submission
       # can :read, Photo
       can :read, ProjectManagerProject, id: ProjectManagerProject.where(project_id: user.projects.pluck(:id))
-      can :read, ProjectRequest, id: ProjectRequest.where(project_id: user.projects.pluck(:id))
+      can [:read, :accept, :reject], ProjectRequest, id: ProjectRequest.where(project_id: user.projects.pluck(:id))
       can :manage, ActiveAdmin::Page, name: 'Maps'
       can :read, User, id: user.land_managers.pluck(:id)
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
