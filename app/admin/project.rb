@@ -160,6 +160,10 @@ ActiveAdmin.register Project do
   remove_filter :project_categories
   remove_filter :feedbacks
   remove_filter :updated_at
+  remove_filter :submissions
+  remove_filter :project_requests
+
+  filter :status, as: :select, collection: -> {Project.statuses}
   # remove_filter :sub_categories
   show do
     attributes_table do

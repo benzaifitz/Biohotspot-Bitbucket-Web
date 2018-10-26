@@ -65,6 +65,7 @@ module Api
           unless pmp
             project.project_manager_projects.create!(project_manager_id: current_user.id, is_admin: true, status: 'pending')
             pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
+            current_user.update_attributes({user_type: 'project_manager'}) if current_user.land_manager?
             @msg = 'You have applied for this project'
           end
         else
