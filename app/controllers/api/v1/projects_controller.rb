@@ -25,7 +25,25 @@ module Api
       api :GET, '/projects/1/species.json', 'Returns species data'
       def species
         project = Project.find_by_id(params[:project_id])
-        @species = project ? project.categories : []
+        @specie_types = get_grouped_categories(project)
+      end
+
+      def get_grouped_categories(project)
+        category_types = []
+        SpecieType.joins(:categories).where("categories.id IN (?)",project.categories.ids).order("name asc").uniq.each do |st|
+          categories = st.categories.order("name asc").group_by { |d| d[:family_common] }
+          categories.each do |family, categories_group|
+            type_hash = {
+                type: [st.name, family].join(", "),
+                categories: []
+            }
+            categories_group.each do |category|
+              type_hash[:categories] << category
+            end
+            category_types << type_hash
+          end
+        end
+        category_types
       end
 
       api :POST, '/projects/leave', 'Leave project'
