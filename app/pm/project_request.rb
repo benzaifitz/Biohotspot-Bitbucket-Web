@@ -9,7 +9,15 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
     end
     column :project_id
     column :reason
-    column :status
+    column :status do |pmp|
+      if pmp.status == 'accepted'
+        status_tag('active', :ok, class: 'green', label: 'Accepted')
+      elsif pmp.status == 'rejected'
+        status_tag('active', :ok, class: 'red', label: 'Rejected')
+      elsif pmp.status == 'pending'
+        status_tag('active', :ok, class: 'orange', label: 'Pending')
+      end
+    end
 
     actions do |pr|
       (item 'Accept', accept_join_request_pm_project_request_path(pr), class: 'member_link', method: :post) if pr.status == 'pending'

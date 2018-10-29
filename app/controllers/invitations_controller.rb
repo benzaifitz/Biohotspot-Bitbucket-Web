@@ -42,8 +42,18 @@ class InvitationsController < ApplicationController
   end
 
   def reject_invitation
-    flash[:notice] = 'You have been invited to project'
-    redirect_to pm_root_path
+    if params[:token]
+      token, project, user = Base64.urlsafe_decode64(params[:token]).split('_')
+      @user = User.find(user)
+      @user = ProjectManager.find(user) if @user.project_manager?
+      pmp = ProjectManagerProject.where(project_id: project, project_manager_id: user, token: token).first
+      if pmp.present?
+        pmp.update_attributes!(status: 'rejected')
+        @project = Project.find(project)
+      end
+    else
+      render file: Rails.public_path.join('404.html'), status: :not_found, layout: false
+    end
   end
 
 

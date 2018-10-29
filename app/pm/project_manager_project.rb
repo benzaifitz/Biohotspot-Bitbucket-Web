@@ -9,7 +9,15 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm 
     end
     column :project_id
     column :is_admin
-    column :status
+    column :status do |pmp|
+      if pmp.status == 'accepted'
+        status_tag('active', :ok, class: 'green', label: 'Accepted')
+      elsif pmp.status == 'rejected'
+        status_tag('active', :ok, class: 'red', label: 'Rejected')
+      elsif pmp.status == 'pending'
+        status_tag('active', :ok, class: 'orange', label: 'Pending')
+      end
+    end
 
     actions do |pmp|
       (item 'Remove', remove_user_pm_project_path(pmp), class: 'member_link', method: :post) if pmp.project_manager != current_project_manager
