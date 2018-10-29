@@ -1,4 +1,7 @@
-json.categories @species do |category|
-  json.partial! "api/v1/categories/category", category: category
+json.deprecated_eula Eula.find_by_is_latest(true).id != current_user.eula_id
+json.category_types @specie_types do |st|
+  json.type st[:type]
+  json.categories st[:categories] do |category|
+    json.partial! "api/v1/categories/category", category: category
+  end
 end
-json.eula_id  current_user.eula_id
