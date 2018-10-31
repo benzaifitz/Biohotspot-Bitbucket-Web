@@ -45,7 +45,6 @@ class InvitationsController < ApplicationController
     if params[:token]
       token, project, user = Base64.urlsafe_decode64(params[:token]).split('_')
       @user = User.find(user)
-      @user = ProjectManager.find(user) if @user.project_manager?
       pmp = ProjectManagerProject.where(project_id: project, project_manager_id: user, token: token).first
       if pmp.present?
         pmp.update_attributes!(status: 'rejected')

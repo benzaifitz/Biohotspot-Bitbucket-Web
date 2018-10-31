@@ -1,0 +1,4 @@
+<p>Hey <%= @project_request&.user&.full_name %>,</p>
+<p> <%= "Your request to join project #{@project_request.project.try(:title)} has been rejected." %> </p>
+<p>Regards,</p>
+<p>BioHotSpot Team.</p>

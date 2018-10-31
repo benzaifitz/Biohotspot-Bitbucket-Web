@@ -6,8 +6,8 @@ module Api
       api :GET, '/projects.json', 'Return a list of associated and open projects'
       def index
         if params[:assignedProjects] && params[:assignedProjects] == true.to_s
-          pm = ProjectManager.find_by_id(current_user.id)
-          @projects = pm ? pm.projects.where(status: 'open') : []
+          pmp_projects = ProjectManagerProject.where(project_manager_id: current_user.id, status: 'accepted').pluck(:project_id)
+          @projects = Project.where(id: pmp_projects, status: 'open')
           @projects.each do |project|
             project.access_status = 'accepted'
           end
@@ -81,9 +81,8 @@ module Api
             @msg = 'You have applied for this project'
           end
           unless pmp
-            project.project_manager_projects.create!(project_manager_id: current_user.id, is_admin: true, status: 'pending')
+            project.project_manager_projects.create!(project_manager_id: current_user.id, status: 'pending')
             pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
-            current_user.update_attributes({user_type: 'project_manager'}) if current_user.land_manager?
             @msg = 'You have applied for this project'
           end
         else

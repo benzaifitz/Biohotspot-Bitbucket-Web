@@ -5,10 +5,9 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
   index do
     selectable_column
     column 'User' do |pr|
-      pr.user.email
+      pr.user.full_name
     end
     column :project_id
-    column :reason
     column :status do |pmp|
       if pmp.status == 'accepted'
         status_tag('active', :ok, class: 'green', label: 'Accepted')
@@ -32,6 +31,7 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
       if pmp
         pr.update_attributes({status: 'accepted'})
         pmp.update_attributes({status: 'accepted'})
+        NotificationMailer.accept_project_joining_request(pr).deliver
       end
     end
     redirect_to pm_project_requests_path, :notice => 'Project joining request accepted' and return
@@ -44,6 +44,7 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
       if pmp
         pr.update_attributes({status: 'rejected'})
         pmp.update_attributes({status: 'rejected'})
+        NotificationMailer.reject_project_joining_request(pr).deliver
       end
     end
     redirect_to pm_project_requests_path, :notice => 'Project joining request rejected' and return

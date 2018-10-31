@@ -20,7 +20,7 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users' do
     end
 
     actions do |pmp|
-      (item 'Remove', remove_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.project_manager.id != current_user.id
+      (item 'Remove', remove_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.project_manager_id != current_user.id
       (item 'Re Invite', re_invite_user_admin_project_path(pmp), class: 'member_link', method: :post) if pmp.status == 'pending'
     end
   end
