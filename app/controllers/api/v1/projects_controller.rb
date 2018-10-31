@@ -51,17 +51,27 @@ module Api
       def leave
         project = Project.find_by_id(params[:project_id])
         if project
-          @msg = 'No other project manager is for this project, so you can\'t leave.'
-          pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id, is_admin: true, status: 'accepted').first
-          if pmp
-            all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, is_admin: true, status: 'accepted').pluck(:id)
-            all_pmp.delete(pmp.id)
-            if all_pmp.length > 0
+          if current_user.user_type == 'land_manager'
+            pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id).first
+            if pmp
               pmp.destroy
               @msg = 'You have left this project successfuly.'
+            else
+              @msg = 'You have not subscribed for this project.'
             end
           else
-            @msg = 'You are not project admin of this project.'
+            @msg = 'No other project manager is for this project, so you can\'t leave.'
+            pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id, status: 'accepted').first
+            if pmp
+              all_pmp = ProjectManagerProject.where(project_id: pmp.project_id, is_admin: true, status: 'accepted').pluck(:id)
+              all_pmp.delete(pmp.id)
+              if all_pmp.length > 0 || pmp.is_admin == false
+                pmp.destroy
+                @msg = 'You have left this project successfuly.'
+              end
+            else
+              @msg = 'You have not subscribed for this project.'
+            end
           end
         else
           @msg = 'Project doesn\'t exist.'

@@ -16,8 +16,12 @@ class InvitationsController < ApplicationController
           render 'invitations/accept_invitation', :user => @user
         end
       elsif @user.land_manager?
-        @user.update_attributes!(user_type: 'project_manager')
-        redirect_to pm_root_path
+        if pmp.is_admin
+          @user.update_attributes!(user_type: 'project_manager')
+          redirect_to pm_root_path
+        else
+          render 'invitations/lm_no_admin_accept_invitation', @project => @project
+        end
       else
         flash[:error] = 'Please login, you are already part of the system'
         redirect_to pm_root_path
