@@ -36,29 +36,29 @@ ActiveAdmin.register Project do
         end
       end
     end
-    column :project_managers do |p|
-      table(:style => 'margin-bottom: 0') do
-        p.project_managers.each do |pm|
-          tr do
-            td(:style =>'border: 0; padding: 2px;') do
-              link_to(pm.email, admin_user_path(pm))
-            end
-          end
-        end
-      end
-    end
-    column :admins do |p|
-      admins = p.project_manager_projects.where(is_admin: true).map(&:project_manager_id)
-      table(:style => 'margin-bottom: 0') do
-        ProjectManager.where(id: admins).each do |pa|
-          tr do
-            td(:style =>'border: 0; padding: 2px;') do
-              link_to(pa.email, admin_user_path(pa))
-            end
-          end
-        end
-      end
-    end
+    # column :project_managers do |p|
+    #   table(:style => 'margin-bottom: 0') do
+    #     p.project_managers.each do |pm|
+    #       tr do
+    #         td(:style =>'border: 0; padding: 2px;') do
+    #           link_to(pm.email, admin_user_path(pm))
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
+    # column :admins do |p|
+    #   admins = p.project_manager_projects.where(is_admin: true).map(&:project_manager_id)
+    #   table(:style => 'margin-bottom: 0') do
+    #     ProjectManager.where(id: admins).each do |pa|
+    #       tr do
+    #         td(:style =>'border: 0; padding: 2px;') do
+    #           link_to(pa.email, admin_user_path(pa))
+    #         end
+    #       end
+    #     end
+    #   end
+    # end
     column :created_at
     actions do |p|
       (item 'Open', change_project_status_admin_project_path(p), class: 'member_link', method: :put) if p.closed?
