@@ -32,6 +32,13 @@ class NotificationMailer < ApplicationMailer
     mail(to: User.find_by_id(object.project_manager_id).email, subject: "You’ve Been Invited To Join Project as Project Manager!")
   end
 
+  def notify_project_managers(pr=nil)
+    return if pr.nil?
+    @project_request = pr
+    pm_emails = pr.project.project_managers.map(&:email)
+    mail(to: pm_emails.join(','), subject: 'Biohotspot: Project Joining Request')
+  end
+
 
   def accept_project_joining_request(object=nil)
     return if object.nil?

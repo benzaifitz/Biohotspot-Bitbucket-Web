@@ -1,0 +1,5 @@
+<p>Hey,</p>
+<p><%= @project_request&.user&.full_name %> has requested to join project <b><%= @project_request&.project.try(:title) %></b></p>
+<p>Reason: <%= @project_request.reason %></p>
+<p>Regards,</p>
+<p>BioHotSpot Team.</p>
