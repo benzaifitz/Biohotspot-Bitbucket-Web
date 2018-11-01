@@ -27,7 +27,7 @@ ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm 
 
 
 
-  filter :project_manager
+  filter :project_manager, label: 'User', as: :select, collection: -> {User.all.collect{|u| [u.email, u.id]}}
   filter :project, as: :select, collection: -> {current_project_manager.projects}
   filter :is_admin
   filter :status, as: :select, collection: -> { ProjectManagerProject.statuses }
