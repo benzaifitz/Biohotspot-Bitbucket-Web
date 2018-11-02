@@ -100,7 +100,7 @@ ActiveAdmin.register Project, namespace: :pm do
       if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
         project_invitation_token = SecureRandom.hex(10)
         pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: params[:is_admin] == '1' ? true : false, token: project_invitation_token, status: 2)
-        NotificationMailer.invite_user(pmp).deliver
+        NotificationMailer.invite_user(pmp, current_project_manager.username).deliver
       end
     end
     redirect_to pm_projects_path, :notice => 'Users have been invited' and return
@@ -109,7 +109,7 @@ ActiveAdmin.register Project, namespace: :pm do
   member_action :re_invite_user, method: :post do
     pmp_id = params[:id]
     pmp = ProjectManagerProject.find_by_id(pmp_id)
-    NotificationMailer.invite_user(pmp).deliver if pmp
+    NotificationMailer.invite_user(pmp, current_project_manager.username).deliver if pmp
     redirect_to pm_project_users_path, :notice => 'User has been invited' and return
   end
 

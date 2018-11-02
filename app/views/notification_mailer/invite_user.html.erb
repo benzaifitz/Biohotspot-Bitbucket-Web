@@ -1,5 +1,5 @@
 <p>Hey <%= @project_manager_project&.project_manager&.email %>,</p>
-<p> <%= "You have been invited to join project of #{@project_manager_project.project.try(:title)}" %> </p>
+<p> <%= "#{@inviting_user} has invited you to join project #{@project_manager_project.project.try(:title)}" %> </p>
 <p>Click here to <%= link_to 'Accept Invitation', pm_accept_invitation_url(token: @token) %> </p>
 <p>Click here to <%= link_to 'Reject Invitation', pm_reject_invitation_url(token: @token) %> </p>
 <p>Regards,</p>

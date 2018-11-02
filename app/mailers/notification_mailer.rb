@@ -23,8 +23,9 @@ class NotificationMailer < ApplicationMailer
     mail(options)
   end
 
-  def invite_user(object=nil)
+  def invite_user(object=nil, inviting_user='Adminn')
     return if object.nil?
+    @inviting_user = inviting_user
     @project_manager_project = object
     #logic to encrypt token is above
     token = Base64.urlsafe_encode64([object.token, object.project_id, object.project_manager_id].join("_"))
