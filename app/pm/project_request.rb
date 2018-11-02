@@ -52,7 +52,7 @@ ActiveAdmin.register ProjectRequest, namespace: :pm do
 
 
   remove_filter :reason
-  filter :user, as: :select, collection: -> {User.where(id: ProjectRequest.where(project_id: current_project_manager.projects.pluck(:id)).pluck(:user_id)).collect{|user| [user.email, user.id]}}
+  filter :user, as: :select, collection: -> {User.where(id: ProjectRequest.where(project_id: current_project_manager.projects.pluck(:id)).pluck(:user_id)).collect{|user| [user.full_name, user.id]}}
   filter :project, as: :select, collection: -> {current_project_manager.projects}
   filter :status, as: :select, collection: -> { ProjectRequest.statuses }
 end
