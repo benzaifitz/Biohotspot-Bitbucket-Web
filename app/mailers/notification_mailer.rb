@@ -35,7 +35,7 @@ class NotificationMailer < ApplicationMailer
   def notify_project_managers(pr=nil)
     return if pr.nil?
     @project_request = pr
-    pm_emails = pr.project.project_managers.map(&:email)
+    pm_emails = pr.project.project_managers.where(id: ProjectManagerProject.where(project_id: pr.project_id, status: 'accepted', is_admin: true).pluck(:project_manager_id)).map(&:email)
     mail(to: pm_emails.join(','), subject: 'Biohotspot: Project Joining Request')
   end
 
