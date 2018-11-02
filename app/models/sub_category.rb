@@ -1,6 +1,6 @@
 class SubCategory < ApplicationRecord
   # belongs_to :category
-  has_many :category_sub_categories, dependent: :destroy
+  has_many :category_sub_categories
   has_many :categories, :through => :category_sub_categories
   belongs_to :site
   accepts_nested_attributes_for :category_sub_categories#, :allow_destroy => true
