@@ -63,7 +63,7 @@ $(document).ready(function() {
 
     $( "form" ).on( "submit", function() {
         if($('#submission_sub_category_id').val() == ''){
-            alert('Sub category can not blank');
+            alert('Sample can not blank');
             return false;
         }
     });
