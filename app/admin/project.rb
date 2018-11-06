@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :summary, :tags, :client_name, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]
+    allowed = [:title, :ecosystem, :summary, :tags, :organization, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]
     allowed.uniq
   end
 
@@ -13,6 +13,7 @@ ActiveAdmin.register Project do
     selectable_column
     id_column
     column :title, label: "Project Title"
+    column :ecosystem
     column :summary do |p|
       omision = "<a href='#' onclick=\"$.fancybox('#{p.summary}')\"> View More</a>"
       p.summary.length > 100 ? (p.summary[0..100] + omision).html_safe : p.summary
@@ -24,7 +25,7 @@ ActiveAdmin.register Project do
     column "Number of users" do |p|
       p.users.count
     end
-    column :client_name
+    column :organization
     column :locations do |p|
       table(:style => 'margin-bottom: 0') do
         p.locations.each do |loc|
@@ -75,9 +76,10 @@ ActiveAdmin.register Project do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
       f.input :title
+      f.input :ecosystem
       f.input :summary, input_html: {rows: 4}
       f.input :tags, input_html: {rows: 3}
-      f.input :client_name
+      f.input :organization
       f.input :status
       f.inputs do
         f.has_many :project_manager_projects, heading: 'Project Managers', new_record: "Add new Project Manager", allow_destroy: true do |pmp|
@@ -169,9 +171,10 @@ ActiveAdmin.register Project do
     attributes_table do
       row :id
       row :title
+      row :ecosystem
       row :summary
       row :tags
-      row :client_name
+      row :organization
       row :status
       row :project_managers do |p|
         table(:style => 'margin-bottom: 0') do
