@@ -41,6 +41,10 @@ $(document).ready(function() {
         readURL(this,$('#picture_preview'));
     });
 
+    $("#project_image").on('change', function(){
+        readURL(this,$('#picture_preview'));
+    });
+
     $(document).on('change','input[id*="category_photos_attributes_"]', function(){
         readCategoryImageURL(this);
     });

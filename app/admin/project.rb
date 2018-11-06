@@ -3,7 +3,7 @@ ActiveAdmin.register Project do
   menu label: 'Projects', priority: 1
 
   permit_params do
-    allowed = [:title, :ecosystem, :summary, :tags, :organization, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]
+    allowed = [:title, :image, :image_cache, :ecosystem, :summary, :tags, :organization, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]
     allowed.uniq
   end
 
@@ -12,6 +12,9 @@ ActiveAdmin.register Project do
   index do
     selectable_column
     id_column
+    column :image do |p|
+      image_tag(p.image.url(:thumb)) rescue nil
+    end
     column :title, label: "Project Title"
     column :ecosystem
     column :summary do |p|
@@ -75,6 +78,15 @@ ActiveAdmin.register Project do
     end
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
+      f.inputs :multipart => true do
+        f.input :image, :as => :file, :hint => f.object[:image]
+        f.input :image_cache, :as => :hidden
+        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
+          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
+            insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', width: '100px', src: "#{f.object.image.url(:thumb)}?#{Random.rand(100)}")
+          end
+        end
+      end
       f.input :title
       f.input :ecosystem
       f.input :summary, input_html: {rows: 4}
@@ -164,12 +176,16 @@ ActiveAdmin.register Project do
   remove_filter :updated_at
   remove_filter :submissions
   remove_filter :project_requests
+  remove_filter :image
 
   filter :status, as: :select, collection: -> {Project.statuses}
   # remove_filter :sub_categories
   show do
     attributes_table do
       row :id
+      row :image do |p|
+        image_tag(p.image.url(:thumb)) rescue nil
+      end
       row :title
       row :ecosystem
       row :summary

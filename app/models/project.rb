@@ -1,5 +1,6 @@
 class Project < ApplicationRecord
   attr_accessor :access_status
+  mount_uploader :image, ProjectPictureUploader
   has_many :users
   has_many :locations
   has_many :document_projects
@@ -36,5 +37,27 @@ class Project < ApplicationRecord
 
   # validates_presence_of :project_manager
   # accepts_nested_attributes_for :project_manager, allow_destroy: true
+  def image_data(data, content_type)
+    # decode data and create stream on them
+    io = CarrierStringIO.new(Base64.decode64(data), content_type)
 
+    self.image = io
+  end
+
+end
+
+class CarrierStringIO < StringIO
+
+  def initialize(data, content_type)
+    super(data)
+    @content_type = content_type
+  end
+
+  def original_filename
+    "project_image.png"
+  end
+
+  def content_type
+    @content_type
+  end
 end
