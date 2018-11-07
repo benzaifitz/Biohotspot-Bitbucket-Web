@@ -13,7 +13,7 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "project_images/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+    "project_images/#{model.id}"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
@@ -25,7 +25,7 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  process resize_to_fill: [48, 48]
+  process resize_to_fill: [800, 600]
   # process :scale => [200, 300]
   #
   # def scale(width, height)
@@ -45,8 +45,8 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
-  def filename
-    "image.png" if original_filename
+   def filename
+    "image.#{file.extension}" if original_filename.present?
   end
 
 end
