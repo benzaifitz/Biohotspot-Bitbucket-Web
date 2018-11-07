@@ -23,7 +23,6 @@ class Users::ConfirmationsController < Devise::ConfirmationsController
 
     if resource.errors.empty?
       set_flash_message!(:notice, :confirmed)
-      NotificationMailer.notify_admin_for_account_approval(resource.id).deliver_now
       respond_with_navigational(resource){ redirect_to after_confirmation_path_for(resource_name, resource) }
     else
       respond_with_navigational(resource.errors, status: :unprocessable_entity){ render :new }
