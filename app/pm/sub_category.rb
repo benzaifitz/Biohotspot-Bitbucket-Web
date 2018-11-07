@@ -2,7 +2,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
   menu label: 'Samples', priority: 4
 
   permit_params do
-    [:name, :site_id, category_ids: []]
+    [:name, :treatment, :site_id, category_ids: []]
   end
 
   actions :all
@@ -21,6 +21,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Sample Details' do
       f.input :name, label: 'Label'
+      f.input :treatment
       f.input :site, as: :select, collection: current_project_manager.sites.map{|s| [s.project_location_prefix_name, s.id]}
       f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
     end
@@ -38,6 +39,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
     selectable_column
     id_column
     column 'Label', :name
+    column :treatment
     column :site
     column 'Species' do |sc|
       categories = ''
@@ -56,6 +58,7 @@ ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
       row 'Label' do |sc|
         sc.name
       end
+      row :treatment
       row :site
       row 'Species' do |sc|
         categories = ''
