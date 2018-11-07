@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181107075026) do
+ActiveRecord::Schema.define(version: 20181107115840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -364,8 +364,16 @@ ActiveRecord::Schema.define(version: 20181107075026) do
 
   create_table "specie_types", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.string   "phylum"
+    t.string   "klass"
+    t.string   "order"
+    t.string   "superfamily"
+    t.string   "family"
+    t.string   "genus"
+    t.string   "species"
+    t.string   "sub_species"
   end
 
   create_table "sub_categories", force: :cascade do |t|
