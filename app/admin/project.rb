@@ -124,18 +124,22 @@ ActiveAdmin.register Project do
     entered_emails = params[:emails].to_s.html_safe
     project_id = params[:id]
     emails = entered_emails.split(',')
+    VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
 
     emails.each do |email|
-      user = User.find_by_email(email)
-      unless user
-        password = SecureRandom.hex(10)
-        user = User.new(email: email, password: password, password_confirmation: password, pm_invited: true)
-        user.save
-      end
-      if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
-        project_invitation_token = SecureRandom.hex(10)
-        pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: params[:is_admin] == '1' ? true : false, token: project_invitation_token, status: 2)
-        NotificationMailer.invite_user(pmp, current_user.username).deliver
+      email = email.strip
+      unless (email =~ VALID_EMAIL_REGEX).nil?
+        user = User.find_by_email(email)
+        unless user
+          password = SecureRandom.hex(10)
+          user = User.new(email: email, password: password, password_confirmation: password, pm_invited: true)
+          user.save
+        end
+        if user && ProjectManagerProject.where(project_id: project_id, project_manager_id: user.id).count == 0
+          project_invitation_token = SecureRandom.hex(10)
+          pmp = ProjectManagerProject.create(project_id: project_id, project_manager_id: user.id, is_admin: params[:is_admin] == '1' ? true : false, token: project_invitation_token, status: 2)
+          NotificationMailer.invite_user(pmp, current_user.username).deliver
+        end
       end
     end
     redirect_to admin_projects_path, :notice => 'Users have been invited' and return
