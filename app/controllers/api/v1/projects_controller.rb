@@ -24,14 +24,14 @@ module Api
 
       api :GET, '/projects/1/species.json', 'Returns species data'
       def species
-        project = Project.find_by_id(params[:project_id])
-        @specie_types = get_grouped_categories(project)
+        @project = Project.find_by_id(params[:project_id])
+        @specie_types = get_grouped_categories(@project)
       end
 
       def get_grouped_categories(project)
         category_types = []
         SpecieType.joins(:categories).where("categories.id IN (?)",project.categories.ids).order("name asc").uniq.each do |st|
-          categories = st.categories.order("name asc").group_by { |d| d[:family_common] }
+          categories = st.categories.where(id: project.categories.ids).order("name asc").group_by { |d| d[:family_common] }
           categories.each do |family, categories_group|
             type_hash = {
                 type: [st.name, family].join(", "),
