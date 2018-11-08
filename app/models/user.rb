@@ -160,13 +160,14 @@ class User < ApplicationRecord
   end
 
   def active_for_authentication?
-    super && (!self.banned? && self.approved?)
+    super && (!self.banned?)
+    # super && (!self.banned? && self.approved)
   end
 
   def inactive_message
-    if !self.approved?
-      'Your account has not been approved. Please contact your Administrator.'
-    elsif self.banned?
+    # if !self.approved?
+    #   'Your account has not been approved. Please contact your Administrator.'
+    if self.banned?
       'Your account has been banned. Please contact your Administrator.'
     end
   end
