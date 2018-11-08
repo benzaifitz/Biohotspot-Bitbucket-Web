@@ -5,7 +5,7 @@ json.photos category.photos do |photo|
 end
 site_ids = current_project.locations.map(&:site_ids).flatten.uniq rescue []
 allowed_sub_cats = [SubCategory.new(name: SubCategory::UNKNOWN_SAMPLE)] + category.sub_categories.where(site_id: site_ids).to_a
-json.project current_user.locations.first.project rescue nil
+json.project current_project.id rescue nil
 json.site category.site rescue nil
 json.location Location.new rescue nil
 json.surveys allowed_sub_cats.count rescue nil

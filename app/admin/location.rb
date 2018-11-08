@@ -34,12 +34,12 @@ ActiveAdmin.register Location do
     f.inputs 'Location Details' do
       f.input :name
       f.input :description
-      f.input :project_id, as: :select, collection:  Project.all.map{|p| [p.title, p.id]}
+      f.input :project, as: :select, collection:  Project.all.map{|p| [p.title, p.id]}
     end
     f.actions
   end
   show do
-    attributes_table :id, :name, :description, :updated_at, :created_at
+    attributes_table :id, :name, :description, :project, :updated_at, :created_at
   end
 
   filter :name
