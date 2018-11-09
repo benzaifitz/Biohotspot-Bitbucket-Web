@@ -110,6 +110,21 @@ ActiveAdmin.register Submission, namespace: :pm do
     f.inputs do
         f.object.sample_image = Photo.new if f.object.new_record?
         f.object.monitoring_image = Photo.new if f.object.new_record?
+        f.inputs 'Sample Photo',for: [:sample_image, f.object.sample_image] do |s|
+          s.input :file, label: false, :as => :file, :hint => s.object.file.present? \
+                        ? image_tag(s.object.file.url(:thumb))
+          : ''
+
+          s.input :file_cache, :as => :hidden
+        end
+
+        f.inputs 'Monitoring Photo',for: [:monitoring_image, f.object.monitoring_image] do |m|
+          m.input :file, label: false, :as => :file, :hint => m.object.file.present? \
+                        ? image_tag(m.object.file.url(:thumb))
+          : ''
+
+          m.input :file_cache, :as => :hidden
+        end
         f.has_many :sample_image, heading: 'Sample Photos', new_record: false do |pm|
           pm.input :file, :as => :file, :hint => pm.object.file.present? \
                         ? image_tag(pm.object.file.url(:thumb))
