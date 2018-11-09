@@ -164,9 +164,9 @@ ActiveAdmin.register Submission do
       f.input :field_notes, input_html: {rows: 4}
       f.input :sub_category, label: 'Sample', input_html: { class: 'sub_category'}
       f.input :category, label: 'Species'
-      # f.input :site
-      # f.input :location
-      # f.input :project
+      f.input :site
+      f.input :location
+      f.input :project
       f.input :submitted_by, :as => :select, :collection => LandManager.all.collect {|lm| [lm.full_name, lm.id] }
     end
     f.actions
