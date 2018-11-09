@@ -26,11 +26,19 @@ class Submission < ApplicationRecord
   reverse_geocoded_by :latitude, :longitude
   before_save :reverse_geocode
 
+  after_save :validate_monitoring_sample_images
+
   after_create :generate_survey_number
 
   # after_save :save_sample_photo_from_api, if: 'sample_photo_full_url && sample_photo_full_url_changed?'
   # after_save :save_monitoring_photo_from_api, if: 'monitoring_photo_full_url && monitoring_photo_full_url_changed?'
 
+  def validate_monitoring_sample_images
+    errors.add(:base, 'Please add both sample and monitoring image') if (self.sample_image.file.url.nil? || self.monitoring_image.file.url.nil?) rescue false
+    if errors.count > 0
+      raise ActiveRecord::RecordInvalid.new(self)
+    end
+  end
 
   def save_sample_photo_from_api
     self.update_column(:sample_photo, sample_photo_full_url.split('/').last)

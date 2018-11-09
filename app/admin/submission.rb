@@ -122,18 +122,17 @@ ActiveAdmin.register Submission do
     f.inputs do
         f.object.sample_image = Photo.new if f.object.new_record?
         f.object.monitoring_image = Photo.new if f.object.new_record?
-        f.inputs 'Sample Photo',for: [:sample_image, f.object.sample_image] do |s|
-          s.input :file, label: false, :as => :file, :hint => s.object.file.present? \
-                        ? image_tag(s.object.file.url(:thumb))
-          : ''
-
-          s.input :file_cache, :as => :hidden
-        end
-
-        f.inputs 'Monitoring Photo',for: [:monitoring_image, f.object.monitoring_image] do |m|
-          m.input :file, label: false, :as => :file, :hint => m.object.file.present? \
+        f.has_many :sample_image, heading: 'Sample Photo', new_record: false do |m|
+          m.input :file, :as => :file, :hint => m.object.file.present? \
                         ? image_tag(m.object.file.url(:thumb))
-          : ''
+          : content_tag(:span, 'no image selected')
+
+          m.input :file_cache, :as => :hidden
+        end
+        f.has_many :monitoring_image, heading: 'Monitoring Photo', new_record: false do |m|
+          m.input :file, :as => :file, :hint => m.object.file.present? \
+                        ? image_tag(m.object.file.url(:thumb))
+          : content_tag(:span, 'no image selected')
 
           m.input :file_cache, :as => :hidden
         end

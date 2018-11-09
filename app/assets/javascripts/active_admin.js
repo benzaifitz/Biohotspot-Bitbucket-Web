@@ -29,13 +29,10 @@ $(document).ready(function() {
         readURL(this,$('#picture_preview'));
     });
 
-    $("#submission_sample_photo").on('change', function(){
-        readURL(this,$('#picture_preview'));
-    });
-
-    $("#submission_monitoring_photo").on('change', function(){
-        readURL(this,$("#monitoring_picture_preview"));
-    });
+    $('.has_many_container.monitoring_image .has_many_remove').hide();
+    $('.has_many_container.sample_image .has_many_remove').hide();
+    $('#submission_monitoring_image_attributes_file').on('change', function(){readCategoryImageURL(this);});
+    $('#submission_sample_image_attributes_file').on('change', function(){readCategoryImageURL(this);});
 
     $("#land_manager_profile_picture").on('change', function(){
         readURL(this,$('#picture_preview'));
