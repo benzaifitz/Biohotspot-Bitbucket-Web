@@ -79,13 +79,10 @@ ActiveAdmin.register Project do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
       f.inputs :multipart => true do
-        f.input :image, :as => :file, :hint => f.object[:image]
+        f.input :image, :as => :file, :hint => f.object.image.present? \
+                        ? image_tag(f.object.image.url(:thumb))
+        : content_tag(:span, 'no image selected')
         f.input :image_cache, :as => :hidden
-        insert_tag(Arbre::HTML::Li, class: 'file input optional') do
-          insert_tag(Arbre::HTML::P, class: 'inline-hints') do
-            insert_tag(Arbre::HTML::Img, id: 'picture_preview', height: '100px', width: '100px', src: "#{f.object.image.url(:thumb)}?#{Random.rand(100)}")
-          end
-        end
       end
       f.input :title
       f.input :ecosystem
