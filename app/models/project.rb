@@ -23,6 +23,7 @@ class Project < ApplicationRecord
   serialize :tags
 
   after_save :has_project_managers
+  before_destroy(if: lambda{|project| project.locations.any?}) { halt msg: 'Project Could not de destroyed.' }
 
   def has_project_managers
     errors.add(:base, 'There should be atleast one project admin') if self.project_manager_projects.where(is_admin: true).empty?

@@ -2,7 +2,7 @@ class Site < ApplicationRecord
   # belongs_to :project
   belongs_to :location
   # has_many :categories
-  has_many :sub_categories, dependent: :destroy
+  has_many :sub_categories
   # has_many :site_categories
   # has_many :categories, :through => :site_categories
   # accepts_nested_attributes_for :site_categories, :allow_destroy => true
@@ -12,7 +12,7 @@ class Site < ApplicationRecord
   validates_presence_of :location, :title
   validates_uniqueness_of :title, scope: :location_id
 
-
+  before_destroy(if: lambda{|site| site.sub_categories.any?}) { halt msg: 'Site Could not de destroyed.' }
   def project_location_prefix_name
     "#{self.location.project.title rescue 'N/A'} - #{self.location.name rescue 'N/A'} - #{self.title}"
   end

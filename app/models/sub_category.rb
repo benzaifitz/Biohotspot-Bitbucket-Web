@@ -13,6 +13,7 @@ class SubCategory < ApplicationRecord
   # validates_presence_of :category_id #, :user_id
   validates_uniqueness_of :name, scope: :site_id
   validates :site, presence: true
+  before_destroy(if: lambda{|sample| sample.submission.present?}) { halt msg: 'Sample Could not de destroyed.' }
 
   UNKNOWN_SAMPLE = 'New Sample'
 
