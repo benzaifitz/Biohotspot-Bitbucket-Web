@@ -79,7 +79,7 @@ ActiveAdmin.register Project do
     f.semantic_errors *f.object.errors.keys
     f.inputs 'Project Details' do
       f.inputs :multipart => true do
-        f.input :image, :as => :file, :hint => f.object.image.present? \
+        f.input :image, :as => :file, input_html: {style: f.object.image.present? ? 'color: transparent':''}, :hint => f.object.image.present? \
                         ? image_tag(f.object.image.url(:thumb))
         : content_tag(:span, 'no image selected')
         f.input :image_cache, :as => :hidden
