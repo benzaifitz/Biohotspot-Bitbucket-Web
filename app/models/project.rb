@@ -22,15 +22,14 @@ class Project < ApplicationRecord
   # validates_presence_of :project_manager_id
   serialize :tags
 
-  after_save :has_project_managers
+  before_save :check_admin_count
   before_destroy(if: lambda{|project| project.locations.any?}) { halt msg: 'Project Could not de destroyed.' }
 
-  def has_project_managers
-    errors.add(:base, 'There should be atleast one project admin') if self.project_manager_projects.where(is_admin: true).empty?
-    # uncomment below line if max 3 project managers are required.
-    # errors.add(:base, 'There could be maximum three project managers') if self.project_manager_projects.length > 3
-    if errors.count > 0
-      raise ActiveRecord::RecordInvalid.new(self)
+  def check_admin_count
+    pms = self.project_manager_projects.map(&:is_admin)
+    if pms.index(true).nil?
+      errors.add(:base, 'There should be atleast one project admin')
+      return false
     end
   end
 
