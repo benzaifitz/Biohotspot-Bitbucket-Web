@@ -55,7 +55,7 @@ module Api
             pmp = ProjectManagerProject.where(project_id: params[:project_id], project_manager_id: current_user.id).first
             if pmp
               pmp.destroy
-              @msg = 'You have left this project successfuly.'
+              @msg = 'You have left this project successfully.'
             else
               @msg = 'You have not subscribed for this project.'
             end
@@ -67,7 +67,7 @@ module Api
               all_pmp.delete(pmp.id)
               if all_pmp.length > 0 || pmp.is_admin == false
                 pmp.destroy
-                @msg = 'You have left this project successfuly.'
+                @msg = 'You have left this project successfully.'
               end
             else
               @msg = 'You have not subscribed for this project.'
@@ -88,12 +88,12 @@ module Api
           if (pmp && pmp.status == 'rejected')
             pmp.update_attributes(status: 'pending')
             pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
-            @msg = 'You have applied for this project'
+            @msg = 'Your application has been received. A project manager will review your application.'
           end
           unless pmp
             project.project_manager_projects.create!(project_manager_id: current_user.id, status: 'pending')
             pr = project.project_requests.create!(user_id: current_user.id, reason: params[:reason] ? params[:reason] : '')
-            @msg = 'You have applied for this project'
+            @msg = 'Your application has been received. A project manager will review your application.'
           end
         else
           @msg = 'Project doesn\'t exist.'
