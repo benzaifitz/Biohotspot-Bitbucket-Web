@@ -76,6 +76,18 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     link_to("New Sample", new_admin_sample_path)
   end
 
+  controller do
+    def destroy
+      sample = SubCategory.find(params[:id])
+      if sample.submission.present?
+        flash[:flash_alert] = 'Sample could not be destroyed.'
+        redirect_to :back
+      else
+        flash[:notice] = 'Sample deleted successfully..'
+        super
+      end
+    end
+  end
 
   filter :category_id, label: 'Species', as: :select, collection: -> {Category.all.map{|c| [c.name, c.id]}}
   filter :name, label: 'Label'
