@@ -180,6 +180,7 @@ ActiveAdmin.register Project do
   remove_filter :image
 
   filter :status, as: :select, collection: -> {Project.statuses}
+  filter :tags, filters: [:equals, :starts_with]
   # remove_filter :sub_categories
   show do
     attributes_table do

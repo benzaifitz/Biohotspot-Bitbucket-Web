@@ -175,7 +175,7 @@ ActiveAdmin.register Category, as: 'Species' do
   filter :site, multiple: true
   filter :sub_categories, label: 'Samples', multiple: true
   filter :description
-  filter :tags
+  filter :tags, filters: [:equals, :starts_with]
   filter :class_name
   filter :specie_type
   filter :url
