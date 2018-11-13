@@ -87,7 +87,7 @@ ActiveAdmin.register Site do
   filter :categories, label: 'Species'
   filter :title, label: 'Name'
   filter :summary
-  filter :tags
+  filter :tags, filters: [:equals, :starts_with]
   filter :created_at
 
 end

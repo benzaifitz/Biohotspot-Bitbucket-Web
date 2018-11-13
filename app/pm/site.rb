@@ -94,7 +94,7 @@ ActiveAdmin.register Site, namespace: :pm do
   # filter :users, as: :select, collection: proc{LandManager.joins(locations:[:project]).where("projects.id in (?)", current_project_manager.projects.pluck(:id)).pluck(:username, :id)}
   filter :title
   filter :summary
-  filter :tags
+  filter :tags, filters: [:equals, :starts_with]
   filter :created_at
   filter :updated_at
 end

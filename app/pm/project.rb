@@ -154,6 +154,7 @@ ActiveAdmin.register Project, namespace: :pm do
 
   filter :locations, as: :select, collection: proc{current_project_manager.locations.pluck(:name, :id)}
   filter :status, as: :select, collection: -> {Project.statuses}
+  filter :tags, filters: [:equals, :starts_with]
   preserve_default_filters!
   remove_filter :document_projects
   remove_filter :users
