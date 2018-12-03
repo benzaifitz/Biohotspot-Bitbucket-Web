@@ -90,6 +90,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
 
     def new 
       params[:notification_type] ||= 'email'
+      super
     end  
     
     def scoped_collection
