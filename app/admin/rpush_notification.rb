@@ -89,7 +89,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
   controller do
 
     def new 
-      params[:rpush_client_active_record_notification][:notification_type] ||= 'email'
+      params[:notification_type] ||= 'email'
     end  
     
     def scoped_collection
@@ -104,7 +104,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
     end
 
     def create
-      params[:rpush_client_active_record_notification][:notification_type] ||= 'email'
+      permitted_params[:rpush_client_active_record_notification][:notification_type] ||= 'email'
       attrs = permitted_params[:rpush_client_active_record_notification]
       if attrs[:alert].present?
         RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_user.id, user_type: User.user_types[:land_manager]}).to_json)
