@@ -82,7 +82,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
     end
     f.actions do
       f.action :submit, label: "Create #{params[:notification_type].try(:capitalize)} Notification"
-      f.cancel_link(admin_users_path)
+      f.cancel_link(admin_notifications_path)
     end
   end
 
