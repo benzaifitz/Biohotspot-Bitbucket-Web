@@ -99,6 +99,7 @@ ActiveAdmin.register User do
       row :rating
       row :number_of_ratings
       row :eula
+      row :device_token
       row :sign_in_count
       row :last_sign_in_at
       row :current_sign_in_at
