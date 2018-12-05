@@ -19,7 +19,7 @@ class RpushNotificationQueueJob < ApplicationJob
 
   def create_push_notification(attrs)
     notification = { body: attrs['alert'],
-                       title: 'Message from PWM Admin',
+                       title: 'Message from BioHotspot Admin',
                        icon: 'myicon'}
     opts ={device_token: attrs[:user].device_token, notification: notification,
      user_id: attrs[:user].id, sent_by_id: attrs['sent_by_id']}
@@ -32,7 +32,7 @@ class RpushNotificationQueueJob < ApplicationJob
     n.app = Rpush::Apns::App.find_by_name(Rails.application.secrets.app_name)
     n.category = attrs['category']
     n.alert = attrs['alert']
-    n.data = { data: { title: 'Message from PWM Admin', message: attrs['alert'] } }
+    n.data = { data: { title: 'Message from BioHotspot Admin', message: attrs['alert'] } }
     n.user_id = attrs[:user].id
     n.sent_by_id = sent_by.id
     n.save(validate: false)
