@@ -23,8 +23,9 @@ ActiveAdmin.register SubCategory, as: 'Sample' do
     f.inputs 'Sample Details' do
       f.input :name, label: 'Label'
       f.input :treatment
-      f.input :site, as: :select, collection: Site.all.map{|s| [s.project_location_prefix_name, s.id]}
-      f.input :categories, label: 'Species', as: :select, multiple: true, :collection => Category.all.map{ |s|  [s.name, s.id] }
+      f.input :site, as: :select, collection: Site.all.map{|s| [s.project_location_prefix_name, s.id, {:"data-title" => (s.location.project.title rescue 'N/A')}]}
+      f.input :categories, label: 'Species', as: :select, multiple: true, input_html: { class: "default-select", style:'height: 300px' },
+              :collection => Category.all.map{ |s|  [s.name, s.id, {:"data-title" => s.projects.map(&:title).join(',')}] }
     end
     f.actions do
       if f.object.new_record?
