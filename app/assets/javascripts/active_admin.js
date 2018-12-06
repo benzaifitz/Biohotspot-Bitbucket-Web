@@ -151,21 +151,30 @@ reg = /[A-E]/gi
 
 $(document).ready(function() {
     if($('#sub_category_site_id').length > 0) {
+        activate_species_on_sample_form();
         $('#sub_category_site_id').on('change', function(){
-            var title = $('#sub_category_site_id').find(":selected").data('title');
-            $.each($('#sub_category_category_ids option'), function( key, value ) {
-              $(value).removeAttr('disabled');
-              $(value).css('color','black');
-              $(value).removeAttr("selected");
-              console.log($(value).data('title'));
-              if ($(value).data('title').indexOf(title) == -1) {
-                $(value).attr('disabled','disabled'); 
-                $(value).css('color','grey')
-              }
-            });            
+           activate_species_on_sample_form();
         });        
     }    
 });
+
+window.activate_species_on_sample_form = function() {
+    var title = $('#sub_category_site_id').find(":selected").data('title');
+    $.each($('#sub_category_category_ids option'), function( key, value ) {
+      $(value).removeAttr('disabled');
+      $(value).css('color','black');
+      // console.log($(value).attr('selected'))
+      if($(value).attr('selected') == false) {
+        $(value).removeAttr("selected");  
+      }
+      
+      console.log($(value).data('title'));
+      if ($(value).data('title').indexOf(title) == -1) {
+        $(value).attr('disabled','disabled'); 
+        $(value).css('color','grey')
+      }
+    }); 
+}
 
 //
 //update_crop = function(coords) {
