@@ -20,7 +20,7 @@ class Ability
       can [:read, :create, :update], SpecieType
       can [:read, :update, :approve, :reject_submission, :reject], Submission, id: user.managed_submissions.pluck(:id)
       can :create, Submission
-      # can :read, Photo
+      can [:read, :update, :approve, :reject_image, :reject], Photo, imageable_id: user.managed_submissions.pluck(:id), imageable_type: "Submission"
       can :read, ProjectManagerProject, id: ProjectManagerProject.where(project_id: user.projects.pluck(:id))
       can [:read, :accept, :reject], ProjectRequest, id: ProjectRequest.where(project_id: user.projects.pluck(:id))
       can :manage, ActiveAdmin::Page, name: 'Maps'

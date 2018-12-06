@@ -37,29 +37,28 @@ ActiveAdmin.register Photo, as: "Sample Image", namespace: :pm do
         status_tag('error', :ok, class: 'important', label: 'Rejected')
       end
     end
-    actions
-    # actions do |p|
-    #   item 'Approve', approve_pm_sample_image_path(p), method: :put if !p.approved?
-    #   (item 'Reject', reject_pm_sample_image_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
-    # end
+    actions do |p|
+      item 'Approve', approve_pm_sample_image_path(p), method: :put if !p.approved?
+      (item 'Reject', reject_pm_sample_image_path(p), class: 'fancybox member_link', data: { 'fancybox-type' => 'ajax' }) if p.approved?
+    end
   end
 
-  # member_action :approve, method: :put do
-  #   resource.update_columns(approved: true)
-  #   redirect_to pm_sample_images_path, :notice => 'Photo approved.' and return
-  # end
+  member_action :approve, method: :put do
+    resource.update_columns(approved: true)
+    redirect_to pm_sample_images_path, :notice => 'Photo approved.' and return
+  end
 
-  # member_action :reject_image, method: :put do
-  #   pn_msg = params[:photo][:reject_comment].to_s.html_safe
-  #   lm = LandManager.where(id: Photo.find(resource.id).imageable.submitted_by).first rescue nil
-  #   lm.send_pn_and_email_notification('Photo Rejected', pn_msg) if lm
-  #   resource.update_columns(approved: false, reject_comment: pn_msg)
-  #   redirect_to pm_sample_images_path, :notice => 'Photo rejected.' and return
-  # end
+  member_action :reject_image, method: :put do
+    pn_msg = params[:photo][:reject_comment].to_s.html_safe
+    lm = LandManager.where(id: Photo.find(resource.id).imageable.submitted_by).first rescue nil
+    lm.send_pn_and_email_notification('Photo Rejected', pn_msg) if lm
+    resource.update_columns(approved: false, reject_comment: pn_msg)
+    redirect_to pm_sample_images_path, :notice => 'Photo rejected.' and return
+  end
 
-  # member_action :reject, method: :get do
-  #   render template: 'admin/image_submissions/reject', layout: false
-  # end
+  member_action :reject, method: :get do
+    render template: 'admin/image_submissions/reject', layout: false
+  end
 
   controller do
     def scoped_collection
