@@ -30,7 +30,7 @@ module Api
                       [I18n.t("devise.failure.unconfirmed")]
                     elsif user && !user.approved?
                       [I18n.t("devise_token_auth.sessions.unapproved_account")]
-                    elsif user.administrator?
+                    elsif user && user.administrator?
                       [I18n.t("devise_token_auth.sessions.disable_admin_on_app")]
                     elsif user
                       [I18n.t("devise_token_auth.sessions.bad_credentials")]
