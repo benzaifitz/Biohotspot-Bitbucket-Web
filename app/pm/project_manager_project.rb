@@ -1,5 +1,5 @@
 ActiveAdmin.register ProjectManagerProject, as: 'Project Users', namespace: :pm do
-
+  menu label: 'Project Users', parent: 'Users', priority: 4
   actions :index
 
   index do

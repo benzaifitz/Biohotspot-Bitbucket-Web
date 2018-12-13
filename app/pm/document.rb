@@ -30,7 +30,7 @@ ActiveAdmin.register Document, namespace: :pm do
     column :category_document_id
     column :projects do |p|
       table do
-        p.projects.where("projects.id in (?)", current_project_manager.managed_projects.pluck(:id)).each do |project|
+        p.projects.where("projects.id in (?)", current_project_manager.projects.pluck(:id)).each do |project|
           tr '', class: 'dboard' do
             td do
               link_to project.title, admin_project_path(project.id)
@@ -45,7 +45,7 @@ ActiveAdmin.register Document, namespace: :pm do
     end
   end
 
-  filter :projects, as: :select, collection: proc{current_project_manager.managed_projects.pluck(:title, :id)}
+  filter :projects, as: :select, collection: proc{current_project_manager.projects.pluck(:title, :id)}
   filter :category_document, as: :select, collection: proc{current_project_manager.category_documents.pluck(:name, :id)}
   
   preserve_default_filters!

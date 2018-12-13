@@ -6,7 +6,7 @@ ActiveAdmin.register_page 'Maps', namespace: :pm do
     @sub_categories = current_project_manager.sub_categories.map{|c| [c.project_location_site_prefix_name, c.id]}
     @sites = current_project_manager.sites.map{|c| [c.project_location_prefix_name, c.id]}
     @locations = current_project_manager.locations.map{|c| [c.project_prefix_name, c.id]}
-    @projects = current_project_manager.managed_projects.pluck(:title, :id)
+    @projects = current_project_manager.projects.pluck(:title, :id)
     render partial: 'index', locals: {categories: @categories, sites: @sites, locations: @locations,
                                       projects: @projects,
                                       sub_categories: @sub_categories}
