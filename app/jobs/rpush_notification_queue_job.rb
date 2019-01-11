@@ -2,8 +2,6 @@ class RpushNotificationQueueJob < ApplicationJob
   queue_as :rpush_notifications
 
   def perform(attrs = {})
-    attrs = JSON.parse(attrs)
-    users = attrs['user_id'].blank? ? User.where(user_type: attrs['user_type']) : User.where(id: attrs['user_id'])
     users.find_each do |user|
       begin
         if attrs['notification_type'] == RpushNotification::NOTIFICATION_TYPE[:push]
@@ -16,6 +14,25 @@ class RpushNotificationQueueJob < ApplicationJob
       end
     end
   end
+
+  def users(attrs)
+    attrs = JSON.parse(attrs)
+    u = User.find(attrs['sent_by_id'])
+    list = if u.project_manager? && attrs['user_id'].blank?
+      u.land_managers
+    elsif u.administrator? &&  attrs['user_id'].blank?
+      User.where(user_type: attrs['user_type'])
+    elsif u.project_manager? && !attrs['user_id'].blank?  
+      if u.land_managers.map(&:id).include?(attrs['user_id'].to_i)
+        User.where(id: attrs['user_id'])
+      else
+        []
+      end  
+    elsif !attrs['user_id'].blank?  
+      User.where(id: attrs['user_id'])        
+    end  
+    # users = attrs['user_id'].blank? ? User.where(user_type: attrs['user_type']) : User.where(id: attrs['user_id'])    
+  end  
 
   def create_push_notification(attrs)
     notification = { body: attrs['alert'],
