@@ -1,6 +1,6 @@
 ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notification', namespace: :pm do
 
-  menu label: 'Notifications List', parent: 'Notifications'
+  menu label: 'Notifications List', parent: 'Notifications', priority: 9
 
   # config.clear_action_items!
 

@@ -5,7 +5,7 @@ class Ability
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
-    if user.administrator?
+    if user.administrator? 
       can :manage, :all
     elsif user.project_manager?
       can [:read, :update, :change_project_status, :invite], Project, id: user.projects.pluck(:id)
@@ -24,6 +24,12 @@ class Ability
       can :read, ProjectManagerProject, id: ProjectManagerProject.where(project_id: user.projects.pluck(:id))
       can [:read, :accept, :reject], ProjectRequest, id: ProjectRequest.where(project_id: user.projects.pluck(:id))
       can :manage, ActiveAdmin::Page, name: 'Maps'
+
+      can :manage, Rpush::Client::ActiveRecord::Notification, user_id: user.land_managers.pluck(:id)
+      can :manage, Feedback, project_id: user.projects.map(&:id)
+      can :manage, CategoryDocument, id: (user.projects.map(&:documents).flatten.map(&:category_document) rescue 0)
+      can :read, BlockedUser, id: user.land_managers.pluck(:id)
+      
       can :read, User, id: user.land_managers.pluck(:id)
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)

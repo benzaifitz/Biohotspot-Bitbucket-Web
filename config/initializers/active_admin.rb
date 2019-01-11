@@ -265,9 +265,14 @@ ActiveAdmin.setup do |config|
 
 
     pm.build_menu do |p_menu|
+      p_menu.add label: 'Communicate', priority: 12 do |communicate|
+        communicate.add label: 'Send Email', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
+        communicate.add label: 'Send Push Notification', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
+      end      
       p_menu.add label: 'Notifications', priority: 14
       p_menu.add label: 'Users', priority: 11
-      p_menu.add label: 'Documents', priority: 17
+      p_menu.add label: 'Documents', priority: 17      
+      p_menu.add label: 'Feedbacks', url: '/pm/feedbacks', priority: 18      
     end
 
   end
