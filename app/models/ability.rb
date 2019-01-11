@@ -32,6 +32,7 @@ class Ability
       can :read, BlockedUser, id: user.land_managers.pluck(:id)
       
       can :read, User, id: user.land_managers.pluck(:id)
+      can :create, User
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)
     end
