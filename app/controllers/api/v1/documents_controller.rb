@@ -5,7 +5,7 @@ module Api
       before_action :set_document, only: [:show, :destroy]
 
       api :GET, '/documents.json', 'Return all documents'
-      param :project_id, String, desc: 'ID of project whose documents to be returned', required: false
+      param :project_id, String, desc: 'ID of project whose documents to be returned', required: true
       def index
         render json: category_documents
       end
