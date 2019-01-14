@@ -5,9 +5,9 @@ module Api
       before_action :set_document, only: [:show, :destroy]
 
       api :GET, '/documents.json', 'Return all documents'
+      param :project_id, String, desc: 'ID of project whose documents to be returned', required: false
       def index
-        @category_documents = CategoryDocument.all.map{|a| {"#{a.name}" => a.documents}}
-        render json: @category_documents
+        render json: category_documents
       end
 
       api :GET, '/documents/:id.json', 'Return single document'
@@ -30,6 +30,12 @@ module Api
         {id: data.id, name: data.name, document: "#{request.protocol}#{request.host_with_port}#{data.document.url}",
          projects: data.try(:projects), document_category: data.try(:category_document).try(:name)}
       end
+
+      def category_documents
+        if params[:project_id]
+          CategoryDocument.where(project_id: params[:project_id]).all.map{|a| {"#{a.name}" => a.documents}}            
+        end  
+      end  
     end
   end
 end
