@@ -29,9 +29,9 @@ class Ability
       can :create, Rpush::Client::ActiveRecord::Notification
       can :manage, Feedback, project_id: user.projects.map(&:id)
       can :manage, CategoryDocument, id: (user.projects.map(&:documents).flatten.map(&:category_document) rescue 0)
-      can :read, BlockedUser, id: user.land_managers.pluck(:id)
+      can :read, BlockedUser, id: land_managers_plus_project_managers(user)
       
-      can :read, User, id: user.land_managers.pluck(:id)
+      can :read, User, id: land_managers_plus_project_managers(user)
       can :create, User
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)
@@ -55,4 +55,8 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
   end
+
+  def land_managers_plus_project_managers(user)
+    (user.land_managers.pluck(:id) + ProjectManagerProject.where(project_id: user.projects.pluck(:id)).map(&:project_manager_id)).uniq
+  end  
 end
