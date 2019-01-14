@@ -33,6 +33,7 @@ class Ability
       
       can :read, User, id: land_managers_plus_project_managers(user)
       can :create, User
+      can :manage, PaperTrail::Version, item_id: land_managers_plus_project_managers(user), item_type: 'User'
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
       can :read, Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)
     end
