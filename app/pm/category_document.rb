@@ -10,6 +10,6 @@ ActiveAdmin.register CategoryDocument, as: 'Document Category', namespace: :pm d
   show do
     attributes_table :id, :name, :updated_at, :created_at
   end
-
+  remove_filter :documents
 
 end

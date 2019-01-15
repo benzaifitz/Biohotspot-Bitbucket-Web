@@ -107,7 +107,7 @@ ActiveAdmin.register Rpush::Client::ActiveRecord::Notification, as: 'Notificatio
       params[:rpush_client_active_record_notification][:notification_type] ||= 'email'
       attrs = permitted_params[:rpush_client_active_record_notification]
       if attrs[:alert].present?
-        RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_user.id, user_type: User.user_types[:land_manager]}).to_json)
+        RpushNotificationQueueJob.perform_later(attrs.merge({sent_by_id: current_project_manager.id, user_type: User.user_types[:land_manager]}).to_json)
         redirect_to pm_notifications_path,
                   notice: 'Your message(s) has been enqueued for sending! Its Delivered or Failed field will be set to true once it has been processed.'
       else
