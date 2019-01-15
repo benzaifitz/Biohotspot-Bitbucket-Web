@@ -2,23 +2,23 @@ ActiveAdmin.register Document, namespace: :pm do
 
   menu label: 'Document List', parent: 'Documents'
 
-  # permit_params do
-  #   [:name, :document, :category_document_id, project_ids: []]
-  # end
+  permit_params do
+    [:name, :document, :category_document_id, project_ids: []]
+  end
 
-  # form do |f|
-  #   f.semantic_errors *f.object.errors.keys
-  #   f.inputs 'Document Details' do
-  #     f.input :name
-  #     f.input :document, as: :file
-  #     f.input :category_document
-  #     f.input :projects
-  #   end
-  #   f.actions do
-  #     f.action(:submit)
-  #     f.cancel_link(admin_documents_path)
-  #   end
-  # end
+  form do |f|
+    f.semantic_errors *f.object.errors.keys
+    f.inputs 'Document Details' do
+      f.input :name
+      f.input :document, as: :file
+      f.input :category_document
+      f.input :projects
+    end
+    f.actions do
+      f.action(:submit)
+      f.cancel_link(pm_documents_path)
+    end
+  end
 
   index do
     selectable_column

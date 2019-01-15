@@ -7,7 +7,7 @@ module Api
       api :GET, '/documents.json', 'Return all documents'
       param :project_id, String, desc: 'ID of project whose documents to be returned', required: true
       def index
-        render json: category_documents
+        render json: documents
       end
 
       api :GET, '/documents/:id.json', 'Return single document'
@@ -31,9 +31,9 @@ module Api
          projects: data.try(:projects), document_category: data.try(:category_document).try(:name)}
       end
 
-      def category_documents
+      def documents
         if params[:project_id]
-          CategoryDocument.where(project_id: params[:project_id]).all.map{|a| {"#{a.name}" => a.documents}}            
+          Project.find(params[:project_id]).documents.map{|p| {"#{p.name}" => p}} rescue nil
         end  
       end  
     end
