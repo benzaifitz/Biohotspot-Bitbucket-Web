@@ -3,7 +3,7 @@ ActiveAdmin.register User, namespace: :pm  do
 
   menu label: 'User List', parent: 'Users', priority: 1
 
-  # actions :index, :show, :destroy
+  actions :index, :show, :destroy
 
   action_item :view, only: :index do
     link_to 'New Land Manager', new_pm_land_manager_path
