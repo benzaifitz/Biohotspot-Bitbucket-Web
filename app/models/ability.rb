@@ -38,7 +38,7 @@ class Ability
       can :create, User
       can :manage, PaperTrail::Version, item_id: land_managers_plus_project_managers(user), item_type: 'User'
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)
-      can [:read, :update, :destroy], Document, id: Document.joins(:projects).where("projects.id in (?)", user.projects.pluck(:id)).pluck(:id)
+      can [:read, :update, :destroy], Document, id:  user.projects.map(&:document_ids).flatten
       can :create, Document
     end
     #

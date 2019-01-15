@@ -12,7 +12,7 @@ ActiveAdmin.register Document, namespace: :pm do
       f.input :name
       f.input :document, as: :file
       f.input :category_document
-      f.input :projects
+      f.input :projects, as: :select, collection: current_project_manager.projects
     end
     f.actions do
       f.action(:submit)
