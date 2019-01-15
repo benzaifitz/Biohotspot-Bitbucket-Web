@@ -25,7 +25,8 @@ class Ability
       can [:read, :accept, :reject], ProjectRequest, id: ProjectRequest.where(project_id: user.projects.pluck(:id))
       can :manage, ActiveAdmin::Page, name: 'Maps'
 
-      can :read, Rpush::Client::ActiveRecord::Notification, sent_by_id: land_managers_plus_project_managers(user), user_id: land_managers_plus_project_managers(user)
+      can :read, Rpush::Client::ActiveRecord::Notification, sent_by_id: land_managers_plus_project_managers(user)
+      can :read, Rpush::Client::ActiveRecord::Notification,  user_id: land_managers_plus_project_managers(user)
       can :create, Rpush::Client::ActiveRecord::Notification
       can :manage, Feedback, project_id: user.projects.map(&:id)
       
