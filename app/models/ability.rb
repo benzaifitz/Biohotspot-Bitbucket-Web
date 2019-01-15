@@ -28,10 +28,13 @@ class Ability
       can :read, Rpush::Client::ActiveRecord::Notification, user_id: user.land_managers.pluck(:id)
       can :create, Rpush::Client::ActiveRecord::Notification
       can :manage, Feedback, project_id: user.projects.map(&:id)
-      can :manage, CategoryDocument, id: (user.projects.map(&:documents).flatten.map(&:category_document) rescue 0)
+      
+      
+      can [:read, :update], CategoryDocument, id: (user.projects.map(&:documents).flatten.map(&:category_document) rescue 0)
+      can :create, CategoryDocument
       can :read, BlockedUser, id: land_managers_plus_project_managers(user)
       
-      can :read, User, id: land_managers_plus_project_managers(user)
+      can :manage, User, id: land_managers_plus_project_managers(user)
       can :create, User
       can :manage, PaperTrail::Version, item_id: land_managers_plus_project_managers(user), item_type: 'User'
       # can :read, Rpush::Client::ActiveRecord::Notification, user_id: LandManager.joins(locations:[:project]).where("projects.id in (?)", user.managed_projects.pluck(:id)).pluck(:id)

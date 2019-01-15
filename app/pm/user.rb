@@ -1,5 +1,5 @@
 ActiveAdmin.register User, namespace: :pm  do
-  include SharedAdmin
+  include SharedPM
 
   menu label: 'User List', parent: 'Users', priority: 1
 
