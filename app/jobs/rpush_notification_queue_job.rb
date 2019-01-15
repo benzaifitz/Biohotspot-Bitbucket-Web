@@ -51,7 +51,7 @@ class RpushNotificationQueueJob < ApplicationJob
     n.alert = attrs['alert']
     n.data = { data: { title: 'Message from BioHotspot Admin', message: attrs['alert'] } }
     n.user_id = attrs[:user].id
-    n.sent_by_id = sent_by.id
+    n.sent_by_id = attrs['sent_by_id'] || sent_by.id
     n.save(validate: false)
     
 
