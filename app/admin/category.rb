@@ -204,6 +204,7 @@ ActiveAdmin.register Category, as: 'Species' do
     else
       begin
         CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+          next if row.to_hash['name'].blank?
           category_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
           category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
           if category.update_attributes(category_hash)
