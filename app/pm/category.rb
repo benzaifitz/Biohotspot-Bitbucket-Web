@@ -202,8 +202,10 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
     else
       begin
         CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
+          next if row.to_hash['name'].blank?
           category_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
-          byebug          
+          specie_type_id = SpecieType.find_by(name: category_hash['specie_type_id']).id rescue nil
+          category_hash['specie_type_id'] = specie_type_id          
           category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
           if category.update_attributes(category_hash)
           else
