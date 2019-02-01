@@ -14,7 +14,7 @@ module Api
       # POST /api/v1/feedbacks.json
       api :POST, '/feedbacks.json', 'Create a new feedback.'
       param :comment, String, desc: 'Comment.{"feedback":{"comment":"ABC"}}', required: false
-      param :project_id, String, desc: 'selected project id', required: true
+      param :project_id, String, desc: 'selected project id', required: false
       def create
         begin
           @feedback = Feedback.new(feedback_params.merge(land_manager_id: current_user.id))
