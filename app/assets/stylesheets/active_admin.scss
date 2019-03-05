@@ -65,3 +65,7 @@ body.loading .modal {
     column-count: 6; column-gap:10px;
     list-style-position: inside;
 }
+#project_categories_input {
+  height: 400px;
+  overflow-y: auto;
+}
