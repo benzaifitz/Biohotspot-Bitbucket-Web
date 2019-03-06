@@ -22,7 +22,7 @@ class Category < ApplicationRecord
   serialize :tags
   LIMIT = 5
   validates_uniqueness_of :name
-  validates_presence_of :name, :specie_type
+  validates_presence_of :name, :specie_type, :species_scientific
 
   validate do |record|
     record.validate_photo_quota
