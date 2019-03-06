@@ -201,6 +201,9 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
       redirect_to :back, alert: "Please select a csv file"
     else
       begin
+        total_count = CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8').count
+        success_count = 0
+        errors = []        
         CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
           next if row.to_hash['name'].blank?
           category_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
@@ -208,12 +211,17 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
           category_hash['specie_type_id'] = specie_type_id          
           category = Category.find_by_name(category_hash['name']) || Category.new(category_hash)
           if category.update_attributes(category_hash)
+            success_count += 1
           else
-            redirect_to :back, alert: category.errors.full_messages.first
-            return
+            errors << category.errors.full_messages.first
           end
         end
-        redirect_to "/pm/species", notice: "successfully created all records"
+        if errors.length > 0
+          errors = errors.uniq.join("\n")
+          redirect_to "/pm/species", alert: "#{success_count}/#{total_count} species were imported.\n #{errors}"
+        else
+          redirect_to "/pm/species", notice: "#{success_count}/#{total_count} species were imported."  
+        end        
       rescue => error
         redirect_to :back, alert: error.message
       end
