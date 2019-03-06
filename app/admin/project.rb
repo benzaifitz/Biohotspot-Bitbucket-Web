@@ -97,7 +97,7 @@ ActiveAdmin.register Project do
         end
       end
       # f.input :categories, as: :check_boxes, collection: Category.order(:name).all.map{|cat| [cat.name, cat.id]}.unshift(['All*', '']), label: 'Species', input_html: {class: 'project_category_checkbox'}
-      f.input :categories, as: :select, :multiple => true, collection: Category.all.map{|cat| [cat.name, cat.id]}.unshift(['All*', '']), label: 'Species', input_html: {class: 'project_category_checkbox'}
+      f.input :categories, as: :select, :multiple => true, collection: Category.order(:species_scientific).all.map{|cat| [cat.species_scientific, cat.id]}.unshift(['All*', '']), label: 'Species', input_html: {class: 'project_category_checkbox'}
     end
     f.actions
   end
