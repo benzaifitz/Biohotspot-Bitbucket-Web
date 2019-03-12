@@ -196,18 +196,22 @@ ActiveAdmin.register Category, as: 'Species' do
     # @resource.photos = resource.photos.dup
     render :new, :layout => false
   end
+
   collection_action :import_species do
   end
   collection_action :import, method: 'post' do
     if params[:species].blank? || params[:species].original_filename.split(".").last != "csv"
       redirect_to :back, alert: "Please select a csv file"
     else
-      total_count = CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8').count
+      csv_table = CSV.read(params[:species].path, :headers => true)
+      csv_table.delete("created_at")
+      csv_table.delete("updated_at")  
+      total_count = csv_table.count
       success_count = 0
       errors = []
       begin
-        CSV.foreach(params[:species].path, headers: true, encoding: 'iso-8859-1:utf-8') do |row|
-          next if row.to_hash['name'].blank?
+        csv_table.each do |row|
+          # next if row.to_hash['name'].blank?
           category_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
           specie_type_id = SpecieType.find_by(name: category_hash['specie_type_id']).id rescue nil
           category_hash['specie_type_id'] = specie_type_id
