@@ -52,9 +52,9 @@ ActiveAdmin.register Submission do
     end
     column "Number", :stem_diameter
     column "Length", :health_score
-    column "Percent Cover Live", :live_leaf_cover
-    column "Percent Cover Dead", :live_branch_stem
-    column "Percent bleached", :dieback
+    column "Biomass", :live_leaf_cover
+    column "Sex", :live_branch_stem
+    column "Price", :dieback
     column :temperature
     column "Wind", :rainfall
     column "Seastate", :humidity
@@ -148,9 +148,9 @@ ActiveAdmin.register Submission do
         end
       f.input :stem_diameter, label: 'Number'
       f.input :health_score,label: "Length", :input_html => { :type => "number" }
-      f.input :live_leaf_cover,label:"Percent Cover Live", :input_html => { :type => "number" }
-      f.input :live_branch_stem, label: "Percent Cover Dead", :input_html => { :type => "number" }
-      f.input :dieback, label: "Percent bleached", :input_html => { :type => "number" }
+      f.input :live_leaf_cover,label:"Biomass", :input_html => { :type => "number" }
+      f.input :live_branch_stem, label: "Sex", :input_html => { :type => "number" }
+      f.input :dieback, label: "Price", :input_html => { :type => "number" }
       f.input :temperature, label: 'Temperature'
       f.input :rainfall, label: "Wind"
       f.input :humidity, label: 'Seastate'
@@ -202,13 +202,13 @@ ActiveAdmin.register Submission do
       row "Length" do |o|
         o.health_score
       end
-      row "Percent Cover Live" do |s|
+      row "Biomass" do |s|
         s.live_leaf_cover
       end
-      row "Percent Cover Dead" do |s|
+      row "Sex" do |s|
         s.live_branch_stem
       end
-      row "Percent bleached" do |s|
+      row "Price" do |s|
         s.dieback
       end
 
@@ -259,13 +259,13 @@ ActiveAdmin.register Submission do
     column "Length" do |s|
       s.health_score
     end
-    column "Percent Cover Live" do |s|
+    column "Biomass" do |s|
       s.live_leaf_cover
     end
-    column "Percent Cover Dead" do |s|
+    column "Sex" do |s|
       s.live_branch_stem
     end
-    column "Percent bleached" do |s|
+    column "Price" do |s|
       s.dieback
     end
     column :temperature
@@ -307,10 +307,10 @@ ActiveAdmin.register Submission do
   filter :humidity, label: "Seastate"
   filter :temperature
   filter :health_score, label: "Length"
-  filter :live_branch_stem, label: "Percent Cover Dead"
-  filter :live_leaf_cover, label: "Percent Cover Live"
+  filter :live_branch_stem, label: "Sex"
+  filter :live_leaf_cover, label: "Biomass"
   filter :stem_diameter, label: "Number"
-  filter :dieback, label: "Percent Bleached"
+  filter :dieback, label: "Sex"
   filter :leaf_tie_month, label: "Low"
   filter :loopers, label: "Rising"
   filter :seed_borer, label: "Rising"
