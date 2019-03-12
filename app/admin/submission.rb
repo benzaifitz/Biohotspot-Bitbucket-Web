@@ -310,7 +310,7 @@ ActiveAdmin.register Submission do
   filter :live_branch_stem, label: "Sex"
   filter :live_leaf_cover, label: "Biomass"
   filter :stem_diameter, label: "Number"
-  filter :dieback, label: "Sex"
+  filter :dieback, label: "Price"
   filter :leaf_tie_month, label: "Low"
   filter :loopers, label: "Rising"
   filter :seed_borer, label: "Rising"
