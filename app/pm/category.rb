@@ -201,7 +201,7 @@ ActiveAdmin.register Category, as: 'Species', namespace: :pm do
       redirect_to :back, alert: "Please select a csv file"
     else
       begin
-        csv_table = CSV.read(params[:species].path, :headers => true)
+        csv_table = CSV.read(params[:species].path, :headers => true, encoding: 'iso-8859-1:utf-8')
         csv_table.delete("created_at")
         csv_table.delete("updated_at")  
         total_count = csv_table.count

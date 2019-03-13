@@ -203,7 +203,7 @@ ActiveAdmin.register Category, as: 'Species' do
     if params[:species].blank? || params[:species].original_filename.split(".").last != "csv"
       redirect_to :back, alert: "Please select a csv file"
     else
-      csv_table = CSV.read(params[:species].path, :headers => true)
+      csv_table = CSV.read(params[:species].path, :headers => true, encoding: 'iso-8859-1:utf-8')
       csv_table.delete("created_at")
       csv_table.delete("updated_at")  
       total_count = csv_table.count
