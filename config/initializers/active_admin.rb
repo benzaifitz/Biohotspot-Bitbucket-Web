@@ -122,7 +122,7 @@ ActiveAdmin.setup do |config|
   # config.comments = false
   #
   # You can disable the menu item for the comments index page:
-  # config.show_comments_in_menu = false
+  config.comments_menu = false
   #
   # You can change the name under which comments are registered:
   # config.comments_registration_name = 'AdminComment'
@@ -232,28 +232,29 @@ ActiveAdmin.setup do |config|
     admin.logout_link_method    = :delete
     admin.root_to = 'projects#index'
     admin.build_menu do |menu|
-      menu.add label: 'Projects', priority: 1
-      menu.add label: 'Locations', priority: 2
-      menu.add label: 'Sites', priority: 3
-      menu.add label: 'Samples', priority: 4
-      menu.add label: 'Species', priority: 5
-      menu.add label: 'Submissions', priority: 6
-      menu.add label: 'Sample Images', priority: 7
-      menu.add label: 'License', priority: 8
-      menu.add label: 'Maps', priority: 9
-      menu.add label: 'Users', priority: 10
-      menu.add label: 'User Content', priority: 11 do |user_content|
+      # menu.add label: 'Projects', priority: 1
+      # menu.add label: 'Locations', priority: 2
+      # menu.add label: 'Sites', priority: 3
+      # menu.add label: 'Samples', priority: 4
+      # menu.add label: 'Species', priority: 5
+      # menu.add label: 'Submissions', priority: 6
+      # menu.add label: 'Sample Images', priority: 7
+      # menu.add label: 'License', priority: 8
+      # menu.add label: 'Maps', priority: 9
+      # menu.add label: 'Users', priority: 10
+      menu.add label: 'Administration', priority: 11 do |user_content|
         user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
-      menu.add label: 'Communicate', priority: 12 do |communicate|
+      menu.add label: 'Communication', priority: 12 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
+        communicate.add label: 'Comments', priority: 14
       end
-      menu.add label: 'Notifications', priority: 13
-      menu.add label: 'Comments', priority: 14
-      menu.add label: 'License', priority: 15
-      menu.add label: 'Tutorial', priority: 16
-      menu.add label: 'Document', priority: 17
+      # menu.add label: 'Notifications', priority: 13
+      
+      # menu.add label: 'License', priority: 15
+      # menu.add label: 'Tutorial', priority: 16
+      # menu.add label: 'Document', priority: 17
     end
   end
   config.namespace :pm do |pm|
@@ -265,14 +266,16 @@ ActiveAdmin.setup do |config|
 
 
     pm.build_menu do |p_menu|
-      p_menu.add label: 'Communicate', priority: 12 do |communicate|
+      p_menu.add label: 'Communication', priority: 12 do |communicate|
         communicate.add label: 'Send Email', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
+        communicate.add label: 'Feedbacks', url: '/pm/feedbacks', priority: 18 
+        communicate.add label: 'Comments', priority: 14     
       end      
-      p_menu.add label: 'Notifications', priority: 14
-      p_menu.add label: 'Users', priority: 11
-      p_menu.add label: 'Documents', priority: 17      
-      p_menu.add label: 'Feedbacks', url: '/pm/feedbacks', priority: 18      
+      # p_menu.add label: 'Notifications', priority: 14
+      # p_menu.add label: 'Users', priority: 11
+      # p_menu.add label: 'Documents', priority: 17      
+      
     end
 
   end

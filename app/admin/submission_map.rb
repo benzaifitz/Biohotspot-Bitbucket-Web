@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Maps' do
-  menu label: 'Maps', priority: 8
+  menu label: 'Maps', priority: 8, parent: 'Data'
 
   content do
     @categories = Category.all.map{|c| [c.name, c.id]}

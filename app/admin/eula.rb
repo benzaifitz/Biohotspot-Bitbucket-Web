@@ -1,6 +1,6 @@
 ActiveAdmin.register Eula, as: 'Terms And Condition' do
 
-  menu label: 'Terms and Conditions', parent: 'License', priority: 12
+  menu label: 'License Terms and Conditions', parent: 'Administration', priority: 12
 
   permit_params :eula_text
 

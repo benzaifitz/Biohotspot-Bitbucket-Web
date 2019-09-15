@@ -1,6 +1,6 @@
 ActiveAdmin.register Project, namespace: :pm do
 
-  menu label: 'Projects', priority: 1
+  menu label: 'Projects', priority: 1, parent: 'Project Design'
 
   permit_params do
     allowed = [:title, :image, :image_cache, :ecosystem, :summary, :tags, :organization, :status, project_manager_projects_attributes: [:id, :project_manager_id, :is_admin, :_destroy, :_edit], category_ids:[], categories_attributes: [:id,:_update,:_create]]

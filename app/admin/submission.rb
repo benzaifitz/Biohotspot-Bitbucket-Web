@@ -10,7 +10,7 @@
 # DROP TRIGGER club_trigger_0 ON submissions;
 ActiveAdmin.register Submission do
 
-  menu label: 'Submissions', priority: 6
+  menu label: 'Submissions', priority: 6, parent: 'Data'
 
   permit_params :sub_category_id, :category_id, :site_id, :location_id, :project_id, :survey_number, :submitted_by,
                 :sub_category, :rainfall, :humidity, :temperature,

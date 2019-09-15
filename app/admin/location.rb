@@ -1,6 +1,6 @@
 ActiveAdmin.register Location do
 
-  menu label: 'Locations', priority: 2
+  menu label: 'Locations', priority: 2, parent: 'Project Design'
 
   permit_params do
     allowed = [:name, :project_id, :description]

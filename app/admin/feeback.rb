@@ -1,5 +1,5 @@
 ActiveAdmin.register Feedback do
-
+	menu label: 'Feedback',priority: 5, parent: 'Communication'
   actions :index
 
   index do

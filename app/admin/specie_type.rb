@@ -1,6 +1,7 @@
 ActiveAdmin.register SpecieType, as: 'Species Types' do
 
-  menu label: 'Species Types', priority: 6
+  # menu label: 'Species Types', priority: 6
+  menu label: 'Taxonomy',priority: 5, parent: 'Species'
 
   permit_params do
     allowed = [:id, :name, :phylum, :klass, :order, :superfamily, :family, :genus, :species, :sub_species]

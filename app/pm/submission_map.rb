@@ -1,5 +1,5 @@
 ActiveAdmin.register_page 'Maps', namespace: :pm do
-  menu label: 'Maps', priority: 9
+  menu label: 'Maps', priority: 9, parent: 'Data'
 
   content do
     @categories = current_project_manager.categories.pluck(:name, :id)

@@ -1,6 +1,6 @@
 ActiveAdmin.register Photo, as: "Sample Image" do
 
-  menu label: ' Sample Images', priority: 7
+  menu label: ' Sample Images', priority: 7, parent: 'Data'
 
   actions :index
 

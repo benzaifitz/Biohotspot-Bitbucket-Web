@@ -1,6 +1,7 @@
 ActiveAdmin.register Category, as: 'Species' do
 
-  menu label: 'Species',priority: 5 #, parent: 'Species', priority: 1
+  # menu label: 'Species',priority: 5 #, parent: 'Species', priority: 1
+  menu label: 'Descriptions',priority: 5, parent: 'Species'
 
   permit_params :crop_h, :crop_w, :crop_x, :crop_y, :name, :description, :tags, :class_name, :family_scientific,
                 :family_common, :species_scientific, :species_common, :status, :growth, :habit, :impact, :photographer,

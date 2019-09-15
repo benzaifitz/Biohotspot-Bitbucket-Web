@@ -1,6 +1,6 @@
 ActiveAdmin.register Photo, as: "Sample Image", namespace: :pm do
 
-  menu label: ' Sample Images', priority: 8
+  menu label: ' Sample Images', priority: 8, parent: 'Data'
   index do
     column :id
     column 'Image' do |p|

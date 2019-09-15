@@ -1,5 +1,5 @@
 ActiveAdmin.register ProjectRequest, namespace: :pm do
-  menu label: 'Project Requests', priority: 10
+  menu label: 'Project Requests', priority: 10, parent: 'Users'
   actions :index
 
   index do

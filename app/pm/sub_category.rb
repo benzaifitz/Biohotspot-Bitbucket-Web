@@ -1,5 +1,5 @@
 ActiveAdmin.register SubCategory, as: 'Sample', namespace: :pm do
-  menu label: 'Samples', priority: 4
+  menu label: 'Samples', priority: 4, parent: 'Project Design'
 
   permit_params do
     [:name, :treatment, :site_id, category_ids: []]
