@@ -231,6 +231,7 @@ ActiveAdmin.setup do |config|
     admin.logout_link_path      = :destroy_user_session_path
     admin.logout_link_method    = :delete
     admin.root_to = 'projects#index'
+    # Project Design > Species > Documents > Users > Data > Communication > Administration
     admin.build_menu do |menu|
       # menu.add label: 'Projects', priority: 1
       # menu.add label: 'Locations', priority: 2
@@ -242,13 +243,31 @@ ActiveAdmin.setup do |config|
       # menu.add label: 'License', priority: 8
       # menu.add label: 'Maps', priority: 9
       # menu.add label: 'Users', priority: 10
-      menu.add label: 'Administration', priority: 11 do |user_content|
-        user_content.add label: "Administrator Comments", url: '/admin/comments'
+      # menu.add label: 'Project Design'
+      # menu.add label: 'Data'
+      # menu.add label: 'Document'
+      menu.add label: 'Project Design', priority: 1 do |mnu|
+
       end
+      menu.add label: 'Species', priority: 2 do |mnu|
+
+      end
+      menu.add label: 'Documents', priority: 3 do |mnu|
+
+      end
+      menu.add label: 'Users', priority: 4 do |mnu|
+
+      end
+      menu.add label: 'Data', priority: 5 do |mnu|
+
+      end            
       menu.add label: 'Communication', priority: 12 do |communicate|
         communicate.add label: 'Send Email', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/admin/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"
         communicate.add label: 'Comments', priority: 14
+      end      
+      menu.add label: 'Administration', priority: 11 do |user_content|
+        user_content.add label: "Administrator Comments", url: '/admin/comments'
       end
       # menu.add label: 'Notifications', priority: 13
       
@@ -266,6 +285,21 @@ ActiveAdmin.setup do |config|
 
 
     pm.build_menu do |p_menu|
+      p_menu.add label: 'Project Design', priority: 1 do |mnu|
+
+      end
+      p_menu.add label: 'Species', priority: 2 do |mnu|
+
+      end
+      p_menu.add label: 'Documents', priority: 3 do |mnu|
+
+      end
+      p_menu.add label: 'Users', priority: 4 do |mnu|
+
+      end
+      p_menu.add label: 'Data', priority: 5 do |mnu|
+
+      end         
       p_menu.add label: 'Communication', priority: 12 do |communicate|
         communicate.add label: 'Send Email', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:email]}"
         communicate.add label: 'Send Push Notification', url: "/pm/notifications/new?notification_type=#{RpushNotification::NOTIFICATION_TYPE[:push]}"

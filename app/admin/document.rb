@@ -1,6 +1,6 @@
 ActiveAdmin.register Document do
 
-  menu label: 'Document List', parent: 'Document', priority: 1
+  menu label: 'Document List', parent: 'Documents', priority: 1
 
   permit_params do
     [:name, :document, :category_document_id, project_ids: []]
