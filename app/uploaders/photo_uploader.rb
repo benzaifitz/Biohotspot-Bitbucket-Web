@@ -8,7 +8,7 @@ class PhotoUploader < CarrierWave::Uploader::Base
 
   # Choose what kind of storage to use for this uploader:
   storage :fog
-  process :resize_to_fill => [800, 600]
+  # process :resize_to_fill => [800, 600]
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
@@ -22,7 +22,7 @@ class PhotoUploader < CarrierWave::Uploader::Base
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
-  process resize_to_fill: [1000, 1000]
+  # process resize_to_fill: [1000, 1000]
   # Process files as they are uploaded:
   # process :scale => [200, 300]
   #

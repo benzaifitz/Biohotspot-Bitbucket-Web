@@ -22,7 +22,7 @@ class MonitoringPhotoUploader < CarrierWave::Uploader::Base
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
-  process resize_to_fill: [1000, 1000]
+  # process resize_to_fill: [1000, 1000]
   # Process files as they are uploaded:
   # process :scale => [200, 300]
   #
