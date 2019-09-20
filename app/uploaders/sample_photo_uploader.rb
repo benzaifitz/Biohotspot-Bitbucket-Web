@@ -22,7 +22,7 @@ class SamplePhotoUploader < CarrierWave::Uploader::Base
   #
   #   "/images/fallback/" + [version_name, "default.png"].compact.join('_')
   # end
-
+  process resize_to_fill: [1000, 1000]
   # Process files as they are uploaded:
   # process :scale => [200, 300]
   #
@@ -41,7 +41,7 @@ class SamplePhotoUploader < CarrierWave::Uploader::Base
 
   protected
   def secure_token(length=48)
-    model.sample_photo_secure_token ||= SecureRandom.hex(length / 2)
+    model.sample_photo_secure_token ||= SecureRandom.hex[0..10]
   end
 
 end

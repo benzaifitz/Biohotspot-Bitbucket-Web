@@ -25,7 +25,7 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
   # end
 
   # Process files as they are uploaded:
-  process resize_to_fill: [800, 600]
+  process resize_to_fill: [800, 800]
   # process :scale => [200, 300]
   #
   # def scale(width, height)
@@ -34,7 +34,7 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
 
   # Create different versions of your uploaded files:
   version :thumb do
-    process resize_to_fill: [100,100]
+    process resize_to_fit: [100,100]
   end
 
   # Add a white list of extensions which are allowed to be uploaded.
@@ -45,8 +45,14 @@ class ProjectPictureUploader < CarrierWave::Uploader::Base
 
   # Override the filename of the uploaded files:
   # Avoid using model.id or version_name here, see uploader/store.rb for details.
-   def filename
-    "image.#{file.extension}" if original_filename.present?
+  def filename
+    "image_#{secure_token}.#{file.extension}" if original_filename.present?
+  end
+
+  protected
+  def secure_token
+    var = :"@#{mounted_as}_secure_token"
+    model.instance_variable_get(var) or model.instance_variable_set(var, SecureRandom.uuid)
   end
 
 end
