@@ -243,16 +243,101 @@ ActiveAdmin.register Submission do
     end
   end
 
+# Dont upload if no project
+# Do upload if no location site sample, No need to create them, they can be blank
+# Dont upload if no species, time and coordinates
+  action_item :view, only: :index do
+    link_to 'Import Submissions', import_submissions_admin_submissions_path
+  end
+
+  collection_action :import_submissions do
+  end
+  collection_action :import, method: 'post' do
+    byebug
+    if params[:submissions].blank? || params[:submissions].original_filename.split(".").last != "csv"
+      redirect_to :back, alert: "Please select a csv file"
+    else
+      csv_table = CSV.read(params[:submissions].path, :headers => true, encoding: 'iso-8859-1:utf-8')
+      csv_table.delete("created_at")
+      csv_table.delete("updated_at")  
+      total_count = csv_table.count
+      success_count = 0
+      errors = []
+      begin
+        csv_table.each do |row|
+          # next if row.to_hash['name'].blank?
+          sub_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
+
+          next if sub_hash['latitude'].blank? || sub_hash['longitude'].blank? || sub_hash['species'].blank?
+          
+          project_id = Project.find_by(title: sub_hash['project']).id rescue nil
+          next if project_id.blank?
+
+          sub_category_id = SubCategory.find_by(name: sub_hash['sample']).id rescue nil
+
+          category_id = Category.find_by(name: sub_hash['species']).id rescue nil 
+          next if category_id.blank?
+
+          site_id = Site.find_by(title: sub_hash['site']).id rescue nil
+
+          location_id = Location.find_by(name: sub_hash['location']).id rescue nil
+
+          sub_attributes = {
+            project_id: project_id,
+            sub_category_id: sub_category_id,
+            site_id: site_id,
+            location_id: location_id,
+            stem_diameter: sub_hash['number'],
+            health_score: sub_hash['length'],
+            live_leaf_cover: sub_hash['biomass'],
+            live_branch_stem: sub_hash['sex'],
+            dieback: sub_hash['price'],
+            temperature: sub_hash['temperature'],
+            rainfall: sub_hash['wind'],
+            humidity: sub_hash['seastate'],
+            leaf_tie_month: sub_hash['low'],
+            seed_borer: sub_hash['rising'],
+            loopers: sub_hash['high'],
+            grazing: sub_hash['falling'],
+            field_notes: sub_hash['field_notes'],
+            survey_number: sub_hash['survey_number'],
+            submitted_by: sub_hash['submitted_by'],
+            address: sub_hash['address'],
+            latitude: sub_hash['latitude'],
+            longitude: sub_hash['longitude'] 
+          }       
+
+          submission = Submission.new(sub_attributes)  
+
+          if submission.save
+            success_count += 1
+          else
+            errors << submission.errors.full_messages.first
+          end
+        end
+        if errors.length > 0
+          errors = errors.uniq.join("\n")
+          redirect_to "/admin/submissions", alert: "#{success_count}/#{total_count} submissions were imported.\n #{errors}"
+        else
+          redirect_to "/admin/submissions", notice: "#{success_count}/#{total_count} submissions were imported."  
+        end
+        
+      rescue => error
+        redirect_to :back, alert: error.message
+      end
+    end
+  end  
+
   csv do
     column 'Sample' do |s|
       s.try(:sub_category).try(:name)
     end
     column 'Species' do |s|
-      link_to(s.category.name, admin_species_path(s.category.id)) rescue nil
+      s.try(:category).try(:name)
     end
-    column :site
-    column :location
-    column :project
+    column :site do |s| s.try(:site).try(:title) end
+    column :location do |s| s.try(:location).try(:name) end
+    column :project do |s| s.try(:project).try(:title) end
     column "Number" do |s|
       s.stem_diameter
     end
