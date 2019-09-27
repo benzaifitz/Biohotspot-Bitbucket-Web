@@ -253,7 +253,6 @@ ActiveAdmin.register Submission do
   collection_action :import_submissions do
   end
   collection_action :import, method: 'post' do
-    byebug
     if params[:submissions].blank? || params[:submissions].original_filename.split(".").last != "csv"
       redirect_to :back, alert: "Please select a csv file"
     else

@@ -60,6 +60,66 @@ ActiveAdmin.register SpecieType, as: 'Species Types' do
       row :updated_at
     end
   end
+
+
+  action_item :view, only: :index do
+    link_to 'Import Taxonomy', import_taxonomy_admin_species_types_path
+  end
+
+  collection_action :import_taxonomy do
+  end
+  collection_action :import, method: 'post' do
+    byebug
+    if params[:taxonomy].blank? || params[:taxonomy].original_filename.split(".").last != "csv"
+      redirect_to :back, alert: "Please select a csv file"
+    else
+      csv_table = CSV.read(params[:taxonomy].path, :headers => true, encoding: 'iso-8859-1:utf-8')
+      csv_table.delete("created_at")
+      csv_table.delete("updated_at")  
+      total_count = csv_table.count
+      success_count = 0
+      errors = []
+      begin
+        csv_table.each do |row|
+          # next if row.to_hash['name'].blank?
+          tax_hash = row.to_hash.transform_keys(&:downcase).transform_keys{|k| k.to_s.gsub(" ", "_")}
+     
+byebug
+          taxonomy = SpecieType.new(tax_hash)  
+
+          if taxonomy.save
+            success_count += 1
+          else
+            errors << taxonomy.errors.full_messages.first
+          end
+        end
+        if errors.length > 0
+          errors = errors.uniq.join("\n")
+          redirect_to "/admin/species_types", alert: "#{success_count}/#{total_count} Taxonomy were imported.\n #{errors}"
+        else
+          redirect_to "/admin/species_types", notice: "#{success_count}/#{total_count} Taxonomy were imported."  
+        end
+        
+      rescue => error
+        redirect_to :back, alert: error.message
+      end
+    end
+  end  
+
+  csv do
+    column :name
+    column :phylum
+    column :klass
+    column :order
+    column :superfamily
+    column :family
+    column :genus
+    column :species
+    column :sub_species
+    column :created_at
+  end    
+
+
   filter :name
   filter :created_at
 

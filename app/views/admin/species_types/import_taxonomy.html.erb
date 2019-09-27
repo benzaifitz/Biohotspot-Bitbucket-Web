@@ -1,0 +1,9 @@
+<%= form_tag "import", multipart: true do %>
+  <div class="panel">
+    <h3>Import</h3>
+    <div class="panel-contents">
+      <%= file_field_tag :taxonomy, required: true %>
+    </div>
+  </div>
+  <%= submit_tag 'Import' %>
+<% end %>
